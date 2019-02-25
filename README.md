@@ -1,8 +1,8 @@
-# csc667-teamproject-teamNN
+# csc667-teamproject-team9
 
 # Todo:
 
-1. Change the name of the repo with the correct team number.
+1. Change the name of the repo with the correct team number. Done
 
 2. Invite all members to your repository.
 
