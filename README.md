@@ -22,8 +22,8 @@
   
   NOTE: if at any moment in this process you encounter an error of any sort DO NOT force push your changes to the server. Many errors             involve merge conflics between your changes and the code that exists on the repository. These should be looked through before your         code is pushed to the central respository 
   
-  - Changes to group branches
-    - This section is to be filled in later
+- Changes to group branches
+   - This section is to be filled in later
 
 ### Note that the milestone folders have been moved to their branch named milestones. 
 ### This is to keep them off the master/production branch so they are cleaner.
