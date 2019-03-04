@@ -4,7 +4,7 @@
 
 1. Change the name of the repo with the correct team number. Done
 
-2. Invite all members to your repository.
+2. Invite all members to your repository. Done
 
 3. When ready, initialize your repository with the initial state of your project.
 
