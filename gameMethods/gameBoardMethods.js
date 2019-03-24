@@ -80,33 +80,35 @@ exports.assignCoordinates = function(board) {
 }
 
 exports.calculatePiecePositionInArray = function(coordinate) {
-    let temp = coordinate;
+    let temp = [];
     switch(coordinate.charAt(0)) {
         case 'A':
-            temp = temp.replace('A', '0');
+            coordinate = coordinate.replace('A', '0');
             break;
         case 'B':
-            temp = temp.replace('B', '1');
+            coordinate = coordinate.replace('B', '1');
             break;
         case 'C':
-            temp = temp.replace('C', '2');
+            coordinate = coordinate.replace('C', '2');
             break;
         case 'D':
-            temp = temp.replace('D', '3');
+            coordinate = coordinate.replace('D', '3');
             break;
         case 'E':
-            temp = temp.replace('E', '4');
+            coordinate = coordinate.replace('E', '4');
             break;
         case 'F':
-            temp = temp.replace('F', '5');
+            coordinate = coordinate.replace('F', '5');
             break;
         case 'G':
-            temp = temp.replace('G', '6');
+            coordinate = coordinate.replace('G', '6');
             break;
         case 'H':
-            temp = temp.replace('H', '7');
+            coordinate = coordinate.replace('H', '7');
             break;
     }
+    temp.push(parseInt(coordinate.charAt(0)));
+    temp.push(parseInt(coordinate.charAt(1)));
     return temp; 
 }
 
