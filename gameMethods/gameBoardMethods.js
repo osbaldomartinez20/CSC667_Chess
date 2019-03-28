@@ -21,23 +21,23 @@ exports.assignCoordinates = function(board) {
         for (var j = 0; j < board.length; j++) {
             if(i == 0) {
                 if(j == 0 || j == 7) {
-                    board[i][j] = new common.boardTile("A" + (j+1), "Rook");
+                    board[i][j] = new common.boardTile("A" + (j+1), "BR" + "A" + (j+1));
                 }
                 if(j == 1 || j == 6) {
-                    board[i][j] = new common.boardTile("A" + (j+1), "Knight");
+                    board[i][j] = new common.boardTile("A" + (j+1), "BN" + "A" + (j+1));
                 }
                 if (j == 2 || j == 5) {
-                    board[i][j] = new common.boardTile("A" + (j+1), "Bishop");
+                    board[i][j] = new common.boardTile("A" + (j+1), "BB" + "A" + (j+1));
                 }
                 if (j == 3) {
-                    board[i][j] = new common.boardTile("A" + (j+1), "King");
+                    board[i][j] = new common.boardTile("A" + (j+1), "BQ" + "A" + (j+1));
                 }
                 if (j == 4) {
-                    board[i][j] = new common.boardTile("A" + (j+1), "Queen");
+                    board[i][j] = new common.boardTile("A" + (j+1), "BK" + "A" + (j+1));
                 }
             }
             if(i == 1) {
-                board[i][j] = new common.boardTile("B" + (j+1), "Pawn");
+                board[i][j] = new common.boardTile("B" + (j+1), "BP" + "B" + (j+1));
             }
             if(i == 2) {
                 board[i][j] = new common.boardTile("C" + (j+1), "");
@@ -52,23 +52,23 @@ exports.assignCoordinates = function(board) {
                 board[i][j] = new common.boardTile("F" + (j+1), "");
             }
             if(i == 6) {
-                board[i][j] = new common.boardTile("G" + (j+1), "Pawn");
+                board[i][j] = new common.boardTile("G" + (j+1), "WP" + "G" + (j+1));
             }
             if(i == 7) {
                 if(j == 0 || j == 7) {
-                    board[i][j] = new common.boardTile("H" + (j+1), "Rook");
+                    board[i][j] = new common.boardTile("H" + (j+1), "WR" + "H" + (j+1));
                 }
                 if(j == 1 || j == 6) {
-                    board[i][j] = new common.boardTile("H" + (j+1), "Knight");
+                    board[i][j] = new common.boardTile("H" + (j+1), "WN" + "H" + (j+1));
                 }
                 if (j == 2 || j == 5) {
-                    board[i][j] = new common.boardTile("H" + (j+1), "Bishop");
+                    board[i][j] = new common.boardTile("H" + (j+1), "WB" + "H" + (j+1));
                 }
                 if (j == 3) {
-                    board[i][j] = new common.boardTile("H" + (j+1), "King");
+                    board[i][j] = new common.boardTile("H" + (j+1), "WQ" + "H" + (j+1));
                 }
                 if (j == 4) {
-                    board[i][j] = new common.boardTile("H" + (j+1), "Queen");
+                    board[i][j] = new common.boardTile("H" + (j+1), "WK" + "H" + (j+1));
                 }
             }
             
@@ -108,7 +108,7 @@ exports.calculatePiecePositionInArray = function(coordinate) {
             break;
     }
     temp.push(parseInt(coordinate.charAt(0)));
-    temp.push(parseInt(coordinate.charAt(1)));
+    temp.push(parseInt(coordinate.charAt(1)) - 1);
     return temp; 
 }
 

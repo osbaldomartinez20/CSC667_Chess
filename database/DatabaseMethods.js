@@ -15,3 +15,8 @@ function newUser(mail) {
     //store the email and the usename into the database
 
 }
+
+//this function will store the captured game pieces in database
+exports.capturePiece = function(gamePiece) {
+
+}
