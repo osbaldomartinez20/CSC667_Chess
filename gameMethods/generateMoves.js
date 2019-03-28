@@ -1,7 +1,7 @@
 const common = require('./gameBoardMethods');
 const cap = require('../database/DatabaseMethods');
 
-//gives the possible moves for a pawn
+//gives the possible moves for a pawn. Moves one square towards the opponent, possibly two squares if pawn first move.
 var possibleMovesPawn = function(pieceInfo, board) {
     var moves = [];
     var coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
@@ -27,7 +27,7 @@ var possibleMovesPawn = function(pieceInfo, board) {
     return moves;
 }
 
-//gives the possible moves for a rook
+//gives the possible moves for a rook. Moves in a straight line.
 var possibleMovesRook = function(pieceInfo, board) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
@@ -59,7 +59,7 @@ var possibleMovesRook = function(pieceInfo, board) {
     return moves;
 }
 
-//gives the possible moves for a knight
+//gives the possible moves for a knight. Knight movement is L-shaped.
 var possibleMovesKnight = function(pieceInfo, board) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
@@ -101,6 +101,7 @@ var possibleMovesKnight = function(pieceInfo, board) {
     return moves;
 }
 
+//gives the possible moves for a bishop. Bishop moves diagonally.
 var possibleMovesBishop = function(pieceInfo, board) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
@@ -137,6 +138,7 @@ var possibleMovesBishop = function(pieceInfo, board) {
     return moves;
 }
 
+//gives the possible moves for the queen. Queen moves the same as the rook plus the bishop.
 var possibleMovesQueen = function(pieceInfo, board) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
@@ -197,12 +199,44 @@ var possibleMovesQueen = function(pieceInfo, board) {
     return moves;
 }
 
+//gives the possible moves for the King. King can move one square in any direction.
+var possibleMovesKing = function(pieceInfo, board) {
+    var moves = [];
+    const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
+    const currentPos = common.calculatePiecePositionInArray(coordinate);
+    if(currentPos[0] + 1 < 8 && board[currentPos[0]+1][currentPos[1]].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + (coordinate.charAt(1)));
+    }
+    if(currentPos[0] - 1 > -1 && board[currentPos[0]-1][currentPos[1]].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + (coordinate.charAt(1)));
+    }
+    if(currentPos[1] + 1 < 8 && board[currentPos[0]+1][currentPos[1]].getPiece() == "") {
+        moves.push(coordinate.charAt(0) + String.fromCharCode(coordinate.charCodeAt(1)+1));
+    }
+    if(currentPos[1] - 1 > -1 && board[currentPos[0]-1][currentPos[1]].getPiece() == "") {
+        moves.push(coordinate.charAt(0) + String.fromCharCode(coordinate.charCodeAt(1)-1));
+    }
+    if(currentPos[0] + 1 < 8 && currentPos[1] + 1 < 8 && board[currentPos[0]+1][currentPos[1]+1].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
+    }
+    if(currentPos[0] - 1 > -1 && currentPos[1] + 1 < 8 && board[currentPos[0]-1][currentPos[1]+1].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
+    }
+    if(currentPos[0] + 1 < 8 && currentPos[1] - 1 > -1 && board[currentPos[0]+1][currentPos[1]-1].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
+    }
+    if(currentPos[0] - 1 > -1 && currentPos[1] - 1 > -1 && board[currentPos[0]-1][currentPos[1]-1].getPiece() == "") {
+        moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
+    }
+    return moves;
+}
+
 var w = common.createBoard(8);
 var x = common.assignCoordinates(w);
-var fh = "WQD5";
+var fh = "WKD5";
 var b = common.createBoard(8);
 var cb = common.assignCoordinates(b);
-var y = possibleMovesQueen(fh, cb);
+var y = possibleMovesKing(fh, cb);
 var cc = fh.charAt(2) + fh.charAt(3);
 if(x[3][1].getPiece() == "") {
     var t = common.calculatePiecePositionInArray(cc);
