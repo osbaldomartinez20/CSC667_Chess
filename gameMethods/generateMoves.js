@@ -41,6 +41,7 @@ var possibleMovesPawn = function(pieceInfo, board) {
     if(pieceInfo.charAt(0) == 'B'  && board[arrC[0] + 1][arrC[1]].getPiece() == "") {
         moves.push(String.fromCharCode(pieceInfo.charCodeAt(2)+1) + pieceInfo.charAt(3));
     }
+    moves.sort();
     return moves;
 }
 
@@ -86,6 +87,7 @@ var possibleMovesRook = function(pieceInfo, board) {
     if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
     }
+    moves.sort();
     return moves;
 }
 
@@ -128,6 +130,7 @@ var possibleMovesKnight = function(pieceInfo, board) {
             moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-2));
         } 
     }
+    moves.sort();
     return moves;
 }
 
@@ -176,7 +179,7 @@ var possibleMovesBishop = function(pieceInfo, board) {
     if((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-1));
     }
-
+    moves.sort();
     return moves;
 }
 
@@ -261,6 +264,7 @@ var possibleMovesQueen = function(pieceInfo, board) {
     if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
     }
+    moves.sort();
     return moves;
 }
 
@@ -269,36 +273,37 @@ var possibleMovesKing = function(pieceInfo, board) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
     const currentPos = common.calculatePiecePositionInArray(coordinate);
-    if(currentPos[0] + 1 < 8 && board[currentPos[0]+1][currentPos[1]].getPiece() == "") {
+    if(currentPos[0] + 1 < 8 && board[currentPos[0]+1][currentPos[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + (coordinate.charAt(1)));
     }
-    if(currentPos[0] - 1 > -1 && board[currentPos[0]-1][currentPos[1]].getPiece() == "") {
+    if(currentPos[0] - 1 > -1 && board[currentPos[0]-1][currentPos[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + (coordinate.charAt(1)));
     }
-    if(currentPos[1] + 1 < 8 && board[currentPos[0]+1][currentPos[1]].getPiece() == "") {
+    if(currentPos[1] + 1 < 8 && board[currentPos[0]][currentPos[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(coordinate.charAt(0) + String.fromCharCode(coordinate.charCodeAt(1)+1));
     }
-    if(currentPos[1] - 1 > -1 && board[currentPos[0]-1][currentPos[1]].getPiece() == "") {
+    if(currentPos[1] - 1 > -1 && board[currentPos[0]][currentPos[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(coordinate.charAt(0) + String.fromCharCode(coordinate.charCodeAt(1)-1));
     }
-    if(currentPos[0] + 1 < 8 && currentPos[1] + 1 < 8 && board[currentPos[0]+1][currentPos[1]+1].getPiece() == "") {
+    if(currentPos[0] + 1 < 8 && currentPos[1] + 1 < 8 && board[currentPos[0]+1][currentPos[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
     }
-    if(currentPos[0] - 1 > -1 && currentPos[1] + 1 < 8 && board[currentPos[0]-1][currentPos[1]+1].getPiece() == "") {
+    if(currentPos[0] - 1 > -1 && currentPos[1] + 1 < 8 && board[currentPos[0]-1][currentPos[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
     }
-    if(currentPos[0] + 1 < 8 && currentPos[1] - 1 > -1 && board[currentPos[0]+1][currentPos[1]-1].getPiece() == "") {
+    if(currentPos[0] + 1 < 8 && currentPos[1] - 1 > -1 && board[currentPos[0]+1][currentPos[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
     }
-    if(currentPos[0] - 1 > -1 && currentPos[1] - 1 > -1 && board[currentPos[0]-1][currentPos[1]-1].getPiece() == "") {
+    if(currentPos[0] - 1 > -1 && currentPos[1] - 1 > -1 && board[currentPos[0]-1][currentPos[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
     }
+    moves.sort();
     return moves;
 }
 
 var w = common.createBoard(8);
 var x = common.assignCoordinates(w);
-var fh = "BQD5";
+var fh = "BKC5";
 var b = common.createBoard(8);
 var cb = common.assignCoordinates(b);
 var y = possibleMovesQueen(fh, cb);
