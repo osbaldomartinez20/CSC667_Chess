@@ -298,6 +298,11 @@ var possibleMovesKing = function(pieceInfo, board) {
     return moves;
 }
 
+var functionToConnectFunctions = function(pieceInfo, board) {
+    var x = possibleMovesKing(pieceInfo, board);
+    return movingKingToSafeSpace(pieceInfo, x, board);
+}
+
 //breaks the program if used in possibleMovesKing
 //works properly by itself
 var movingKingToSafeSpace = function(king, kMoves, board) {
@@ -374,10 +379,10 @@ var calculateOpposingMoves = function(king, board) {
 
 var w = common.createBoard(8);
 var x = common.assignCoordinates(w);
-var fh = "BKC5";
+var fh = "BKF5";
 var b = common.createBoard(8);
 var cb = common.assignCoordinates(b);
-var y = movingKingToSafeSpace(fh, ["F5"], cb);
+var y = functionToConnectFunctions(fh, cb);
 var cc = fh.charAt(2) + fh.charAt(3);
 if(x[3][1].getPiece() == "") {
     var t = common.calculatePiecePositionInArray(cc);
