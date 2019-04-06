@@ -1,6 +1,39 @@
 const common = require('./gameBoardMethods');
 const cap = require('../database/DatabaseMethods');
 
+
+//this function is to be used to calculate where king can move.
+//It would be a pain to add a check to the possiblePawnMoves funcion
+var pawnCapture = function(pieceInfo, board) {
+    var moves = [];
+    var coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
+    var arrC = common.calculatePiecePositionInArray(coordinate);
+    if(pieceInfo.charAt(0) == 'W') {
+        if((arrC[0] - 1 > -1 && arrC[1] - 1 > -1) && board[arrC[0]-1][arrC[1]-1].getPiece().charAt(0) != 'B') {
+            moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
+        }
+        if((arrC[0] - 1 > -1 && arrC[1] + 1 < 8) && board[arrC[0]-1][arrC[1]+1].getPiece().charAt(0) != 'B') {
+            moves.push(String.fromCharCode(coordinate.charCodeAt(0)-1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
+        }
+        if(board[arrC[0]-1][arrC[1]].getPiece() != "") {
+        return moves;
+        }
+    }
+    if(pieceInfo.charAt(0) == 'B') {
+        if((arrC[0] + 1 < 8 && arrC[1] - 1 > -1) && board[arrC[0]+1][arrC[1]-1].getPiece().charAt(0) != 'W') {
+            moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)-1));
+        }
+        if((arrC[0] + 1 < 8 && arrC[1] + 1 < 8) && board[arrC[0]+1][arrC[1]+1].getPiece().charAt(0) != 'W') {
+            moves.push(String.fromCharCode(coordinate.charCodeAt(0)+1) + String.fromCharCode(coordinate.charCodeAt(1)+1));
+        }
+        if(board[arrC[0]+1][arrC[1]].getPiece() != "") {
+        return moves;
+        }
+    }
+    return moves;
+}
+
+
 //gives the possible moves for a pawn. Moves one square towards the opponent, possibly two squares if pawn first move.
 //complete
 var possibleMovesPawn = function(pieceInfo, board) {
@@ -46,7 +79,7 @@ var possibleMovesPawn = function(pieceInfo, board) {
 
 //gives the possible moves for a rook. Moves in a straight line.
 //complete
-var possibleMovesRook = function(pieceInfo, board) {
+var possibleMovesRook = function(pieceInfo, board, king = 0) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
     var tempC = coordinate;
@@ -59,6 +92,11 @@ var possibleMovesRook = function(pieceInfo, board) {
     if(tempP[1] + 1 < 8 && board[tempP[0]][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(tempC.charAt(0) + (tempP[1] + 2));
     }
+    if(king == 1) {
+        if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     while(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece() == "") {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
@@ -67,6 +105,11 @@ var possibleMovesRook = function(pieceInfo, board) {
     }
     if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+    }
+    if (king == 1) {
+        if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+        }
     }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
@@ -77,6 +120,11 @@ var possibleMovesRook = function(pieceInfo, board) {
     if(tempP[1] - 1 > -1 && board[tempP[0]][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(tempC.charAt(0) + (tempP[1]));
     }
+    if (king == 1) {
+        if(tempP[1] - 1 > -1 && board[tempP[0]][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(tempC.charAt(0) + (tempP[1]));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     while(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece() == "") {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
@@ -86,12 +134,17 @@ var possibleMovesRook = function(pieceInfo, board) {
     if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
     }
+    if (king == 1) {
+        if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
+        }
+    }
     return moves;
 }
 
 //gives the possible moves for a knight. Knight movement is L-shaped.
 //complete
-var possibleMovesKnight = function(pieceInfo, board) {
+var possibleMovesKnight = function(pieceInfo, board, king = 0) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
     var tempC = coordinate;
@@ -104,6 +157,14 @@ var possibleMovesKnight = function(pieceInfo, board) {
         if (tempP[1] - 1 > -1 && board[tempP[0]+2][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
             moves.push(String.fromCharCode(tempC.charCodeAt(0)+2) + String.fromCharCode(tempC.charCodeAt(1)-1));
         } 
+        if (king == 1) {
+            if(tempP[1] + 1 < 8 && board[tempP[0]+2][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)+2) + String.fromCharCode(tempC.charCodeAt(1)+1));
+            }
+            if (tempP[1] - 1 > -1 && board[tempP[0]+2][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)+2) + String.fromCharCode(tempC.charCodeAt(1)-1));
+            } 
+        }
     }
     if(tempP[0] - 2 > -1) {
         if(tempP[1] + 1 < 8 && board[tempP[0]-2][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
@@ -112,6 +173,14 @@ var possibleMovesKnight = function(pieceInfo, board) {
         if (tempP[1] - 1 > -1 && board[tempP[0]-2][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
             moves.push(String.fromCharCode(tempC.charCodeAt(0)-2) + String.fromCharCode(tempC.charCodeAt(1)-1));
         } 
+        if (king == 1) {
+            if(tempP[1] + 1 < 8 && board[tempP[0]-2][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)-2) + String.fromCharCode(tempC.charCodeAt(1)+1));
+            }
+            if (tempP[1] - 1 > -1 && board[tempP[0]-2][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)-2) + String.fromCharCode(tempC.charCodeAt(1)-1));
+            } 
+        }
     }
     if(tempP[1] + 2 < 8) {
         if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]+2].getPiece().charAt(0) != pieceInfo.charAt(0)) {
@@ -120,6 +189,14 @@ var possibleMovesKnight = function(pieceInfo, board) {
         if (tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]+2].getPiece().charAt(0) != pieceInfo.charAt(0)) {
             moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+2));
         } 
+        if (king == 1) {
+            if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]+2].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)+2));
+            }
+            if (tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]+2].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+2));
+            }
+        }
     }
     if(tempP[1] - 2 > -1) {
         if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]-2].getPiece().charAt(0) != pieceInfo.charAt(0)) {
@@ -128,13 +205,21 @@ var possibleMovesKnight = function(pieceInfo, board) {
         if (tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]-2].getPiece().charAt(0) != pieceInfo.charAt(0)) {
             moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-2));
         } 
+        if (king == 1) {
+            if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]-2].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)-2));
+            }
+            if (tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]-2].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+                moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-2));
+            }
+        }
     }
     return moves;
 }
 
 //gives the possible moves for a bishop. Bishop moves diagonally.
 //complete
-var possibleMovesBishop = function(pieceInfo, board) {
+var possibleMovesBishop = function(pieceInfo, board, king = 0) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
     var tempC = coordinate;
@@ -148,6 +233,11 @@ var possibleMovesBishop = function(pieceInfo, board) {
     if((tempP[0] + 1 < 8 && tempP[1] + 1 < 8) && board[tempP[0]+1][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)+1));
     }
+    if (king == 1) {
+        if((tempP[0] + 1 < 8 && tempP[1] + 1 < 8) && board[tempP[0]+1][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)+1));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
     while((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece() == "") {
@@ -157,6 +247,11 @@ var possibleMovesBishop = function(pieceInfo, board) {
     }
     if((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+    }
+    if (king == 1) {
+        if((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+        }
     }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
@@ -168,6 +263,11 @@ var possibleMovesBishop = function(pieceInfo, board) {
     if((tempP[0] - 1 > -1 && tempP[1] + 1 < 8) && board[tempP[0]-1][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+1));
     }
+    if (king == 1) {
+        if((tempP[0] - 1 > -1 && tempP[1] + 1 < 8) && board[tempP[0]-1][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+1));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
     while((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece() == "") {
@@ -177,13 +277,18 @@ var possibleMovesBishop = function(pieceInfo, board) {
     }
     if((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+    }
+    if (king == 1) {
+        if((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+        }
     }
     return moves;
 }
 
 //gives the possible moves for the queen. Queen moves the same as the rook plus the bishop.
 //complete
-var possibleMovesQueen = function(pieceInfo, board) {
+var possibleMovesQueen = function(pieceInfo, board, king = 0) {
     var moves = [];
     const coordinate = pieceInfo.charAt(2) + pieceInfo.charAt(3);
     var tempC = coordinate;
@@ -197,6 +302,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     if((tempP[0] + 1 < 8 && tempP[1] + 1 < 8) && board[tempP[0]+1][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)+1));
     }
+    if (king == 1) {
+        if((tempP[0] + 1 < 8 && tempP[1] + 1 < 8) && board[tempP[0]+1][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)+1));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
     while((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece() == "") {
@@ -206,6 +316,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     }
     if((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+    }
+    if (king == 1) {
+        if((tempP[0] + 1 < 8 && tempP[1] - 1 > -1) && board[tempP[0]+1][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+        }
     }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
@@ -217,6 +332,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     if((tempP[0] - 1 > -1 && tempP[1] + 1 < 8) && board[tempP[0]-1][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+1));
     }
+    if (king == 1) {
+        if((tempP[0] - 1 > -1 && tempP[1] + 1 < 8) && board[tempP[0]-1][tempP[1]+1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)+1));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
     while((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece() == "") {
@@ -226,6 +346,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     }
     if((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+    }
+    if (king == 1) {
+        if((tempP[0] - 1 > -1 && tempP[1] - 1 > -1) && board[tempP[0]-1][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + String.fromCharCode(tempC.charCodeAt(1)-1));
+        }
     }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
@@ -236,6 +361,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     if(tempP[1] + 1 < 8 && board[tempP[0]][tempP[1]+1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(tempC.charAt(0) + (tempP[1] + 2));
     }
+    if(king == 1) {
+        if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     while(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece() == "") {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
@@ -244,6 +374,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     }
     if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+    }
+    if (king == 1) {
+        if(tempP[0] + 1 < 8 && board[tempP[0]+1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)+1) + (tempC.charAt(1)));
+        }
     }
     tempP = [currentPos[0], currentPos[1]];
     tempC = coordinate;
@@ -254,6 +389,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     if(tempP[1] - 1 > -1 && board[tempP[0]][tempP[1]-1].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(tempC.charAt(0) + (tempP[1]));
     }
+    if (king == 1) {
+        if(tempP[1] - 1 > -1 && board[tempP[0]][tempP[1]-1].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(tempC.charAt(0) + (tempP[1]));
+        }
+    }
     tempP = [currentPos[0], currentPos[1]];
     while(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece() == "") {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
@@ -262,6 +402,11 @@ var possibleMovesQueen = function(pieceInfo, board) {
     }
     if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) != pieceInfo.charAt(0)) {
         moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
+    }
+    if (king == 1) {
+        if(tempP[0] - 1 > -1 && board[tempP[0]-1][tempP[1]].getPiece().charAt(0) == pieceInfo.charAt(0)) {
+            moves.push(String.fromCharCode(tempC.charCodeAt(0)-1) + (tempC.charAt(1)));
+        }
     }
     return moves;
 }
@@ -300,6 +445,7 @@ var possibleMovesKing = function(pieceInfo, board) {
 
 var functionToConnectFunctions = function(pieceInfo, board) {
     var x = possibleMovesKing(pieceInfo, board);
+    console.log(x);
     return movingKingToSafeSpace(pieceInfo, x, board);
 }
 
@@ -324,22 +470,22 @@ var calculateOpposingMoves = function(king, board) {
                 if (board[i][j].getPiece().charAt(0) == 'B') {
                     switch(board[i][j].getPiece().charAt(1)) {
                        case 'P':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesPawn(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(pawnCapture(board[i][j].getPiece(), board));
                        break;
                        case 'R':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesRook(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesRook(board[i][j].getPiece(), board, 1));
                        break;
                        case 'N':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKnight(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKnight(board[i][j].getPiece(), board, 1));
                        break;
                        case 'B':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesBishop(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesBishop(board[i][j].getPiece(), board, 1));
                        break;
                        case 'Q':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesQueen(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesQueen(board[i][j].getPiece(), board, 1));
                        break;
                        case 'K':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKing(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKing(board[i][j].getPiece(), board, 1));
                        break;
                     }
                 }
@@ -352,28 +498,29 @@ var calculateOpposingMoves = function(king, board) {
                 if (board[i][j].getPiece().charAt(0) == 'W') {
                     switch(board[i][j].getPiece().charAt(1)) {
                        case 'P':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesPawn(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(pawnCapture(board[i][j].getPiece(), board));
                        break;
                        case 'R':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesRook(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesRook(board[i][j].getPiece(), board, 1));
                        break;
                        case 'N':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKnight(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKnight(board[i][j].getPiece(), board, 1));
                        break;
                        case 'B':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesBishop(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesBishop(board[i][j].getPiece(), board, 1));
                        break;
                        case 'Q':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesQueen(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesQueen(board[i][j].getPiece(), board, 1));
                        break;
                        case 'K':
-                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKing(board[i][j].getPiece(), board));
+                       opposingPiecesMoves = opposingPiecesMoves.concat(possibleMovesKing(board[i][j].getPiece(), board, 1));
                        break;
                     }
                 }
             }
         }
     }
+    console.log(opposingPiecesMoves);
     return opposingPiecesMoves;
 }
 
