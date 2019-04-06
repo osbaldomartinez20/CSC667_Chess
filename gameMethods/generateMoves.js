@@ -1,6 +1,4 @@
 const common = require('./gameBoardMethods');
-const cap = require('../database/DatabaseMethods');
-
 
 //this function is to be used to calculate where king can move.
 //It would be a pain to add a check to the possiblePawnMoves funcion
@@ -526,13 +524,13 @@ var calculateOpposingMoves = function(king, board) {
 
 var w = common.createBoard(8);
 var x = common.assignCoordinates(w);
-var fh = "BKF5";
+var fh = "BPA7";
 var b = common.createBoard(8);
 var cb = common.assignCoordinates(b);
-var y = functionToConnectFunctions(fh, cb);
+var y = possibleMovesPawn(fh, cb);
 var cc = fh.charAt(2) + fh.charAt(3);
 if(x[3][1].getPiece() == "") {
     var t = common.calculatePiecePositionInArray(cc);
 }
 var p = cb[0][0].getPiece();
-console.log(t + " " + cc + " " + p + "\n" + y + " g");
+console.log(t + " " + cc + " " + p + "\n" + y);

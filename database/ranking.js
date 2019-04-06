@@ -1,7 +1,7 @@
-
 //the K constant needed for the ELO calculation
 var K = 24;
 
+//the wining probality of player 2 winning
 var winProbability = function(rank1, rank2) {
     return 1.0 * 1.0 / (1 + 1.0 *  Math.pow(10, 1.0 * (rank1 - rank2) / 400));
 }
