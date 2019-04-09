@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>private game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="moves.js"></script>
+    <script src="js/chessboard-0.3.0.js"></script>
+    <script src="js/chessboard-0.3.0.min.js"></script>
+    <link href="p_game.css" rel="stylesheet">
+    <link href="css/chessboard-0.3.0.css" rel="stylesheet">
+    <link href="css/chessboard-0.3.0.min.css" rel="stylesheet">
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation var-->
+    <div class="container">
+        <nav class="navbar nav-border navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                     
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>                        
+            </button>
+                    <a class="navbar-brand" href="#">ChessGame</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Private Game</a></li>
+                        <li><a href="index.html">Login</a></li>
+                        <li><a href="lobby.html">Lobby</a></li>
+                        <li><a href="b_Players.html">Best Players</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="board">
+        <script>
+            var board = ChessBoard('board', 'start');
+        </script>
+
+    </div>
+    <!--
+       <canvas id="myCanvas" height="480" width="480"></canvas>
+<script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var width = 480;
+        var size = 8;
+        var light = '#D2691E';
+        var dark = '#703810';
+        var x = -1;
+        var y = -1;
+        let totalSquares = Math.pow(size, 2);
+        let squareWidth = width / size;
+        var imgSRC = [];
+        for (var k = 1; k < 13; k++) {
+            imgSRC[k] = "images/" + k + ".png";
+            console.log(imgSRC[k]);
+        }
+        const images = []; /// array to hold images.
+        var imageCount = 0; // number of loaded images;
+
+
+        function drawBoard() {
+            ctx.beginPath();
+            ctx.rect(x * squareWidth, y * squareWidth, squareWidth, squareWidth);
+            console.log(x * squareWidth, y * squareWidth, squareWidth, squareWidth)
+            ctx.fillStyle = (x + y) % 2 ? dark : light;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function allImagesLoaded() {
+            var count = 0;
+            while (count != 13) {
+                ctx.beginPath();
+                ctx.drawImage(images[0], x * squareWidth, y * squareWidth, squareWidth, squareWidth);
+                ctx.closePath();
+            }
+
+        }
+
+        function drawImg() {
+
+            // iterate each image URL, create, load, and add it to the images array
+            imgSRC.forEach(src => { // for each image url
+                const image = new Image();
+                image.src = src;
+                image.onload = () => {
+                    imageCount += 1;
+                    if (imageCount === imgSRC.length) { // have all loaded????
+                        allImagesLoaded(); // call function to start rendering
+                    }
+                }
+                images.push(image); // add loading image to images array
+
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < totalSquares; i++) {
+                x++;
+                if (i % size == 0) {
+                    y++;
+                    x = 0;
+                }
+                drawBoard();
+                //drawImg();
+            }
+        }
+        draw();
+        // setInterval(draw, 100000000);
+    </script>
+
+
+  -->
+    <div class="ex1">
+
+        <div id="nav" class="tab">
+        </div>
+        <div id="form" class="tab">
+            <div class="table-header">
+                <h4> Game Moves</h4>
+            </div>
+            <div>
+                <p id="moves"></p>
+            </div>
+        </div>
+        <div id="map" class="tab">
+            <header>
+                <div class="chat-header">
+                    <div class="table-header">
+                        <h4> chat</h4>
+                    </div>
+                </div>
+            </header>
+
+            <section class="chat">
+                <p><strong>John</strong>: Hello!</p>
+                <p><strong>Bob</strong>: How are you!</p>
+            </section>
+
+            <form>
+                <input type="text" placeholder="be respecful when you chat" />
+                <button>Send</button>
+            </form>
+        </div>
+        <div id="utils" class="tab">
+            <p></p>
+        </div>
+    </div>
+    <script>
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            moves()
+        };
+    </script>
+</body>
+
+</html>

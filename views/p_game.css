@@ -1,0 +1,179 @@
+* {
+    box-sizing: border-box;
+    transition: all .3s ease;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.table-header {
+    width: 100%;
+    padding: 1px;
+    text-align: center;
+    background: hsl(150, 50%, 50%);
+    color: black;
+    font-size: 30px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: separate;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 5px;
+}
+
+table th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 5px;
+    background: beige;
+}
+
+
+/* this line work to change color to each row in a colum
+tr:nth-child(1) {
+    width: 120%;
+    background: hsl(150, 50%, 50%);
+}*/
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.myclass tr:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+
+/* used to create a container (square ) */
+
+.container {
+    padding: 16px;
+}
+
+.nav-border {
+    border-radius: 30px;
+}
+
+div.ex1 {
+    width: 100%;
+    position: absolute;
+    top: 58%;
+}
+
+#board {
+    width: 400px;
+    position: absolute;
+    text-align: center
+}
+
+
+/*chat css */
+
+h1,
+.chat-header {
+    margin: 0;
+    padding: 1px 0;
+    font-size: 25px;
+    border: 1px solid black;
+}
+
+.chat-header {
+    float: right;
+    width: 100%
+}
+
+.chat {
+    content: '';
+    width: 80%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+}
+
+.chat p {
+    margin: 0 0 0 0;
+}
+
+input,
+button {
+    width: 100%;
+    font: inherit;
+    background: lightgray;
+    border: none;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid black;
+}
+
+#send-button:hover {
+    cursor: pointer;
+    background: #ddd;
+}
+
+@media all and (min-width: 500px) {
+    .chat {
+        height: calc(50vh - 200px);
+        float: right;
+        width: 100%;
+    }
+    input {
+        width: 100%
+    }
+    button {
+        float: right;
+        width: 150px;
+    }
+}
+
+#content {
+    height: calc(110vh - 50px);
+}
+
+.tab {
+    float: left;
+    height: 100%;
+}
+
+#form {
+    background-color: white;
+    width: 15%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: 80px;
+    margin-left: 285px;
+}
+
+#map {
+    background-color: white;
+    width: 30%;
+    margin-left: 30px
+}

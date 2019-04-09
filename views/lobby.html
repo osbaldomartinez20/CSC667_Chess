@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Lobby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="user_Game.js"></script>
+    <script src="available_games.js"></script>
+    <script src="online_players.js"></script>
+    <script src="resizable.js"></script>
+    <script src="onGames.js"></script>
+    <!--used for chat box-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
+    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>
+    <link href="site.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Navigation var-->
+    <div class="container">
+        <nav class="navbar nav-border navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                     
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>                        
+            </button>
+                    <a class="navbar-brand" href="#">ChessGame</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Lobby</a></li>
+                        <li><a href="index.html">Login</a></li>
+                        <li><a href="p_game.html">Private Game</a></li>
+                        <li><a href="b_Players.html">Best Players</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- User Game table -->
+    <!--<input type="button" onclick="user_game()" value="Create Table From JSON" /> -->
+    <div id="content">
+        <div id="nav" class="tab"></div>
+        <div id="form" class="tab">
+            <div class="table-header">
+                <h4> User Games</h4>
+            </div>
+            <p id="userGames"></p>
+        </div>
+        <div id="map" class="tab">
+            <div class="table-header">
+                <h4> Available Games</h4>
+            </div>
+            <div>
+                <p id="available_games"></p>
+            </div>
+
+            <div class="table-header">
+                <h4> Ongoing Games</h4>
+            </div>
+            <div>
+                <p id="onG"></p>
+            </div>
+            <div>
+                <header>
+                    <div class="chat-header">
+                        <div class="table-header">
+                            <h4> chat</h4>
+                        </div>
+                    </div>
+                    <div class="player-header">
+                        <div class="table-header">
+                            <h4> Online</h4>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="chat">
+                    <p><strong>John</strong>: Hello!</p>
+                    <p><strong>Bob</strong>: How are you!</p>
+                </section>
+
+                <section class="onlineP">
+                    <div>
+                        <p id="p_online"></p>
+                    </div>
+                </section>
+
+                <form>
+                    <input type="text" placeholder="be respecful when you chat" />
+                    <button>Send</button>
+                </form>
+            </div>
+        </div>
+        <div id="utils" class="tab"></div>
+    </div>
+    <script>
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            user_game(), onlineP(), available_games(), onGames()
+        };
+    </script>
+
+
+</body>
+
+</html>
