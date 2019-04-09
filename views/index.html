@@ -73,7 +73,26 @@
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
             console.log("ID Token: " + id_token);
+
+            var jsonString = profile.concat(id_token);
+            console.log(jsonString);
         }
+
+        /*   var url = "http://swapi.co/api/";
+
+$.ajax({
+  type: "POST",
+  url: url,
+  data: JSON.stringify(data),
+  contentType: "application/json; charset=utf-8",
+  dataType: "json",
+  error: function() {
+    alert("Error");
+  },
+  success: function() {
+    alert("OK");
+  }
+});*/
     </script>
 
 
