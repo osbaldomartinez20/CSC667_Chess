@@ -3,7 +3,7 @@ const app = express()
 
 //important.. this line creates a connection to use static files such as html saved in the
 //folder public
-app.use(express.static('./views'))
+app.use(express.static(__dirname + '/views'));
 
 app.get('/', (req, res) => {
     //res.send('Hey')
