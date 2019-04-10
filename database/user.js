@@ -3,7 +3,7 @@
 
 var db = require('../config/db.config');
 
-
+//param id and email should be given from the information that google gives us.
 exports.createUser = function (id, email) {
 
     var display_name = email.substring(0, email.indexOf('@'));
