@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({
 }));
 router.use(bodyParser.json());
 
-router.get('/login', (request, response) => {
+router.post('/login', (request, response) => {
     const id_token = request.query.id_token
     verify(id_token)
     const { OAuth2Client } = require('google-auth-library')
