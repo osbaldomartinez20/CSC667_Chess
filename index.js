@@ -1,4 +1,5 @@
 const express = require('express')
+const login =  require('/controller/login.js')
 const app = express()
 
 //important.. this line creates a connection to use static files such as html saved in the
@@ -10,8 +11,7 @@ app.get('/', (request, response) => {
 })
 
 app.post('/login', (request, response) => { 
-    //this will be a script that returns the user_id token
-    //and the page to redirec to in a json file
+    login.verify(request)
 })
 
 app.get('/lobby', (request, response) => {
