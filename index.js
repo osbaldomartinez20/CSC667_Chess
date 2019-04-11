@@ -1,17 +1,19 @@
 const express = require('express')
 const login =  require('/controller/login.js')
+const bodyParser = require('body-parser')
 const app = express()
 
 //important.. this line creates a connection to use static files such as html saved in the
 //folder public
 app.use(express.static(__dirname + '/views'));
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
 
 app.post('/login', (request, response) => { 
-    login.verify(request)
+    login.verify(request.query.id_token)
 })
 
 app.get('/lobby', (request, response) => {
