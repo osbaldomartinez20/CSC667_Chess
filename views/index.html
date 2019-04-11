@@ -3,15 +3,12 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Login - DEV</title>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
+    <meta name="google-signin-client_id" content="80146750892-kdcobp9c18m1fkhl8oa4gha04rdgukni.apps.googleusercontent.com">
     <link href="site.css" rel="stylesheet">
 
 
@@ -33,14 +30,10 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <base href="http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com">
                         <li class="active"><a href="#">Login</a></li>
                         <li><a href="rules.html">Rules</a></li>
                         <li><a href="b_Players.html">Best Players</a></li>
                         <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -50,18 +43,15 @@
 
 
     <div class="container">
-        <form action="/action_page.php">
+        <form action="">
             <div class="imgcontainer">
                 <img src="avatar.jpg" alt="Avatar" class="avatar">
             </div>
     </div>
 
-    <div class="container">
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    </div>
+    <div id="my-signin2"></div>
     <script>
-        function onSignIn(googleUser) {
-            // Useful data for your client-side scripts:
+        function onSuccess(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log("ID: " + profile.getId()); // Don't send this directly to your server!
             console.log('Full Name: ' + profile.getName());
@@ -73,27 +63,35 @@
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
             console.log("ID Token: " + id_token);
-
-            var jsonString = profile.concat(id_token);
-            console.log(jsonString);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', ' ubuntu@ec2-54-149-192-92.us-west-2.compute.amazonaws.com/login');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                console.log('Signed in as: ' + xhr.responseText);
+            };
+            xhr.send('idtoken=' + id_token);
+            // window.location.href = "lobby.html";
         }
 
-        /*   var url = "http://swapi.co/api/";
+        function onFailure(error) {
+            console.log(error);
+        }
 
-$.ajax({
-  type: "POST",
-  url: url,
-  data: JSON.stringify(data),
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  error: function() {
-    alert("Error");
-  },
-  success: function() {
-    alert("OK");
-  }
-});*/
+        function renderButton() {
+            gapi.signin2.render('my-signin2', {
+                'scope': 'profile email',
+                'width': 240,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': onSuccess,
+                'onfailure': onFailure
+            });
+        }
     </script>
+
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
 
 
 </body>
