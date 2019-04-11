@@ -1,5 +1,5 @@
 const express = require('express')
-const login =  require('/controller/login.js')
+const login =  require('./controllers/login.js')
 const bodyParser = require('body-parser')
 const app = express()
 
@@ -13,6 +13,7 @@ app.get('/', (request, response) => {
 })
 
 app.post('/login', (request, response) => { 
+    console.log('In login route')
     login.verify(request.query.id_token)
 })
 
