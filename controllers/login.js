@@ -30,3 +30,5 @@ router.get('/login', (request, response) => {
     }
     verify().catch(console.error)
 })
+
+module.exports = router
