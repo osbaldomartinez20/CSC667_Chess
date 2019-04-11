@@ -14,6 +14,6 @@ app.get('/', (request, response) => {
 const router = require('./controllers/login.js')
 app.use(router)
 
-app.listen(3003, () => {
-    console.log("Server is up and listening on 3003...")
+app.listen(3000, () => {
+    console.log("Server is up and listening on 3000...")
 })
