@@ -1,5 +1,5 @@
-const db = require('../auth/db_config.js')
 const express = require('express')
+const db = require('../auth/db_config.js')
 const bodyParser = require("body-parser");
 
 //create a router for url request
