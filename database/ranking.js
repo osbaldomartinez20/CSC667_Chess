@@ -12,6 +12,7 @@ var winProbability = function(rank1, rank2) {
 
 //calculates the ELO rating after each match
 //The parameters are the display names of the users
+//and the won parameter is a 1 if user1 won and a 0 if user2 won
 var EloRank = function(user1, user2, won) {
 
     var rank1 = 0;

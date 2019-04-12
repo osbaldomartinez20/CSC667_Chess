@@ -18,3 +18,15 @@ exports.createUser = function (id, email) {
         }
     });
 }
+
+var updateDisplayName = function(email, newDisplayName) {
+    var sql = "UPDATE users SET display_name = '" + newDisplayName + "' WHERE email = '" + email + "'";
+    db.query(sql, function(err, result) {
+        if (err) {
+            console.log("cannot update display_name: " + err);
+            return false;
+        } else {
+            console.log(result.affectedRows + " record(s) updated");
+        }
+    });
+}
