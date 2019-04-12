@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "chess.js": "^0.10.2",
     "mysql": "^2.16.0"
   },
   "scripts": {

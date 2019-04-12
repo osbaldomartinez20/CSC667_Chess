@@ -5,11 +5,10 @@ const mysql = require('mysql');
 
 const db = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: 'oz123!',
-    database: 'mydb'
-
+    host: 'chess-mysql.cmaf5ugscgcc.us-west-2.rds.amazonaws.com',
+    user: 'group9',
+    password: 'chess667',
+    database: 'chess_game'
 });
 
 
