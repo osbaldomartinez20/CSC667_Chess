@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <link href="site.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <!-- Navigation var-->
+    <div class="container">
+        <nav class="navbar nav-border navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                     
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>                        
+            </button>
+                    <a class="navbar-brand" href="#">ChessGame</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Login</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="b_Players.html">Best Players</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    </div>
+
+
+    <div class="container">
+        <form action="">
+            <div class="imgcontainer">
+                <img src="avatar.jpg" alt="Avatar" class="avatar">
+            </div>
+    </div>
+
+    <div id="my-signin2"></div>
+    <script>
+        function onSuccess(googleUser) {
+            /* var profile = googleUser.getBasicProfile();
+             console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+             console.log('Full Name: ' + profile.getName());
+             console.log('Given Name: ' + profile.getGivenName());
+             console.log('Family Name: ' + profile.getFamilyName());
+             console.log("Image URL: " + profile.getImageUrl());
+             console.log("Email: " + profile.getEmail());*/
+
+            // The ID token you need to pass to your backend:
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/login');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                console.log('Signed in as: ' + xhr.responseText);
+                window.location.href = "lobby.html";
+            };
+            xhr.send('idtoken=' + id_token);
+        }
+
+        function onFailure(error) {
+            console.log(error);
+        }
+
+        function renderButton() {
+            gapi.signin2.render('my-signin2', {
+                'scope': 'profile email',
+                'width': 240,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': onSuccess,
+                'onfailure': onFailure
+            });
+        }
+    </script>
+
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+
+
+</body>
+
+</html>

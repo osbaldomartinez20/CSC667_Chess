@@ -1,0 +1,204 @@
+* {
+    box-sizing: border-box;
+    transition: all .3s ease;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: separate;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 16px;
+}
+
+table th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 16px;
+    background: beige;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.myclass tr:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+
+/* used to create a container (square ) */
+
+.container {
+    padding: 16px;
+}
+
+.nav-border {
+    border-radius: 30px;
+}
+
+div.ex1 {
+    width: 100%;
+    position: absolute;
+    top: 58%;
+    border: 1px solid black;
+}
+
+
+/* Canvas to create the centered square for chess board */
+
+canvas {
+    max-width: 100%;
+    height: calc(60vh - 165px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -85%);
+    text-align: center;
+    border-radius: 0.5em;
+}
+
+
+/*chat css */
+
+h1,
+.chat-header {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    border: 1px solid black;
+}
+
+.chat-header {
+    float: right;
+    width: 80%
+}
+
+.player-header {
+    margin: 0;
+    padding: 1px 0;
+    font-size: 25px;
+    border: 1px solid black;
+}
+
+.player-header {
+    float: left;
+    width: 20%
+}
+
+.chat {
+    content: '';
+    width: 80%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+}
+
+.onlineP {
+    width: 20%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+}
+
+.chat p {
+    margin: 0 0 0 0;
+}
+
+input,
+button {
+    width: 100%;
+    font: inherit;
+    background: lightgray;
+    border: none;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid black;
+}
+
+#send-button:hover {
+    cursor: pointer;
+    background: #ddd;
+}
+
+@media all and (min-width: 500px) {
+    .chat {
+        height: calc(50vh - 200px);
+        float: right;
+        width: 80%;
+    }
+    .onlineP {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    input {
+        width: 100%
+    }
+    button {
+        float: right;
+        width: 150px;
+    }
+}
+
+#content {
+    height: calc(110vh - 50px);
+}
+
+.tab {
+    float: left;
+    height: 100%;
+}
+
+#nav {
+    background-color: green;
+    width: 20%;
+}
+
+#form {
+    background-color: yellow;
+    width: 15%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: 80px;
+}
+
+#map {
+    background-color: blue;
+    width: 40%;
+}
+
+#utils {
+    background-color: orange;
+    width: calc(13% - 1px);
+}

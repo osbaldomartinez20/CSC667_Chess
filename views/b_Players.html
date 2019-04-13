@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Best_Players</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link href="site.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Navigation var-->
+    <div class="container">
+        <nav class="navbar nav-border navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                     
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>                        
+            </button>
+                    <a class="navbar-brand" href="#">ChessGame</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Best Players</a></li>
+                        <li><a href="index.html">login</a></li>
+                        <li><a href="lobby.html">Lobby</a></li>
+                        <li><a href="rules.html">Rules</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="table-header">
+            <h4> Best Player Statistics</h4>
+        </div>
+        <p id="showData"></p>
+    </div>
+
+    <script type="text/javascript">
+        function top_users() {
+            var jsonExamples = [{
+                "user": "joe",
+                "points": "1000",
+                "win": "10",
+                "loss": "0"
+            }, {
+                "user": "Jenna",
+                "points": "900",
+                "win": "9",
+                "loss": "0"
+            }, {
+                "user": "Grave",
+                "points": "890",
+                "win": "9",
+                "loss": "1"
+            }, {
+                "user": "Mary",
+                "points": "800",
+                "win": "8",
+                "loss": "0"
+            }, {
+                "user": "Erick",
+                "points": "700",
+                "win": "7",
+                "loss": "0"
+            }, {
+                "user": "Nina",
+                "points": "500",
+                "win": "5",
+                "loss": "0"
+            }, {
+                "user": "Lidiya",
+                "points": "499",
+                "win": "6",
+                "loss": "2"
+            }, {
+                "user": "Anton",
+                "points": "450",
+                "win": "4",
+                "loss": "0"
+            }, {
+                "user": "Souza",
+                "points": "230",
+                "win": "4",
+                "loss": "1"
+            }, {
+                "user": "Ryan",
+                "points": "100",
+                "win": "2",
+                "loss": "1"
+            }]
+
+            var col = [];
+            for (var i = 0; i < jsonExamples.length; i++) {
+                for (var key in jsonExamples[i]) {
+                    if (col.indexOf(key) === -1) {
+                        col.push(key);
+                    }
+                }
+            }
+
+            // CREATE DYNAMIC TABLE.
+            var table = document.createElement("table");
+
+            tr = table.insertRow(-1);
+            var th = document.createElement("th");
+            th.innerHTML = "Top Ranks"
+            tr.appendChild(th);
+            var th = document.createElement("th");
+            th.innerHTML = "Points"
+            tr.appendChild(th);
+            var th = document.createElement("th");
+            th.innerHTML = "Games Won!"
+            tr.appendChild(th);
+            var th = document.createElement("th");
+            th.innerHTML = "Games Lost!"
+            tr.appendChild(th);
+
+            //}
+
+
+            for (var i = 0; i < jsonExamples.length; i++) {
+                tr = table.insertRow(-1);
+
+                for (var j = 0; j < col.length; j++) {
+                    var tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = jsonExamples[i][col[j]];
+                }
+            }
+            var divContainer = document.getElementById("showData");
+            divContainer.innerHTML = "";
+            divContainer.appendChild(table);
+            $("tr").click(function() {
+                window.location = "index.html";
+            });
+
+        }
+        window.onload = top_users;
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
