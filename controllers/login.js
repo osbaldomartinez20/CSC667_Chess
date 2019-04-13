@@ -30,7 +30,9 @@ router.post('/login', (request, response) => {
         console.log("here " + payload)
         console.log("user_id " + user_id)
         console.log("email " + email)
-        response.send(email)
+	//add function that checks to see if the user exists in the db
+	//if not add the user to the db
+        response.send(user_id)
     }
     verify().catch(console.error);
 })

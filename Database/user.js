@@ -30,3 +30,16 @@ exports.updateDisplayName = function(email, newDisplayName) {
         }
     });
 }
+
+exports.userExists = function(user_id) {
+    var sql = "select count(*) from users where user_id = '" + user_id + "'"
+    db.query(sql, function(err, result) {
+	if(err) {
+	    console.log("error looking up user:" + err)
+	    return flase
+	}
+	else{
+		return result;
+	}
+    })
+}
