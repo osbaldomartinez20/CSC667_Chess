@@ -1,7 +1,8 @@
 const express = require('express')
 const https = require('https');
 const db = require('../auth/db_config.js')
-const bodyParser = require("body-parser");
+const user = require('../Database/user.js')
+const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
 
@@ -30,7 +31,10 @@ router.post('/login', (request, response) => {
         console.log("here " + payload)
         console.log("user_id " + user_id)
         console.log("email " + email)
-        response.send(email)
+	if(!user.userExists(user_id)){
+		user.createUser(user_id, email)
+	}
+	response.send(user_id)
     }
     verify().catch(console.error);
 })

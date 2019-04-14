@@ -30,3 +30,19 @@ exports.updateDisplayName = function(email, newDisplayName) {
         }
     });
 }
+
+exports.userExists = function(user_id) {
+    var sql = "select count(*) from users where user_id = '" + user_id + "'"
+    console.log(sql)
+    db.query(sql, function(err, result) {
+	console.log("in the query function")
+	if(err) {
+	    console.log("error looking up user:" + err)
+	    return false
+	}
+	else{
+		console.log("result should on exist")
+		return "test";
+	}
+    })
+}
