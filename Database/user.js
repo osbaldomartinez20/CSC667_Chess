@@ -41,8 +41,8 @@ exports.userExists = function(user_id) {
 	    return false
 	}
 	else{
-		console.log("result should on exist")
-		return "test";
+	    console.log("Result: " + result)
+	    return false;
 	}
     })
 }

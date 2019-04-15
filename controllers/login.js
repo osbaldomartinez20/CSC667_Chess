@@ -18,7 +18,7 @@ router.use(bodyParser.json());
 router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
-        // verify(id_token)
+//    verify(id_token)
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
@@ -31,10 +31,16 @@ router.post('/login', (request, response) => {
         console.log("here " + payload)
         console.log("user_id " + user_id)
         console.log("email " + email)
-	if(!user.userExists(user_id)){
-		user.createUser(user_id, email)
+	if(user.userExists(user_id)){
+	    console.log("user exists already")
+	    response.send(user_id)
 	}
-	response.send(user_id)
+	else{
+	    console.log("creating user")
+	    user.createUser(user_id, email)
+  	    console.log("user created")
+	    response.send(user_id)
+	}
     }
     verify().catch(console.error);
 })
