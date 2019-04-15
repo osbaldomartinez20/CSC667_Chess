@@ -16,33 +16,32 @@ router.use(bodyParser.urlencoded({
 router.use(bodyParser.json());
 
 router.post('/login', (request, response) => {
-    var token = request.body.idtoken
-    console.log("the id token is " + token)
-        //    verify(id_token)
-    async function verify() {
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-             audience: '80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com',
-        })
-        const payload = ticket.getPayload()
-        const user_id = payload['sub']
-        const email = payload['email']
+            var token = request.body.idtoken
+            console.log("the id token is " + token)
+                //    verify(id_token)
+            async function verify() {
+                const ticket = await client.verifyIdToken({
+                    idToken: token,
+                    audience: '80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com',
+                })
+                const payload = ticket.getPayload()
+                const user_id = payload['sub']
+                const email = payload['email']
 
-        console.log("here " + payload)
-        console.log("user_id " + user_id)
-        console.log("email " + email)
-	
-	if(user.userExists(user_id){
-	    console.log("User exists")
-	    response.send(user_id)
-	}
-	else{
-	    console.log("User does not exists")
-	    user.createUser(user_id, email)
-	    response.send(user_id)
-	}
-    }
-    verify().catch(console.error);
-})
+                console.log("here " + payload)
+                console.log("user_id " + user_id)
+                console.log("email " + email)
 
-module.exports = router
+                if (user.userExists(user_id) {
+                        console.log("User exists")
+                        response.send(user_id)
+                    } else {
+                        console.log("User does not exists")
+                        user.createUser(user_id, email)
+                        response.send(user_id)
+                    }
+                }
+                verify().catch(console.error);
+            })
+
+        module.exports = router
