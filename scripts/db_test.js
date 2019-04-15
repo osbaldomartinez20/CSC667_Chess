@@ -4,12 +4,12 @@ if(db){
 
 	console.log('Connection made')	
 	console.log('Connected')
-	queryString = "SELECT * FROM users"
+	queryString = "SELECT count(*) FROM users"
 	db.query(queryString, (err, results, fields) => {
 		if (err) throw err
-		
-		console.log(results)
+		else{
+		    console.log(results[0]['count(*)'])
+		}
 	})
 }
-
 db.end()
