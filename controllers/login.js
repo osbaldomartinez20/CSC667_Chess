@@ -24,13 +24,10 @@ router.post('/login', (request, response) => {
             idToken: token,
             audience: '80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com',
         })
+
         const payload = ticket.getPayload()
         const user_id = payload['sub']
         const email = payload['email']
-
-        console.log("here " + payload)
-        console.log("user_id " + user_id)
-        console.log("email " + email)
 
         if (user.userExists(user_id)) {
             console.log("User exists")
