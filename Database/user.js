@@ -33,7 +33,7 @@ exports.updateDisplayName = function(email, newDisplayName) {
 
 exports.userExists = function(user_id) {
     var sql = "select count(*) from users where user_id = '" + user_id + "'"
-    console.log(sql)
+    
     db.query(sql, function(err, result) {
 	console.log("in the query function")
 	if(err) {
@@ -41,8 +41,24 @@ exports.userExists = function(user_id) {
 	    return false
 	}
 	else{
-		console.log("result should on exist")
-		return "test";
+	    console.log('Result: ' + result[0]['count(*)'])
+	    return result[0]['count(*)'];
 	}
     })
+}
+
+exports.activateSession = function(id) {
+	
+	var sql = "INSERT INTO users (active_session) VALUES(1) WHERE user_id = id"
+	
+	db.query(sql, function(err, result) {
+		if(err){
+		    console.log(err)
+		    return 0
+		}
+		else{
+		    console.log("user session is now activate")
+	  	    return 1
+		}
+	})
 }
