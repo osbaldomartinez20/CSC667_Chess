@@ -2,7 +2,7 @@
 var K = 24;
 
 //database
-var db = require('../auth/db_config.js')
+var db = require('../auth/db_config.js');
 
 
 //the wining probality of player 2 winning

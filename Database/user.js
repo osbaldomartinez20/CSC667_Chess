@@ -12,7 +12,7 @@ exports.createUser = function (id, email) {
     db.query(sql, function (err, result) {
         if(err) {
             console.log("failed to create user " + err);
-            return;
+            return false;
         } else {
             console.log("user created");
         }
