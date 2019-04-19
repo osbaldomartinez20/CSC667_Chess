@@ -25,12 +25,15 @@ table {
     border-collapse: separate;
     margin-bottom: 16px;
     width: 100%;
+    height: 100px;
+    overflow: scroll;
 }
 
 table td {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 5px;
+    overflow: scroll;
 }
 
 table th {
