@@ -1,7 +1,7 @@
 //database
 var db = require('../auth/db_config.js');
 
-//initiate a new game
+//create a new game by giving the username
 var createNewGame = async function (user) {
     var playerid;
     db.query("SELECT user_id FROM users WHERE display_name = '" + user + "'", function (err, result) {
@@ -26,6 +26,7 @@ var createNewGame = async function (user) {
     });
 }
 
+//function used to join a game given an username and a game_id
 var joinGame = function (user, game_id) {
     db.query("SELECT user_id FROM users WHERE display_name = '" + user + "'", function (err, result) {
         if (err) {
@@ -42,6 +43,42 @@ var joinGame = function (user, game_id) {
                     console.log("joined game");
                 }
             });
+        }
+    });
+}
+
+//"class" used to organized the retrieved date when finding available games
+class availableData {
+    constructor(game_id, playerid) {
+        this.game_id = game_id;
+        this.playerid = playerid;
+    }
+}
+
+//helps finding available games
+var fetchAvailableGames = function (data, callback) {
+    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else 
+            callback(null, result);
+    });
+}
+
+//sends data with available games 
+var availableGames = function() {
+    var a_games = [];
+    var data = null;
+    fetchAvailableGames(data, function(err, result) {
+        if (err) {
+            console.log("There was an error retrieving available games: " + err);
+            return false;
+        } else {
+            for (var i = 0; i < Object.keys(result).length; i++) {
+                const temp = new availableData(result[i].game_id, result[i].player_one_id);
+                a_games.push(temp);
+            }
+            console.log(JSON.stringify(a_games));
         }
     });
 }
