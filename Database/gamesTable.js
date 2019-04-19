@@ -55,8 +55,19 @@ exports.fetchAvailableGames = function (callback) {
     });
 }
 
+//helps finding ongoing games
 exports.fetchOngoingGames = function (callback) {
     db.query("SELECT game_id, player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else
+            callback(null, result);
+    });
+}
+
+//returns the moves made throughout the game
+var gameMoves = function (game_id, callback) {
+    db.query("SELECT moves FROM games WHERE game_id = " + game_id + "", function (err, result) {
         if (err) {
             callback(err, null);
         } else
