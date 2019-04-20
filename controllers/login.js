@@ -19,7 +19,7 @@ router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
         //    verify(id_token)
-    async function verify() {
+    function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: '80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com',
