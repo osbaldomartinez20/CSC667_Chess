@@ -12,7 +12,7 @@ exports.createUser = function (id, email) {
     db.query(sql, function (err, result) {
         if(err) {
             console.log("failed to create user " + err);
-            return;
+            return false;
         } else {
             console.log("user created");
         }
@@ -45,4 +45,20 @@ exports.userExists = function(user_id) {
 	    return result[0]['count(*)'];
 	}
     })
+}
+
+exports.activateSession = function(id) {
+	
+	var sql = "INSERT INTO users (active_session) VALUES(1) WHERE user_id = id"
+	
+	db.query(sql, function(err, result) {
+		if(err){
+		    console.log(err)
+		    return 0
+		}
+		else{
+		    console.log("user session is now activate")
+	  	    return 1
+		}
+	})
 }
