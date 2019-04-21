@@ -92,8 +92,8 @@
                 </header>
 
                 <section class="chat">
-                    <p><strong>John</strong>: Hello!</p>
-                    <p><strong>Bob</strong>: How are you!</p>
+                    <!--<p><strong>John</strong>: Hello!</p>
+                    <p><strong>Bob</strong>: How are you!</p>-->
                 </section>
 
                 <section class="onlineP">
@@ -102,9 +102,9 @@
                     </div>
                 </section>
 
-                <form>
-                    <input type="text" placeholder="be respecful when you chat" />
-                    <button>Send</button>
+                <form id="send-message">
+                    <input type="text" id = "message" placeholder="be respecful when you chat" />
+                    <button id = "chat-button" type="submit">Send</button>
                 </form>
             </div>
         </div>
@@ -134,6 +134,35 @@
         function myInit() {
             user_game(), onlineP(), available_games(), onGames(), onLoad()
         };
+
+
+        $( document ).ready(function() {
+            var socket = io.connect();
+            
+
+            var $messageForm = $('#send-message');
+            var $messageBox = $('#message');
+            var $chat = $('.chat');
+
+            function updateScroll(){
+                $chat.scrollTop = $chat.scrollHeight;
+            }
+
+            $messageForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('send message', $messageBox.val());
+                $messageBox.val('');
+            });
+
+            socket.on('new message', function(data){
+                $chat.append( '<b>' + "anon" + ': </b>'+ data + "<br/>");
+                $chat.animate({ scrollTop: 20000000 }, "slow");
+                
+            });
+
+            
+
+        });
     </script>
 
 

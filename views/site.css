@@ -130,6 +130,8 @@ h1,
     background: lightgrey;
     padding: 0;
     border: 1px solid black;
+    overflow: auto;
+
 }
 
 .onlineP {
