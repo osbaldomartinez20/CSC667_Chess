@@ -93,6 +93,7 @@ var EloRank = function (user1, user2, won) {
 
 }
 
+//resets user stats back to  default numbers
 var resetToDefault = function (user) {
     var sql = "UPDATE users SET elo = 1200, losses = 0, wins = 0 WHERE display_name = '" + user + "'";
     db.query(sql, function (err, result) {

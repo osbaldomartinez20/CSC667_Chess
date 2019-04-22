@@ -66,8 +66,8 @@ exports.fetchOngoingGames = function (callback) {
 }
 
 //returns the moves made throughout the game
-var gameMoves = function (game_id, callback) {
-    db.query("SELECT moves FROM games WHERE game_id = " + game_id + "", function (err, result) {
+exports.boardState = function (game_id, callback) {
+    db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function (err, result) {
         if (err) {
             callback(err, null);
         } else
