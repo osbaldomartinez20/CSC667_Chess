@@ -16,9 +16,17 @@
     <script src="resizable.js"></script>
     <script src="onGames.js"></script>
     <!--used for chat box-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+
+   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>
+    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>   -->
     <link href="site.css" rel="stylesheet">
 
 </head>
@@ -128,6 +136,8 @@
             });
         }
     </script>
+    
+
     <script>
         window.addEventListener("load", myInit, true);
 
@@ -135,8 +145,34 @@
             user_game(), onlineP(), available_games(), onGames(), onLoad()
         };
 
+    </script>
 
+    <script type="text/javascript">
+        
+    //send request to backend for chat prep!
+    
         $( document ).ready(function() {
+
+            console.log("Send request to backend re:CHAT\n");
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/lobby.html');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                console.log('SUCCESS!' + xhr.responseText);
+                //window.location.href = "lobby.html";
+            };
+        });
+
+
+
+    </script>
+
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript">
+
+            $( document ).ready(function() {
             var socket = io.connect();
             
 
@@ -159,8 +195,6 @@
                 $chat.animate({ scrollTop: 20000000 }, "slow");
                 
             });
-
-            
 
         });
     </script>
