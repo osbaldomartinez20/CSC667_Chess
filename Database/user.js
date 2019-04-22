@@ -19,8 +19,8 @@ exports.createUser = function (id, email) {
     });
 }
 
-exports.updateDisplayName = function(email, newDisplayName) {
-    var sql = "UPDATE users SET display_name = '" + newDisplayName + "' WHERE email = '" + email + "'";
+exports.updateDisplayName = function(user_id, newDisplayName) {
+    var sql = "UPDATE users SET display_name = '" + newDisplayName + "' WHERE user_id = '" + user_id + "'";
     db.query(sql, function(err, result) {
         if (err) {
             console.log("cannot update display_name: " + err);

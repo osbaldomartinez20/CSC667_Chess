@@ -82,7 +82,7 @@ router.get('/active', (request, response) => {
 
 router.post('/create', (request, response) => {
     games.createNewGame(request.user_id, function (err, result) {
-        if(err) {
+        if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
         } else {
@@ -95,7 +95,7 @@ router.post('/create', (request, response) => {
 //player2 joins the game
 router.put('/join', (request, response) => {
     games.joinGame(request.game_id, request.user_id, function (err, result) {
-        if(err) {
+        if (err) {
             console.log("Cannot join: " + err);
             response.send("Cannot join game");
         } else {

@@ -23,8 +23,8 @@ var EloRank = function (user1, user2, won) {
             return false;
         } else {
             //get the rankings for both players
-            rank1 = JSON.parse(JSON.stringify(result))[0].elo;
-            rank2 = JSON.parse(JSON.stringify(result))[1].elo;
+            rank1 = JSON.parse(JSON.stringify(result))[1].elo;
+            rank2 = JSON.parse(JSON.stringify(result))[0].elo;
 
             //calculate probalitity of second player winning
             var player2 = winProbability(rank1, rank2);
@@ -34,9 +34,12 @@ var EloRank = function (user1, user2, won) {
 
             //case where player 1 wins
             if (won == 1) {
-                rank1 = rank1 + K * (1 - player1);
-                rank2 = rank2 + K * (0 - player2);
-                var win1 = JSON.parse(JSON.stringify(result))[0].wins + 1;
+                var new1 = K * (1 - player1);
+                var new2 = K * (0 - player2);
+                rank1 += new1;
+                rank2 += new2;
+                var win1 = JSON.parse(JSON.stringify(result))[1].wins;
+                win1++;
                 //update player 1 in database
                 db.query("UPDATE users SET elo = " + rank1 + ", wins = " + win1 + " WHERE display_name = '" + user1 + "'", function (err, result) {
                     if (err) {
@@ -46,7 +49,8 @@ var EloRank = function (user1, user2, won) {
                         console.log(result.affectedRows + " record(s) updated");
                     }
                 });
-                var losses2 = JSON.parse(JSON.stringify(result))[1].losses + 1;
+                var losses2 = JSON.parse(JSON.stringify(result))[0].losses;
+                losses2++;
                 //update player 2 in database
                 db.query("UPDATE users SET elo = " + rank2 + ", losses = " + losses2 + " WHERE display_name = '" + user2 + "'", function (err, result) {
                     if (err) {
@@ -61,7 +65,8 @@ var EloRank = function (user1, user2, won) {
             else {
                 rank1 = rank1 + K * (0 - player1);
                 rank2 = rank2 + K * (1 - player2);
-                var win2 = JSON.parse(JSON.stringify(result))[1].wins + 1;
+                var win2 = JSON.parse(JSON.stringify(result))[0].wins;
+                win2++;
                 //update player 2 in database
                 db.query("UPDATE users SET elo = " + rank2 + ", wins = " + win2 + " WHERE display_name = '" + user2 + "'", function (err, result) {
                     if (err) {
@@ -71,7 +76,8 @@ var EloRank = function (user1, user2, won) {
                         console.log(result.affectedRows + " record(s) updated");
                     }
                 });
-                var losses1 = JSON.parse(JSON.stringify(result))[0].losses + 1;
+                var losses1 = JSON.parse(JSON.stringify(result))[1].losses;
+                losses1++;
                 //update player 1 in database
                 db.query("UPDATE users SET elo = " + rank1 + ", losses = " + losses1 + " WHERE display_name = '" + user1 + "'", function (err, result) {
                     if (err) {
@@ -82,11 +88,21 @@ var EloRank = function (user1, user2, won) {
                     }
                 });
             }
-
-            //updates the ELO values of the players in the database
-            console.log("Player 1:" + rank1);
-            console.log("Player 2:" + rank2);
         }
     });
 
 }
+
+var resetToDefault = function (user) {
+    var sql = "UPDATE users SET elo = 1200, losses = 0, wins = 0 WHERE display_name = '" + user + "'";
+    db.query(sql, function (err, result) {
+        if (err) {
+            console.log("cannot update ELO or losses: " + err);
+            return false;
+        } else {
+            console.log(result.affectedRows + " record(s) updated");
+        }
+    });
+}
+
+EloRank("ozo", "osbaldo", 0);
