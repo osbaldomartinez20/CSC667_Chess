@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
     <script src="available_games.js"></script>
     <script src="online_players.js"></script>
@@ -17,16 +18,7 @@
     <script src="onGames.js"></script>
     <!--used for chat box-->
     <script src="/socket.io/socket.io.js"></script>
-
-    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-
-
-
-   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>   -->
     <link href="site.css" rel="stylesheet">
 
 </head>
@@ -111,8 +103,8 @@
                 </section>
 
                 <form id="send-message">
-                    <input type="text" id = "message" placeholder="be respecful when you chat" />
-                    <button id = "chat-button" type="submit">Send</button>
+                    <input type="text" id="message" placeholder="be respecful when you chat" />
+                    <button id="chat-button" type="submit">Send</button>
                 </form>
             </div>
         </div>
@@ -123,6 +115,7 @@
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function() {
                 console.log('User signed out.');
+                cookie.set('user', "");
                 window.location.href = "index.html";
             });
         }
@@ -136,7 +129,7 @@
             });
         }
     </script>
-    
+
 
     <script>
         window.addEventListener("load", myInit, true);
@@ -144,58 +137,39 @@
         function myInit() {
             user_game(), onlineP(), available_games(), onGames(), onLoad()
         };
-
     </script>
 
-    <script type="text/javascript">
-        
-    //send request to backend for chat prep!
-    
-        $( document ).ready(function() {
+    <script>
+        var socket = io();
 
-            console.log("Send request to backend re:CHAT\n");
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/lobby.html');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                console.log('SUCCESS!' + xhr.responseText);
-                //window.location.href = "lobby.html";
-            };
+        // The user count. Can change when someone joins/leaves
+        socket.on('count', function(data) {
+            $('.user-count').html(data);
         });
 
+        // When we receive a message
+        // it will be like { user: 'username', message: 'text' }
+        socket.on('chat message', function(data) {
+            $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
+        });
 
+        // When the form is submitted
+        $('form').submit(function(e) {
+            // Avoid submitting it through HTTP
+            e.preventDefault();
 
-    </script>
+            // Retrieve the message from the user
+            var message = $(e.target).find('input').val();
 
-    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script type="text/javascript">
-
-            $( document ).ready(function() {
-            var socket = io.connect();
-            
-
-            var $messageForm = $('#send-message');
-            var $messageBox = $('#message');
-            var $chat = $('.chat');
-
-            function updateScroll(){
-                $chat.scrollTop = $chat.scrollHeight;
-            }
-
-            $messageForm.submit(function(e){
-                e.preventDefault();
-                socket.emit('send message', $messageBox.val());
-                $messageBox.val('');
+            // Send the message to the server
+            socket.emit('chat message', {
+                user: cookie.get('user') || 'Anonymous',
+                message: message
             });
 
-            socket.on('new message', function(data){
-                $chat.append( '<b>' + "anon" + ': </b>'+ data + "<br/>");
-                $chat.animate({ scrollTop: 20000000 }, "slow");
-                
-            });
-
+            // Clear the input and focus it for a new message
+            e.target.reset();
+            $(e.target).find('input').focus();
         });
     </script>
 
