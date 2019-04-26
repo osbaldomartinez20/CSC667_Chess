@@ -18,7 +18,7 @@ exports.createNewGame = async function (userid, callback) {
 
 //function used to join a game given an username and a game_id
 exports.joinGame = async function (userid, game_id, callback) {
-    var sql = "Update games SET player_two_id = '" + userid + "', active = true WHERE game_id = " + game_id + "";
+    var sql = "UPDATE games SET player_two_id = '" + userid + "', active = true WHERE game_id = " + game_id + "";
     db.query(sql, function (err, result) {
         if (err) {
             callback(err, null);
@@ -50,8 +50,9 @@ exports.fetchAvailableGames = function (callback) {
     db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
         if (err) {
             callback(err, null);
-        } else
+        } else {
             callback(null, result);
+        }
     });
 }
 
@@ -60,8 +61,9 @@ exports.fetchOngoingGames = function (callback) {
     db.query("SELECT game_id, player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function (err, result) {
         if (err) {
             callback(err, null);
-        } else
+        } else {
             callback(null, result);
+        }
     });
 }
 
@@ -70,7 +72,20 @@ exports.boardState = function (game_id, callback) {
     db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function (err, result) {
         if (err) {
             callback(err, null);
-        } else
+        } else {
+            callback(null, result[0].current_state);
+        }
+    });
+}
+
+//updates the current state of the board in the database
+exports.updateState = function (game_id, curr_state, callback) {
+    var sql = "UPDATE games SET current_state = '" + curr_state + "' WHERE game_id = " + game_id + "";
+    db.query(sql, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
             callback(null, result);
+        }
     });
 }
