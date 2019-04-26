@@ -60,5 +60,16 @@ exports.activateSession = function (id) {
             console.log("user session is now activate")
             return 1;
         }
-    })
+    });
+}
+
+//function that returns the display_name given the user_id
+exports.getUsename = function (userid, callback) {
+    db.query("SELECT display_name FROM users WHERE user_id = " + userid + "", function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result[0].display_name);
+        }
+    });
 }
