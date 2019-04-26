@@ -11,7 +11,7 @@ exports.createNewGame = async function (userid, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, game_id);
+            callback(null, JSON.stringify(game_id));
         }
     });
 }
