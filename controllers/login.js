@@ -3,6 +3,7 @@ const https = require('https');
 const db = require('../auth/db_config.js')
 const user = require('../Database/user.js')
 const games = require('../Database/gamesTable.js');
+const rank = require('../Database/ranking.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client('80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com');
@@ -100,6 +101,18 @@ router.put('/join', (request, response) => {
             response.send("Cannot join game");
         } else {
             console.log("Joined game")
+            response.send(result);
+        }
+    });
+});
+
+router.put('/top', (request, response) => {
+    rank.getTopPlayers(function (err, result) {
+        if (err) {
+            console.log("Cannot get top players: " + err);
+            response.send("Cannot show top players");
+        } else {
+            console.log("Success in getting top players");
             response.send(result);
         }
     });

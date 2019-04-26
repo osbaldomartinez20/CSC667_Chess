@@ -156,7 +156,7 @@ exports.getTopPlayers = function (callback) {
             for (var i = 0; i < result.length; i++) {
                 p_top.push(new playerRankInfo(result[i].display_name, result[i].elo));
             }
-            callback(null,JSON.stringify(p_top));
+            callback(null, JSON.stringify(p_top));
         }
     });
 }
