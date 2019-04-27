@@ -1,0 +1,21 @@
+## This text file contains an explanation for the routes ##
+
+/pending :
+this route returns a JSON with the available games to join. Returns an empty JSON if there are no games available to join.
+No need to send data to backend.
+
+/active :
+this route returns a JSON with the ongoing games. Returns an empty JSON if there are no ongoing games.
+No need to send data to backend.
+
+/create :
+this route creates a new game. This route needs to be given the id of user creating the game.
+Returns a JSON with the id of the created game.
+
+/join :
+this route is used to indicate an user has joined an available game. This route needs to be given the id of the joining user and
+the game id of the game the user is joining. Returns a message indicating success.
+
+/top :
+this route returns a JSON with the top 20 players by ELO. Returns empty JSON if no players exist.
+No need to send data to backend.

@@ -12,6 +12,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
+    <script src="helper.js"></script>
     <script src="available_games.js"></script>
     <script src="online_players.js"></script>
     <script src="resizable.js"></script>
@@ -124,8 +125,6 @@
             console.log('I am here');
             gapi.load('auth2', function() {
                 gapi.auth2.init();
-                console.log('User signed in.');
-
             });
         }
     </script>
