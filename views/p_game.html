@@ -14,6 +14,10 @@
     <link href="p_game.css" rel="stylesheet">
     <link href="css/chessboard-0.3.0.css" rel="stylesheet">
     <link href="css/chessboard-0.3.0.min.css" rel="stylesheet">
+    <!--used for chat box-->
+    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <style>
         canvas {
             border: 1px solid #d3d3d3;
@@ -156,13 +160,14 @@
             </header>
 
             <section class="chat">
-                <p><strong>John</strong>: Hello!</p>
-                <p><strong>Bob</strong>: How are you!</p>
+                
             </section>
 
-            <form>
-                <input type="text" placeholder="be respecful when you chat" />
-                <button>Send</button>
+            <form id="send-message">
+                <input type="text" id="message" placeholder="be respecful when you chat" />
+                <button id="chat-button" type="submit">Send</button>
+                <button id="chat-history-button" type="button">Show History</button>
+
             </form>
         </div>
         <div id="utils" class="tab">
@@ -175,6 +180,60 @@
         function myInit() {
             moves()
         };
+    </script>
+
+    <script>
+
+        var theUrl = '/p_game';
+
+        function httpGetAsync(theUrl, callback){
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    callback(xmlHttp.responseText);
+            }
+            xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+            xmlHttp.send(null);
+        }
+
+
+        //On the client side, you tell Socket.IO client to connect to that namespace:
+        var socket = io(theUrl);
+
+        // The user count. Can change when someone joins/leaves
+        /*socket.on('count', function(data) {
+            $('.user-count').html(data);
+        });*/
+
+        // When we receive a message
+        // it will be like { user: 'username', message: 'text' }
+        socket.on('chat message', function(data) {
+            $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
+           //$('.chat').append('<p>' + data.message + '</p>');
+
+            //to scroll down the messages
+            $chat.animate({ scrollTop: 20000000 }, "slow");
+        });
+
+        // When the form is submitted
+        $('form').submit(function(e) {
+            // Avoid submitting it through HTTP
+            e.preventDefault();
+
+            // Retrieve the message from the user
+            var message = $(e.target).find('input').val();
+
+            // Send the message to the server
+            socket.emit('chat message', {
+                user: cookie.get('user') || 'Anonymous',
+                message: message
+            });
+
+            // Clear the input and focus it for a new message
+            e.target.reset();
+            $(e.target).find('input').focus();
+        });
     </script>
 </body>
 
