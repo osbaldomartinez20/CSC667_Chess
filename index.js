@@ -33,6 +33,26 @@ io.on('connection', function(socket) {
 });
 
 
+//adding namespace thing
+
+var nsp = io.of('/p_game');
+nsp.on('connection', function(socket){
+  console.log('someone connected to private room');
+  //nsp.emit('hi', 'everyone!');
+
+});
+
+nsp.emit('hi', 'everyone!');
+
+nsp.on('connection', function(socket) {
+    socket.on('chat message', function(msg) {
+        console.log(msg);
+        nsp.emit('chat message', msg);
+    });
+});
+
+
+
 const router = require('./controllers/login.js')
 app.use(router)
 
