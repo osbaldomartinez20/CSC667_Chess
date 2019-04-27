@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="helper.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com">
+    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <link href="site.css" rel="stylesheet">
 
 
@@ -53,16 +53,33 @@
 
     <div id="my-signin2"></div>
     <script>
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            if (cookie.get('user') !== "") {
+                window.location.href = "lobby.html";
+            }
+        };
+
         function onSuccess(googleUser) {
+            /* var profile = googleUser.getBasicProfile();
+             console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+             console.log('Full Name: ' + profile.getName());
+             console.log('Given Name: ' + profile.getGivenName());
+             console.log('Family Name: ' + profile.getFamilyName());
+             console.log("Image URL: " + profile.getImageUrl());
+             console.log("Email: " + profile.getEmail());*/
 
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
+            var user = cookie.get('user');
+            user = googleUser.getBasicProfile().getEmail();
+            cookie.set('user', user);
             console.log("ID Token: " + id_token);
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/login');
+            xhr.open('POST', 'http://localhost:3000/login');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
-                setID(xhr.responseText)
                 console.log('Signed in as: ' + xhr.responseText);
                 window.location.href = "lobby.html";
             };
@@ -91,5 +108,3 @@
 
 
 </body>
-
-</html>
