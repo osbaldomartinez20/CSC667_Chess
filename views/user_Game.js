@@ -4,12 +4,19 @@ function user_game() {
      console.log("ID Token: " + id_token);
      var xhr = new XMLHttpRequest();
 xhr.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending');
-     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-     xhr.onload = function() {
-         setID(xhr.responseText)
-         console.log('Signed in as: ' + xhr.responseText);
-         window.location.href = "lobby.html";
-     };
+xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log(xhr.responseText);
+      } else {
+        console.error(xhr.statusText);
+      }
+    }
+  };
+  xhr.onerror = function (e) {
+    console.error(xhr.statusText);
+  };
+  xhr.send(null);
     var jsonExamples = [{
         "Oponent": "Bob",
         "status": "Going"

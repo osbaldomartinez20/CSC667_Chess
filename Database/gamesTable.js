@@ -1,6 +1,14 @@
 //database
 var db = require('../auth/db_config.js');
 
+//create a user Game by using userid
+exports.userGame = async function (userid) {
+    //find where player-one-id = user-id 
+    //and player-two-id = user-id 
+    //return JSON with the condition
+    
+}
+
 //create a new game by giving the username
 exports.createNewGame = async function (userid, callback) {
     //this is used to asign an unique id to each game.

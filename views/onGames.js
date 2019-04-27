@@ -1,16 +1,22 @@
 function onGames() {
-
-     //get
+    //get
      var id_token = googleUser.getAuthResponse().id_token;
      console.log("ID Token: " + id_token);
      var xhr = new XMLHttpRequest();
-xhr.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/active');
-     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-     xhr.onload = function() {
-         setID(xhr.responseText)
-         console.log('Signed in as: ' + xhr.responseText);
-         window.location.href = "lobby.html";
-     };
+    xhr.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/active');
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            console.log(xhr.responseText);
+          } else {
+            console.error(xhr.statusText);
+          }
+        }
+      };
+      xhr.onerror = function (e) {
+        console.error(xhr.statusText);
+      };
+      xhr.send(null);
     var jsonExamples = [{
         "Player 1": "Bob",
         "Player 2": "Mark"
