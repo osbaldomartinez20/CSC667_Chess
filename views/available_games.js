@@ -1,4 +1,16 @@
 function available_games() {
+    //get
+    var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+            var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                setID(xhr.responseText)
+                console.log('Signed in as: ' + xhr.responseText);
+                window.location.href = "lobby.html";
+            };
+    //update
     var jsonExamples = [{
         "Oponent": "Anton",
         "Level": "Begginer"
