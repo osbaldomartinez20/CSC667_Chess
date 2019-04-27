@@ -11,7 +11,7 @@ exports.createNewGame = async function (userid, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, game_id);
+            callback(null, JSON.stringify(game_id));
         }
     });
 }
@@ -89,3 +89,60 @@ exports.updateState = function (game_id, curr_state, callback) {
         }
     });
 }
+
+
+//used to help make the process of storing the moves easier
+var moves = class {
+    constructor(playerid, piece, origin, moveTo, timestamp) {
+        this.playerid = playerid;
+        this.piece = piece;
+        this.origin = origin;
+        this.moveTo = moveTo;
+        this.timestamp = timestamp;
+    }
+}
+
+//creates dummy data for testing
+var dummyData = class {
+    constructor(playerid, piece, origin, moveTo, game_id) {
+        this.playerid = playerid;
+        this.piece = piece;
+        this.origin = origin;
+        this.moveTo = moveTo;
+        this.game_id = game_id;
+    }
+}
+
+
+//stores moves in database in table game_moves
+//data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
+exports.storeMove = function (data, callback) {
+    var storing = [];
+    var t_stamp = new Date();
+    var sql = "SELECT * FROM game_moves WHERE game_id = " + data.game_id + "";
+    db.query(sql, function (err, result) {
+        if (err) {
+            console.log("Cannot retrieve moves: " + err);
+        } else {
+            console.log(JSON.parse(result[0].moves));
+            var mov = JSON.parse(result[0].moves);
+            if (mov != null) {
+                for (let i = 0; i < mov.length; i++) {
+                    storing.push(new moves(mov[i].playerid, mov[i].piece, mov[i].origin, mov[i].moveTo, mov[i].timestamp));
+                }
+            }
+            storing.push(new moves(data.playerid, data.piece, data.origin, data.moveTo, t_stamp));
+            var st = JSON.stringify(storing);
+            db.query("UPDATE game_moves SET moves = '" + st + "' WHERE game_id = " + data.game_id + "", function (err, result) {
+                if (err) {
+                    console.log("Cannot update moves: " + err)
+                } else {
+                    console.log("Move update successful");
+                }
+            });
+        }
+    });
+}
+
+//var sec = new dummyData(123, "T", "B5", "A5", 123);
+//storeMove(sec, null);
