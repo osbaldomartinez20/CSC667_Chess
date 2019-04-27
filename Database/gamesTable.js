@@ -11,6 +11,7 @@ exports.createNewGame = async function (userid, callback) {
         if (err) {
             callback(err, null);
         } else {
+            startTrackingMoves(game_id);
             callback(null, JSON.stringify(game_id));
         }
     });
@@ -116,7 +117,7 @@ var dummyData = class {
 
 //stores moves in database in table game_moves
 //data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
-exports.storeMove = function (data, callback) {
+exports.storeMove = function (data) {
     var storing = [];
     var t_stamp = new Date();
     var sql = "SELECT * FROM game_moves WHERE game_id = " + data.game_id + "";
@@ -144,5 +145,16 @@ exports.storeMove = function (data, callback) {
     });
 }
 
+var startTrackingMoves = function (game_id) {
+    var sql = "INSERT INTO game_moves (game_id) VALUES (" + game_id + ")";
+    db.query(sql, function (err, result) {
+        if (err) {
+            console.log("Failed to assing a move tracker to game: " + game_id + ": " + err);
+        } else {
+            console.log("Can track moves of game: " + game_id);
+        }
+    });
+}
+
 //var sec = new dummyData(123, "T", "B5", "A5", 123);
-//storeMove(sec, null);
+//storeMove(sec);
