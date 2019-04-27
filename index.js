@@ -1,7 +1,7 @@
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const games = require('../Database/chat.js');
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 
@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
-
-io.on('connection', function(socket) {
+const nsp = io.of("/" + games.getGameID());
+nsp.on('connection', function(socket) {
     console.log('an user connected');
     socket.on('disconnect', function() {
         console.log('user disconnected');
@@ -25,13 +25,12 @@ io.on('connection', function(socket) {
     });
 });
 
-io.on('connection', function(socket) {
+nsp.on('connection', function(socket) {
     socket.on('chat message', function(msg) {
         console.log(msg);
-        io.emit('chat message', msg);
+        nsp.emit('chat message', msg);
     });
 });
-
 
 const router = require('./controllers/login.js')
 app.use(router)
