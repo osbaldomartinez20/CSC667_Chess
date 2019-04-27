@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
     <script src="helper.js"></script>
     <script src="available_games.js"></script>
@@ -17,9 +18,8 @@
     <script src="resizable.js"></script>
     <script src="onGames.js"></script>
     <!--used for chat box-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <link href="site.css" rel="stylesheet">
 
 </head>
@@ -93,8 +93,8 @@
                 </header>
 
                 <section class="chat">
-                    <p><strong>John</strong>: Hello!</p>
-                    <p><strong>Bob</strong>: How are you!</p>
+                    <!--<p><strong>John</strong>: Hello!</p>
+                    <p><strong>Bob</strong>: How are you!</p>-->
                 </section>
 
                 <section class="onlineP">
@@ -103,9 +103,9 @@
                     </div>
                 </section>
 
-                <form>
-                    <input type="text" placeholder="be respecful when you chat" />
-                    <button>Send</button>
+                <form id="send-message">
+                    <input type="text" id="message" placeholder="be respecful when you chat" />
+                    <button id="chat-button" type="submit">Send</button>
                 </form>
             </div>
         </div>
@@ -116,6 +116,7 @@
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function() {
                 console.log('User signed out.');
+                cookie.set('user', "");
                 window.location.href = "index.html";
             });
         }
@@ -127,12 +128,48 @@
             });
         }
     </script>
+
+
     <script>
         window.addEventListener("load", myInit, true);
 
         function myInit() {
             user_game(), onlineP(), available_games(), onGames(), onLoad()
         };
+    </script>
+
+    <script>
+        var socket = io();
+
+        // The user count. Can change when someone joins/leaves
+        socket.on('count', function(data) {
+            $('.user-count').html(data);
+        });
+
+        // When we receive a message
+        // it will be like { user: 'username', message: 'text' }
+        socket.on('chat message', function(data) {
+            $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
+        });
+
+        // When the form is submitted
+        $('form').submit(function(e) {
+            // Avoid submitting it through HTTP
+            e.preventDefault();
+
+            // Retrieve the message from the user
+            var message = $(e.target).find('input').val();
+
+            // Send the message to the server
+            socket.emit('chat message', {
+                user: cookie.get('user') || 'Anonymous',
+                message: message
+            });
+
+            // Clear the input and focus it for a new message
+            e.target.reset();
+            $(e.target).find('input').focus();
+        });
     </script>
 
 
