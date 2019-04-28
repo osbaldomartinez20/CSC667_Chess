@@ -3,9 +3,10 @@ const https = require('https');
 const db = require('../auth/db_config.js')
 const user = require('../Database/user.js')
 const games = require('../Database/gamesTable.js');
+const rank = require('../Database/ranking.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client('80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com');
+const client = new OAuth2Client('1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com');
 
 //create a router for url request
 const router = express.Router()
@@ -19,11 +20,11 @@ router.use(bodyParser.json());
 router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
-    //    verify(id_token)
+        //    verify(id_token)
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: '80146750892-6lrkaeqa58vffvin1ja4fqmqqj1lep9c.apps.googleusercontent.com',
+            audience: '1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com',
         })
 
         const payload = ticket.getPayload()
@@ -46,7 +47,7 @@ router.post('/login', (request, response) => {
 //Empty JSON if there are no available games
 router.get('/pending', (request, response) => {
     var a_games = [];
-    games.fetchAvailableGames(function (err, result) {
+    games.fetchAvailableGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.send("Cannot retrieve available games");
@@ -64,7 +65,7 @@ router.get('/pending', (request, response) => {
 //Empty JSON if there are no ongoing games
 router.get('/active', (request, response) => {
     var o_games = [];
-    games.fetchOngoingGames(function (err, result) {
+    games.fetchOngoingGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.send("Cannot retrieve available games");
@@ -78,11 +79,9 @@ router.get('/active', (request, response) => {
     });
 });
 
-
-
 router.post('/create', (request, response) => {
-    games.createNewGame(request.user_id, function (err, result) {
-        if(err) {
+    games.createNewGame(request.body.user_id, function(err, result) {
+        if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
         } else {
@@ -94,8 +93,8 @@ router.post('/create', (request, response) => {
 
 //player2 joins the game
 router.put('/join', (request, response) => {
-    games.joinGame(request.game_id, request.user_id, function (err, result) {
-        if(err) {
+    games.joinGame(request.game_id, request.user_id, function(err, result) {
+        if (err) {
             console.log("Cannot join: " + err);
             response.send("Cannot join game");
         } else {
@@ -105,5 +104,17 @@ router.put('/join', (request, response) => {
     });
 });
 
+router.put('/top', (request, response) => {
+    rank.getTopPlayers(function(err, result) {
+        if (err) {
+            console.log("Cannot get top players: " + err);
+            response.send("Cannot show top players");
+        } else {
+            console.log("Success in getting top players");
+            response.send(result);
+        }
+    });
+});
 
-module.exports = router
+
+module.exports = router;
