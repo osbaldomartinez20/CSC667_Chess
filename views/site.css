@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-    transition: all .3s ease;
 }
 
 body {
@@ -26,14 +25,12 @@ table {
     margin-bottom: 16px;
     width: 100%;
     height: 100px;
-    overflow: scroll;
 }
 
 table td {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 5px;
-    overflow: scroll;
 }
 
 table th {
@@ -86,19 +83,6 @@ img.avatar {
 }
 
 
-/* Canvas to create the centered square for chess board */
-
-canvas {
-    max-width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    border-radius: 0.5em;
-}
-
-
 /*chat css */
 
 h1,
@@ -134,7 +118,6 @@ h1,
     padding: 0;
     border: 1px solid black;
     overflow: auto;
-
 }
 
 .onlineP {
