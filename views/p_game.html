@@ -230,7 +230,7 @@
         var room = cookie.get('game_id');
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        var socket = io.connect();
+        var socket = io.connect('http://54.149.192.92:8080');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
