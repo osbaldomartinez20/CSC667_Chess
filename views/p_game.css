@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-    transition: all .3s ease;
 }
 
 body {
@@ -25,6 +24,7 @@ table {
     border-collapse: separate;
     margin-bottom: 16px;
     width: 100%;
+    height: 100px;
 }
 
 table td {
@@ -61,16 +61,6 @@ tr:hover {
     background-color: #ccc;
 }
 
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-}
-
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
-}
-
 
 /* used to create a container (square ) */
 
@@ -85,7 +75,16 @@ img.avatar {
 div.ex1 {
     width: 100%;
     position: absolute;
-    top: 58%;
+    top: 65%;
+}
+
+div.ex2 {
+    background-color: white;
+    width: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 #board {
@@ -175,5 +174,5 @@ button {
 #map {
     background-color: white;
     width: 30%;
-    margin-left: 30px
+    margin-left: 30px;
 }
