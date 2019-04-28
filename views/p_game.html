@@ -18,12 +18,6 @@
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <style>
-        canvas {
-            border: 1px solid #d3d3d3;
-            background-color: #f1f1f1;
-        }
-    </style>
 </head>
 
 <body>
@@ -62,82 +56,6 @@
         </script>
 
     </div>
-    <!--
-       <canvas id="myCanvas" height="480" width="480"></canvas>
-<script>
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        var width = 480;
-        var size = 8;
-        var light = '#D2691E';
-        var dark = '#703810';
-        var x = -1;
-        var y = -1;
-        let totalSquares = Math.pow(size, 2);
-        let squareWidth = width / size;
-        var imgSRC = [];
-        for (var k = 1; k < 13; k++) {
-            imgSRC[k] = "images/" + k + ".png";
-            console.log(imgSRC[k]);
-        }
-        const images = []; /// array to hold images.
-        var imageCount = 0; // number of loaded images;
-
-
-        function drawBoard() {
-            ctx.beginPath();
-            ctx.rect(x * squareWidth, y * squareWidth, squareWidth, squareWidth);
-            console.log(x * squareWidth, y * squareWidth, squareWidth, squareWidth)
-            ctx.fillStyle = (x + y) % 2 ? dark : light;
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function allImagesLoaded() {
-            var count = 0;
-            while (count != 13) {
-                ctx.beginPath();
-                ctx.drawImage(images[0], x * squareWidth, y * squareWidth, squareWidth, squareWidth);
-                ctx.closePath();
-            }
-
-        }
-
-        function drawImg() {
-
-            // iterate each image URL, create, load, and add it to the images array
-            imgSRC.forEach(src => { // for each image url
-                const image = new Image();
-                image.src = src;
-                image.onload = () => {
-                    imageCount += 1;
-                    if (imageCount === imgSRC.length) { // have all loaded????
-                        allImagesLoaded(); // call function to start rendering
-                    }
-                }
-                images.push(image); // add loading image to images array
-
-            });
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (var i = 0; i < totalSquares; i++) {
-                x++;
-                if (i % size == 0) {
-                    y++;
-                    x = 0;
-                }
-                drawBoard();
-                //drawImg();
-            }
-        }
-        draw();
-        // setInterval(draw, 100000000);
-    </script>
-
-
-  -->
     <div class="ex1">
 
         <div id="nav" class="tab">
@@ -160,14 +78,13 @@
             </header>
 
             <section class="chat">
-                
+
             </section>
 
-            <form id="send-message">
-                <input type="text" id="message" placeholder="be respecful when you chat" />
-                <button id="chat-button" type="submit">Send</button>
-                <button id="chat-history-button" type="button">Show History</button>
 
+            <form id="send-message">
+                <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
+                <button id="chat-button" type="submit">Send</button>
             </form>
         </div>
         <div id="utils" class="tab">
@@ -183,37 +100,27 @@
     </script>
 
     <script>
-
-        var theUrl = '/p_game';
-
-        function httpGetAsync(theUrl, callback){
-
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                    callback(xmlHttp.responseText);
-            }
-            xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-            xmlHttp.send(null);
-        }
-
+        var room = cookie.get('game_id');
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        var socket = io(theUrl);
+        var socket = io.connect();
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
 
+        socket.on('connect', function() {
+            socket.emit('room', room)
+        })
+
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }
-        socket.on('chat message', function(data) {
+        socket.on('message', function(data) {
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
-           //$('.chat').append('<p>' + data.message + '</p>');
-
-            //to scroll down the messages
-            $chat.animate({ scrollTop: 20000000 }, "slow");
+            $(".chat").stop().animate({
+                scrollTop: $(".chat")[0].scrollHeight
+            }, 1000);
         });
 
         // When the form is submitted
@@ -225,7 +132,7 @@
             var message = $(e.target).find('input').val();
 
             // Send the message to the server
-            socket.emit('chat message', {
+            socket.emit('message', {
                 user: cookie.get('user') || 'Anonymous',
                 message: message
             });

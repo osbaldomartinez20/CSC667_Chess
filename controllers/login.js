@@ -79,10 +79,8 @@ router.get('/active', (request, response) => {
     });
 });
 
-
-
 router.post('/create', (request, response) => {
-    games.createNewGame(request.user_id, function(err, result) {
+    games.createNewGame(request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
@@ -119,4 +117,4 @@ router.put('/top', (request, response) => {
 });
 
 
-module.exports = router
+module.exports = router;

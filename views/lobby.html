@@ -103,14 +103,30 @@
                 </section>
 
                 <form id="send-message">
-                    <input type="text" id="message" placeholder="be respecful when you chat" />
+                    <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
                     <button id="chat-button" type="submit">Send</button>
                 </form>
             </div>
         </div>
-        <div id="utils" class="tab"></div>
+        <div id="utils" class="tab">
+            <button onclick="newGame()">new game</button>
+        </div>
     </div>
     <script>
+        function newGame() {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/create');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                // console.log('Signed in as: ' + xhr.responseText);
+                // window.location.href = "lobby.html";
+            };
+            const user_id = cookie.get('user');
+            console.log('Signed in as: ' + user_id);
+            xhr.send('user_id=' + user_id);
+        }
+
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function() {
@@ -140,19 +156,26 @@
     </script>
 
     <script>
-        var socket = io();
+        //On the client side, you tell Socket.IO client to connect to that namespace:
+        var socket = io.connect();
+        var room = "default"
 
         // The user count. Can change when someone joins/leaves
-        socket.on('count', function(data) {
+        /*socket.on('count', function(data) {
             $('.user-count').html(data);
-        });
+        });*/
+
+        socket.on('connect', function() {
+            socket.emit('room', room)
+        })
 
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }
-        socket.on('chat message', function(data) {
+        socket.on('message', function(data) {
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
-            $chat.animate({ scrollTop: 20000000 }, "slow");
-
+            $(".chat").stop().animate({
+                scrollTop: $(".chat")[0].scrollHeight
+            }, 1000);
         });
 
         // When the form is submitted
@@ -164,7 +187,7 @@
             var message = $(e.target).find('input').val();
 
             // Send the message to the server
-            socket.emit('chat message', {
+            socket.emit('message', {
                 user: cookie.get('user') || 'Anonymous',
                 message: message
             });
