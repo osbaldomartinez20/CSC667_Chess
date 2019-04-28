@@ -1,6 +1,9 @@
 //database
 var db = require('../auth/db_config.js');
 
+//used for message tracker
+var chat = require('../Database/messages.js');
+
 //create a new game by giving the username
 exports.createNewGame = async function (userid, callback) {
     //this is used to asign an unique id to each game.
@@ -12,6 +15,7 @@ exports.createNewGame = async function (userid, callback) {
             callback(err, null);
         } else {
             startTrackingMoves(game_id);
+            chat.newMessageTracker(game_id);
             callback(null, JSON.stringify(game_id));
         }
     });
@@ -95,7 +99,7 @@ exports.updateState = function (game_id, curr_state, callback) {
 //used to help make the process of storing the moves easier
 var moves = class {
     constructor(playerid, piece, origin, moveTo, timestamp) {
-        this.playerid = playerid;
+        this.playername = playerid;
         this.piece = piece;
         this.origin = origin;
         this.moveTo = moveTo;
@@ -106,7 +110,7 @@ var moves = class {
 //creates dummy data for testing
 var dummyData = class {
     constructor(playerid, piece, origin, moveTo, game_id) {
-        this.playerid = playerid;
+        this.playername = playerid;
         this.piece = piece;
         this.origin = origin;
         this.moveTo = moveTo;
@@ -129,10 +133,10 @@ exports.storeMove = function (data) {
             var mov = JSON.parse(result[0].moves);
             if (mov != null) {
                 for (let i = 0; i < mov.length; i++) {
-                    storing.push(new moves(mov[i].playerid, mov[i].piece, mov[i].origin, mov[i].moveTo, mov[i].timestamp));
+                    storing.push(new moves(mov[i].playername, mov[i].piece, mov[i].origin, mov[i].moveTo, mov[i].timestamp));
                 }
             }
-            storing.push(new moves(data.playerid, data.piece, data.origin, data.moveTo, t_stamp));
+            storing.push(new moves(data.playername, data.piece, data.origin, data.moveTo, t_stamp));
             var st = JSON.stringify(storing);
             db.query("UPDATE game_moves SET moves = '" + st + "' WHERE game_id = " + data.game_id + "", function (err, result) {
                 if (err) {
@@ -156,5 +160,5 @@ var startTrackingMoves = function (game_id) {
     });
 }
 
-//var sec = new dummyData(123, "T", "B5", "A5", 123);
+//var sec = new dummyData("ozo", "T", "B5", "A5", 123);
 //storeMove(sec);

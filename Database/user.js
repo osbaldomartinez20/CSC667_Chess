@@ -1,7 +1,8 @@
 //file used for methods that pertain to users
 //can create and update users
 
-var db = require('../auth/db_config.js')
+var db = require('../auth/db_config.js');
+var xx = require('../Database/ranking.js');
 
 //param id and email should be given from the information that google gives us.
 exports.createUser = function (id, email) {
