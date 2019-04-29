@@ -1,7 +1,8 @@
 const express = require('express')
 const https = require('https');
 const db = require('../auth/db_config.js')
-const user = require('../Database/user.js')
+const chat = require('../Database/message.js');
+const user = require('../Database/user.js');
 const games = require('../Database/gamesTable.js');
 const rank = require('../Database/ranking.js');
 const bodyParser = require("body-parser")
@@ -114,6 +115,14 @@ router.put('/top', (request, response) => {
             response.send(result);
         }
     });
+});
+
+router.post('/chatStore' , (request, response) => {
+	console.log('chatStore()');
+});
+
+router.get('/chatHistory', (request, response) => {
+	console.log('chatHistory()');
 });
 
 
