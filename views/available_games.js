@@ -1,7 +1,7 @@
 function available_games() {
     var av_games;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://54.149.192.92/pending', false); // `false` makes the request synchronous
+    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending', false); // `false` makes the request synchronous
     request.send(null);
 
     if (request.status === 200) {
@@ -67,6 +67,7 @@ function available_games() {
         console.log(user)
         cookie.set('game_id', game_id);
         window.location = "http://54.149.192.92/p_game.html";
+
     });
 
 }
