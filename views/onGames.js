@@ -1,22 +1,15 @@
 function onGames() {
     //get
-     var id_token = googleUser.getAuthResponse().id_token;
-     console.log("ID Token: " + id_token);
-     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/active');
-    xhr.onload = function (e) {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            console.log(xhr.responseText);
-          } else {
-            console.error(xhr.statusText);
-          }
-        }
-      };
-      xhr.onerror = function (e) {
-        console.error(xhr.statusText);
-      };
-      xhr.send(null);
+    var OnGoing_games;
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/active', false);
+    request.send(null);
+
+    if (request.status === 200) {
+        console.log(OnGoing_games = JSON.parse(request.responseText));
+    }
+    
+    
     var jsonExamples = [{
         "Player 1": "Bob",
         "Player 2": "Mark"
@@ -35,8 +28,8 @@ function onGames() {
     }]
 
     var col = [];
-    for (var i = 0; i < jsonExamples.length; i++) {
-        for (var key in jsonExamples[i]) {
+    for (var i = 0; i < OnGoing_games.length; i++) {
+        for (var key in OnGoing_games[i]) {
             if (col.indexOf(key) === -1) {
                 col.push(key);
             }
@@ -57,12 +50,12 @@ function onGames() {
     tr.appendChild(th);
 
 
-    for (var i = 0; i < jsonExamples.length; i++) {
+    for (var i = 0; i < OnGoing_games.length; i++) {
         tr = table.insertRow(-1);
 
         for (var j = 0; j < col.length; j++) {
             var tabCell = tr.insertCell(-1);
-            tabCell.innerHTML = jsonExamples[i][col[j]];
+            tabCell.innerHTML = OnGoing_games[i][col[j]];
         }
     }
     var divContainer = document.getElementById("onG");
