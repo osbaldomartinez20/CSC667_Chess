@@ -35,10 +35,10 @@ io.on('connection', function(socket) {
     });
 });
 
-io.on('disconnect', function() {
+/*io.on('disconnect', function() {
     console.log('user disconnected');
     io.to(rooms).emit('new message', ' *disconnected*');
-});
+});*/
 
 const router = require('./controllers/login.js')
 app.use(router)
