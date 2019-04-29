@@ -104,6 +104,7 @@ router.put('/join', (request, response) => {
     });
 });
 
+//returns the top 20 players in the database by elo
 router.put('/top', (request, response) => {
     rank.getTopPlayers(function(err, result) {
         if (err) {
@@ -115,6 +116,5 @@ router.put('/top', (request, response) => {
         }
     });
 });
-
 
 module.exports = router;

@@ -60,14 +60,14 @@ exports.storeMessage = function (data) {
 
 
 //returns all the messages of the chat given the chat_id
-var getMessages = function (chat_id) {
+exports.getMessages = function (chat_id, callback) {
     var sql = "SELECT * FROM chat WHERE chat_id = " + chat_id + "";
     db.query(sql, function (err, result) {
         if (err) {
             console.log("Cannot retrieve messages: " + err);
-            return "Cannot retrieve messages: " + err;
+            callback(err, null);
         } else {
-            console.log("Message retrieval success" + '\n' + result[0].messages);
+            callback(null, result[0].messages);
         }
     });
 }
