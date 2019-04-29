@@ -114,7 +114,7 @@
         function newGame() {
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
+            xhr.open('POST', 'http://54.149.192.92/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 // console.log('Signed in as: ' + xhr.responseText);
@@ -155,17 +155,13 @@
 
     <script>
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        var socket = io.connect('http://54.149.192.92:3000');
-        var room = "default"
+
+        var socket = io.connect('http://54.149.192.92:3000/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
-
-        socket.on('connect', function() {
-            socket.emit('room', room)
-        })
 
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }

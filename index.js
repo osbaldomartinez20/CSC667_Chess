@@ -17,8 +17,25 @@ app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
 
-var rooms = "";
-io.on('connection', function(socket) {
+var rooms = '';
+var nsp = io.of('/default');
+nsp.on('connection', function(socket) {
+    socket.on('message', function(msg) {
+        console.log(msg);
+        nsp.emit('message', msg);
+    });
+})
+
+nsp.on('connection', function(socket) {
+    console.log('an user connected');
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+        nsp.emit('new message', ' *disconnected*');
+    });
+});
+
+var nsp2 = io.of('/private');
+nsp2.on('connection', function(socket) {
     console.log('an user connected');
     socket.on('room', function(room) {
         socket.join(room)
@@ -28,10 +45,17 @@ io.on('connection', function(socket) {
 
 });
 
+nsp2.on('connection', function(socket) {
+    socket.on('message', function(msg) {
+        console.log(msg);
+        nsp2.to(rooms).emit('message', msg);
+    });
+});
+
 io.on('connection', function(socket) {
     socket.on('message', function(msg) {
         console.log(msg);
-        io.to(rooms).emit('message', msg);
+        io.to('default').emit('message', msg);
     });
 });
 
