@@ -227,7 +227,15 @@
     </script>
 
     <script>
-        var room = cookie.get('game_id');
+        var room = "";
+        var request = new XMLHttpRequest();
+        request.open('GET', 'http://54.149.192.92/chatid', false); // `false` makes the request synchronous
+        request.send(null);
+
+        if (request.status === 200) {
+            console.log(room = JSON.parse(request.responseText).toString());
+        }
+
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
         var socket = io.connect('http://54.149.192.92:3000/private');

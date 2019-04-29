@@ -8,25 +8,6 @@ function available_games() {
         console.log(av_games = JSON.parse(request.responseText));
     }
 
-
-    var jsonExamples = [{
-        "Oponent": "Anton",
-        "Level": "Begginer"
-
-    }, {
-        "Oponent": "Jenna",
-        "Level": "Intermediate"
-    }, {
-        "Oponent": "Grave",
-        "Level": "Intermediate"
-    }, {
-        "Oponent": "Mary",
-        "Level": "Begginer"
-    }, {
-        "Oponent": "Erick",
-        "Level": "Advanced"
-    }]
-
     console.log(jsonExamples);
 
     var col = [];
@@ -71,18 +52,20 @@ function available_games() {
     aGames.innerHTML = "";
     aGames.appendChild(table);
     $("tr").click(function() {
-        var game_id = cookie.get('game_id');
         var rowtable = $(this).children('td').map(function() {
             return this.innerHTML;
         }).toArray();
-        user = rowtable[0];
-        /* var xhr = new XMLHttpRequest();
-         xhr.open('POST', 'http://localhost:3000/chat', false);
-         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-         xhr.send('game_id=' + user);*/
-
+        game_id = rowtable[0];
+        user = rowtable[1];
+        const user_id = cookie.get('user');
+        if (user != user_id) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://54.149.192.92/join', false);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('game_id=' + user + '&' + 'user_id=' + user_id);
+        }
         console.log(user)
-        cookie.set('game_id', user);
+        cookie.set('game_id', game_id);
         window.location = "http://54.149.192.92/p_game.html";
     });
 

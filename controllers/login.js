@@ -116,5 +116,18 @@ router.put('/top', (request, response) => {
     });
 });
 
+router.get('/chatid', (request, response) => {
+    const player_1 = request.body.player_1;
+    const player_2 = request.body.player_2;
+    const queryString = "SELECT game_id FROM games WHERE player_one_id = ? AND player_two_id = ?"
+    db.query(queryString, [player_1, player_2], (err, rows, fields) => {
+        if (err) {
+            console.log("Failed to query for users: " + err)
+            res.sendStatus(500)
+            return
+        }
+    })
+    res.json(rows);
+});
 
 module.exports = router;
