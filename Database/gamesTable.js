@@ -5,26 +5,24 @@ var db = require('../auth/db_config.js');
 var chat = require('../Database/messages.js');
 
 //create a new game by giving the username
-exports.createNewGame = async function (userid, callback) {
+exports.createNewGame = async function(userid, callback) {
     //this is used to asign an unique id to each game.
     var time = new Date();
     var game_id = time.getTime();
     var sql = "INSERT INTO games (game_id, player_one_id, active, complete) VALUES (" + game_id + ", '" + userid + "', false , false)";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             callback(err, null);
         } else {
-            startTrackingMoves(game_id);
-            chat.newMessageTracker(game_id);
             callback(null, JSON.stringify(game_id));
         }
     });
 }
 
 //function used to join a game given an username and a game_id
-exports.joinGame = async function (userid, game_id, callback) {
+exports.joinGame = async function(userid, game_id, callback) {
     var sql = "UPDATE games SET player_two_id = '" + userid + "', active = true WHERE game_id = " + game_id + "";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -51,8 +49,8 @@ exports.ongoingData = class {
 }
 
 //helps finding available games
-exports.fetchAvailableGames = function (callback) {
-    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
+exports.fetchAvailableGames = function(callback) {
+    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -62,8 +60,8 @@ exports.fetchAvailableGames = function (callback) {
 }
 
 //helps finding ongoing games
-exports.fetchOngoingGames = function (callback) {
-    db.query("SELECT game_id, player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function (err, result) {
+exports.fetchOngoingGames = function(callback) {
+    db.query("SELECT game_id, player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -73,8 +71,8 @@ exports.fetchOngoingGames = function (callback) {
 }
 
 //returns the moves made throughout the game
-exports.boardState = function (game_id, callback) {
-    db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function (err, result) {
+exports.boardState = function(game_id, callback) {
+    db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -84,9 +82,9 @@ exports.boardState = function (game_id, callback) {
 }
 
 //updates the current state of the board in the database
-exports.updateState = function (game_id, curr_state, callback) {
+exports.updateState = function(game_id, curr_state, callback) {
     var sql = "UPDATE games SET current_state = '" + curr_state + "' WHERE game_id = " + game_id + "";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -94,7 +92,6 @@ exports.updateState = function (game_id, curr_state, callback) {
         }
     });
 }
-
 
 //used to help make the process of storing the moves easier
 var moves = class {
@@ -121,11 +118,11 @@ var dummyData = class {
 
 //stores moves in database in table game_moves
 //data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
-exports.storeMove = function (data) {
+exports.storeMove = function(data) {
     var storing = [];
     var t_stamp = new Date();
     var sql = "SELECT * FROM game_moves WHERE game_id = " + data.game_id + "";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             console.log("Cannot retrieve moves: " + err);
         } else {
@@ -138,7 +135,7 @@ exports.storeMove = function (data) {
             }
             storing.push(new moves(data.playername, data.piece, data.origin, data.moveTo, t_stamp));
             var st = JSON.stringify(storing);
-            db.query("UPDATE game_moves SET moves = '" + st + "' WHERE game_id = " + data.game_id + "", function (err, result) {
+            db.query("UPDATE game_moves SET moves = '" + st + "' WHERE game_id = " + data.game_id + "", function(err, result) {
                 if (err) {
                     console.log("Cannot update moves: " + err)
                 } else {
@@ -149,9 +146,9 @@ exports.storeMove = function (data) {
     });
 }
 
-var startTrackingMoves = function (game_id) {
+var startTrackingMoves = function(game_id) {
     var sql = "INSERT INTO game_moves (game_id) VALUES (" + game_id + ")";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             console.log("Failed to assing a move tracker to game: " + game_id + ": " + err);
         } else {

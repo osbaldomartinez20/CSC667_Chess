@@ -114,7 +114,7 @@
         function newGame() {
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://54.149.192.92/create');
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 // console.log('Signed in as: ' + xhr.responseText);

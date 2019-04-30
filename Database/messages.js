@@ -23,37 +23,22 @@ var messageStructure = class {
 
 var dummyData = class {
     constructor(user_name, message, game_id) {
-        this.user_name = user_name;
+        this.user_id = user_name;
         this.message = message;
         this.game_id = game_id;
     }
 }
 
+
+//this method stores messages in the database given game_id, message, and user_id
 exports.storeMessage = function (data) {
-    var storing = [];
-    var t_stamp = new Date().toLocaleString();
-    console.log(t_stamp);
-    var sql = "SELECT * FROM chat WHERE chat_id = " + data.game_id + "";
+    var t_stamp = new Date().getDay;
+    var sql = "INSERT INTO chat (chat_id, messages, user_id) VALUES (" + data.game_id + ", '" + data.message + "', '" + data.user_id + "')";
     db.query(sql, function (err, result) {
         if (err) {
-            console.log("Cannot retrieve messages: " + err);
+            console.log("Cannot store message: " + err)
         } else {
-            console.log("Messages retrieved. " + result[0].messages);
-            var mess = JSON.parse(result[0].messages);
-            storing.push(new messageStructure(data.user_name, data.message, t_stamp));
-            if (mess != null) {
-                for (var i = 0; i < mess.length; i++) {
-                    storing.push(new messageStructure(mess[i].user_name, mess[i].message, mess.timestamp));
-                }
-            }
-            var st = JSON.stringify(storing);
-            db.query("UPDATE chat SET messages = '" + st + "' WHERE chat_id = " + data.game_id + "", function (err, result) {
-                if (err) {
-                    console.log("Cannot store message: " + err)
-                } else {
-                    console.log("Message storage successful");
-                }
-            });
+            console.log("Message storage successful");
         }
     });
 }
@@ -61,15 +46,14 @@ exports.storeMessage = function (data) {
 
 //returns all the messages of the chat given the chat_id
 exports.getMessages = function (chat_id, callback) {
-    var sql = "SELECT * FROM chat WHERE chat_id = " + chat_id + "";
+    var sql = "SELECT chat_insert_date, user_id, messages FROM chat WHERE chat_id = " + chat_id + " ORDER BY chat_insert_date DESC LIMIT 200";
     db.query(sql, function (err, result) {
         if (err) {
             console.log("Cannot retrieve messages: " + err);
             callback(err, null);
         } else {
-            callback(null, result[0].messages);
+            console.log("Message retrieval success" + '\n' + JSON.stringify(result));
+            callback(null, result);
         }
     });
 }
-
-//getMessages(123);

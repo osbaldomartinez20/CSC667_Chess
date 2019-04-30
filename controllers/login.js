@@ -1,7 +1,7 @@
 const express = require('express')
 const https = require('https');
 const db = require('../auth/db_config.js')
-const user = require('../Database/user.js')
+const user = require('../Database/user.js');
 const games = require('../Database/gamesTable.js');
 const rank = require('../Database/ranking.js');
 const bodyParser = require("body-parser")
@@ -115,6 +115,20 @@ router.put('/top', (request, response) => {
             response.send(result);
         }
     });
+});
+
+router.get('/chatid', (request, response) => {
+    const player_1 = request.body.player_1;
+    const player_2 = request.body.player_2;
+    const queryString = "SELECT game_id FROM games WHERE player_one_id = ? AND player_two_id = ?"
+    db.query(queryString, [player_1, player_2], (err, rows, fields) => {
+        if (err) {
+            console.log("Failed to query for users: " + err)
+            res.sendStatus(500)
+            return
+        }
+    })
+    res.json(rows);
 });
 
 module.exports = router;
