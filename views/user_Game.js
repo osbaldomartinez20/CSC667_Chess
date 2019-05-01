@@ -66,7 +66,7 @@ function available_games() {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
     $("tr").click(function() {
-        window.location = "index.html";
+        // window.location = "index.html";
     });
 
 }

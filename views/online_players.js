@@ -48,7 +48,7 @@ function onlineP() {
     oplayers.innerHTML = "";
     oplayers.appendChild(t);
     $("tr").click(function() {
-        window.location = "index.html";
+        //  window.location = "index.html";
     });
 
 }
