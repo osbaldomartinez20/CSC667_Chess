@@ -27,13 +27,6 @@ function moves(moves) {
             tr.appendChild(th);
         }
 
-        /* var th = document.createElement("th");
-         th.innerHTML = "White";
-         tr.appendChild(th);
-         var th = document.createElement("th");
-         th.innerHTML = "Black";
-         tr.appendChild(th);*/
-
 
         for (var i = 0; i < move.length; i++) {
             tr = table.insertRow(-1);
