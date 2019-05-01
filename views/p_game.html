@@ -145,7 +145,7 @@
 
     <script>
         var room = 'default';
-        var socket = io.connect('http://54.149.192.92:3000/private');
+        var socket = io.connect('http://localhost:3000/private');
 
         socket.on('connect', function() {
             socket.emit('room', room)
@@ -153,7 +153,7 @@
         var game_id = cookie.get('game_id');
         var players = cookie.get('user');
         var player
-        var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/players";
+        var url = "http://localhost:3000/players";
         var params = "game_id=" + game_id;
         var request = new XMLHttpRequest();
         request.open('GET', url + "?" + params, false); // `false` makes the request synchronous

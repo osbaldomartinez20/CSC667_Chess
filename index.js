@@ -27,6 +27,13 @@ nsp.on('connection', function(socket) {
 })
 
 nsp.on('connection', function(socket) {
+    socket.on('newGame', function(msg) {
+        console.log(msg);
+        nsp.emit('newGame', msg);
+    });
+});
+
+nsp.on('connection', function(socket) {
     console.log('an user connected');
     socket.on('disconnect', function() {
         console.log('user disconnected');

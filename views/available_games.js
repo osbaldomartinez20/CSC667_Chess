@@ -1,7 +1,7 @@
 function available_games() {
     var av_games;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending', false); // `false` makes the request synchronous
+    request.open('GET', 'http://localhost:3000/pending', false); // `false` makes the request synchronous
     request.send(null);
 
     if (request.status === 200) {
@@ -58,7 +58,7 @@ function available_games() {
         const user_id = cookie.get('user');
         if (user != user_id) {
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/join', false);
+            xhr.open('PUT', 'http://localhost:3000/join', false);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.send('game_id=' + game_id + '&' + 'user_id=' + user_id);
             console.log('Signed in as: ' + xhr.responseText);
