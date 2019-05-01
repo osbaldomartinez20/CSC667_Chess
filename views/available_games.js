@@ -8,6 +8,8 @@ function available_games() {
         console.log(av_games = JSON.parse(request.responseText));
     }
 
+    console.log(jsonExamples);
+
     var col = [];
     for (var i = 0; i < av_games.length; i++) {
         for (var key in av_games[i]) {
@@ -68,7 +70,6 @@ function available_games() {
         } else if (user == user_id) {
             alert("you need to wait for an opponent");
         }
-
     });
 
 }
