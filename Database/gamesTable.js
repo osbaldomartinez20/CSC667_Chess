@@ -14,8 +14,6 @@ exports.createNewGame = async function(userid, callback) {
         if (err) {
             callback(err, null);
         } else {
-            startTrackingMoves(game_id);
-            chat.newMessageTracker(game_id);
             callback(null, JSON.stringify(game_id));
         }
     });
