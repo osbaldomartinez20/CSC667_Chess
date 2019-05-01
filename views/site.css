@@ -110,6 +110,15 @@ h1,
     width: 20%
 }
 
+.avGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
 .chat {
     content: '';
     width: 80%;
@@ -126,6 +135,7 @@ h1,
     background: lightgrey;
     padding: 0;
     border: 1px solid black;
+    overflow: auto;
 }
 
 .chat p {
@@ -155,6 +165,10 @@ button {
         width: 80%;
     }
     .onlineP {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    .avGames {
         float: left;
         height: calc(50vh - 200px);
     }

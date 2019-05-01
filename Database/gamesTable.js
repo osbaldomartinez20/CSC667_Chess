@@ -22,8 +22,20 @@ exports.createNewGame = async function(userid, callback) {
 }
 
 //function used to join a game given an username and a game_id
-exports.joinGame = async function(userid, game_id, callback) {
+exports.joinGame = async function(game_id, userid, callback) {
+    console.log(userid)
     var sql = "UPDATE games SET player_two_id = '" + userid + "', active = true WHERE game_id = " + game_id + "";
+    db.query(sql, function(err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+exports.getPlayers = async function(game_id, callback) {
+    var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = '" + game_id + "' AND active = true";
     db.query(sql, function(err, result) {
         if (err) {
             callback(err, null);

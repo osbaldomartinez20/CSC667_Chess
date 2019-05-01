@@ -52,6 +52,14 @@ nsp2.on('connection', function(socket) {
     });
 });
 
+nsp2.on('connection', function(socket) {
+    socket.on('move', function(msg) {
+        console.log(msg);
+        nsp2.to(rooms).emit('move', msg);
+    });
+});
+
+
 io.on('connection', function(socket) {
     socket.on('message', function(msg) {
         console.log(msg);

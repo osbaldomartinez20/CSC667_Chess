@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
@@ -65,10 +65,11 @@
             <div class="table-header">
                 <h4> Available Games</h4>
             </div>
-            <div>
-                <p id="available_games"></p>
-            </div>
-
+            <section class="avGames">
+                <div>
+                    <p id="available_games"></p>
+                </div>
+            </section>
             <div class="table-header">
                 <h4> Ongoing Games</h4>
             </div>
@@ -114,7 +115,7 @@
         function newGame() {
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
+            xhr.open('POST', 'http://localhost:3000/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 // console.log('Signed in as: ' + xhr.responseText);
@@ -154,9 +155,13 @@
     </script>
 
     <script>
-        //On the client side, you tell Socket.IO client to connect to that namespace:
+        $(".avGames").scrollTop(0);
+    </script>
 
-        var socket = io.connect('http://54.149.192.92:3000/default');
+    <script>
+        //On the client side, you tell Socket.IO client to connect to that namespace:
+        //to fix error use http://54.149.192.92:3000/default on server
+        var socket = io.connect('http://localhost:3000/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
