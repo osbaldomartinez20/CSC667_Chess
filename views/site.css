@@ -110,6 +110,33 @@ h1,
     width: 20%
 }
 
+.avGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
+.uGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
+.onGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
 .chat {
     content: '';
     width: 80%;
@@ -126,6 +153,7 @@ h1,
     background: lightgrey;
     padding: 0;
     border: 1px solid black;
+    overflow: auto;
 }
 
 .chat p {
@@ -155,6 +183,18 @@ button {
         width: 80%;
     }
     .onlineP {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    .avGames {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    .onGames {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    .uGames {
         float: left;
         height: calc(50vh - 200px);
     }

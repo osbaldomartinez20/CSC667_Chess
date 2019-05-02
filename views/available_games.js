@@ -8,8 +8,6 @@ function available_games() {
         console.log(av_games = JSON.parse(request.responseText));
     }
 
-    console.log(jsonExamples);
-
     var col = [];
     for (var i = 0; i < av_games.length; i++) {
         for (var key in av_games[i]) {
@@ -60,14 +58,19 @@ function available_games() {
         const user_id = cookie.get('user');
         if (user != user_id) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://54.149.192.92/join', false);
+            xhr.open('PUT', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/join', false);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send('game_id=' + user + '&' + 'user_id=' + user_id);
+            xhr.send('game_id=' + game_id + '&' + 'user_id=' + user_id);
+            console.log('Signed in as: ' + xhr.responseText);
+            console.log("user_id" + user)
+            cookie.set('game_id', game_id);
+            window.location = "p_game.html";
+        } else if (user == user_id) {
+            // alert("you need to wait for an opponent");
         }
-        console.log(user)
+        console.log("user_id" + user)
         cookie.set('game_id', game_id);
-        window.location = "http://54.149.192.92/p_game.html";
-
+        window.location = "p_game.html";
     });
 
 }

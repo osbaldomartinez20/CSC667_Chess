@@ -59,22 +59,25 @@
             <div class="table-header">
                 <h4> User Games</h4>
             </div>
-            <p id="userGames"></p>
+            <section class="uGames">
+                <p id="userGames"></p>
+            </section>
+            <div class="table-header">
+                <h4> Ongoing Games</h4>
+            </div>
+            <section class="onGames">
+                <p id="onG"></p>
+            </section>
         </div>
         <div id="map" class="tab">
             <div class="table-header">
                 <h4> Available Games</h4>
             </div>
-            <div>
-                <p id="available_games"></p>
-            </div>
-
-            <div class="table-header">
-                <h4> Ongoing Games</h4>
-            </div>
-            <div>
-                <p id="onG"></p>
-            </div>
+            <section class="avGames">
+                <div>
+                    <p id="available_games"></p>
+                </div>
+            </section>
             <div>
                 <header>
                     <div class="chat-header">
@@ -111,15 +114,18 @@
         </div>
     </div>
     <script>
-        function newGame() {
+        var socket = io.connect('http://54.149.192.92:3000/default');
 
+        function newGame() {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
-                // console.log('Signed in as: ' + xhr.responseText);
-                // window.location.href = "lobby.html";
+                socket.emit('newGame', "true");
             };
+            socket.on('newGame', function(msg) {
+                available_games();
+            });
             const user_id = cookie.get('user');
             console.log('Signed in as: ' + user_id);
             xhr.send('user_id=' + user_id);
@@ -142,21 +148,10 @@
 
             });
         }
-    </script>
 
-
-    <script>
-        window.addEventListener("load", myInit, true);
-
-        function myInit() {
-            user_game(), onlineP(), available_games(), onGames(), onLoad()
-        };
-    </script>
-
-    <script>
         //On the client side, you tell Socket.IO client to connect to that namespace:
-
-        var socket = io.connect('http://54.149.192.92:3000/default');
+        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
+        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
@@ -190,8 +185,17 @@
             e.target.reset();
             $(e.target).find('input').focus();
         });
-    </script>
 
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            user_Games(), onlineP(), available_games(), onGames(), onLoad()
+        };
+
+        $(".avGames").scrollTop(0);
+        $(".auGames").scrollTop(0);
+        $(".onGames").scrollTop(0);
+    </script>
 
 </body>
 

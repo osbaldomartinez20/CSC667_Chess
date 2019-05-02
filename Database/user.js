@@ -65,12 +65,23 @@ exports.activateSession = function (id) {
 }
 
 //function that returns the display_name given the user_id
-exports.getUsename = function (userid, callback) {
+exports.getUserName = function (userid, callback) {
     db.query("SELECT display_name FROM users WHERE user_id = " + userid + "", function (err, result) {
+        if (err) {
+           callback(err, null);
+        } else {
+            callback(null, result[0].display_name);
+        }
+    });
+}
+
+//function that returns the display_name given the user_id
+exports.getUserId = function (username, callback) {
+    db.query("SELECT user_id FROM users WHERE display_name = '" + username + "'", function (err, result) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, result[0].display_name);
+            callback(null, result[0].user_id);
         }
     });
 }

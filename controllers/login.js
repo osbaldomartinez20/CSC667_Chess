@@ -72,7 +72,7 @@ router.get('/active', (request, response) => {
             response.send("Cannot retrieve available games");
         } else {
             for (var i = 0; i < Object.keys(result).length; i++) {
-                const temp = new games.ongoingData(result[i].game_id, result[i].player_one_id, result[i].player_two_id);
+                const temp = new games.ongoingData(result[i].player_one_id, result[i].player_two_id);
                 o_games.push(temp);
             }
             response.send(JSON.stringify(o_games));
@@ -94,7 +94,7 @@ router.post('/create', (request, response) => {
 
 //player2 joins the game
 router.put('/join', (request, response) => {
-    games.joinGame(request.game_id, request.user_id, function(err, result) {
+    games.joinGame(request.body.game_id, request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot join: " + err);
             response.send("Cannot join game");
@@ -105,7 +105,21 @@ router.put('/join', (request, response) => {
     });
 });
 
-//returns the top 20 players in the database by elo
+router.get('/players', (request, response) => {
+    console.log(request.query.game_id);
+    games.getPlayers(request.query.game_id, function(err, result) {
+        if (err) {
+            console.log("There was an error retrieving available games: " + err);
+            response.send("Cannot retrieve available games");
+        } else {
+            const user = result.map((row) => {
+                return { player_1: row.player_one_id, player_2: row.player_two_id }
+            })
+            response.send(user);
+        }
+    });
+});
+
 router.put('/top', (request, response) => {
     rank.getTopPlayers(function(err, result) {
         if (err) {
@@ -125,11 +139,12 @@ router.get('/chatid', (request, response) => {
     db.query(queryString, [player_1, player_2], (err, rows, fields) => {
         if (err) {
             console.log("Failed to query for users: " + err)
-            res.sendStatus(500)
+            response.sendStatus(500)
             return
         }
+        response.send(rows);
     })
-    res.json(rows);
+
 });
 
 router.post('/chatStore', (request, response) => {
