@@ -88,6 +88,7 @@ exports.fetchOngoingGames = function (callback) {
 }
 
 var fetchUserGames = function (username, callback) {
+    var storing = [];
     userFunc.getUserId(username, function (err, result) {
         if (err) {
             console.log(err);
@@ -99,13 +100,43 @@ var fetchUserGames = function (username, callback) {
             db.query(sql, function (err, result) {
                 if (err) {
                     console.log("Cannot fetch user games: " + err);
-                    //callback(err, null);
+                    callback(err, null);
                 } else {
-                    console.log(result);
+                    let counter = result.length;
+                    for (var i = 0; i < result.length; i++) {
+                        let opponent;
+                        let game_id = result[i].game_id;
+                        let active = result[i].active;
+                        if (result[i].player_one_id == user_id) {
+                            opponent = result[i].player_two_id;
+                        } else if (result[i].player_two_id == user_id) {
+                            opponent = result[i].player_one_id;
+                        }
+                        userFunc.getUserName(opponent, function (err, res) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                storing.push(new userGameData(game_id, res, active));
+                                callback(null, JSON.stringify(storing));
+                            }
+                        });
+                    }
                 }
             });
         }
     });
+}
+
+var userGameData = class {
+    constructor(game_id, opponent, isActive) {
+        this.opponent = opponent;
+        if (isActive == 1) {
+            this.isActive = true;
+        } else {
+            this.isActive = false;
+        }
+        this.game_id = game_id;
+    }
 }
 
 //returns the currnt state of the game
@@ -196,6 +227,15 @@ var startTrackingMoves = function (game_id) {
 }
 
 
+var ft = function () {
+    fetchUserGames("ozo", function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            var x  = JSON.parse(result)[0].opponent;
+            console.log(typeof(result));
+        }
+    });
+}
 
-//var sec = new dummyData("ozo", "T", "B5", "A5", 123);
-fetchUserGames("ozo", null);
+ft();
