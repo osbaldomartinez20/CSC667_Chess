@@ -226,14 +226,19 @@ var startTrackingMoves = function (game_id) {
     });
 }
 
+class helpFixMess {
+    constructor(x) {
+        this.x = x;
+    }
+}
 
 var ft = function () {
     fetchUserGames("ozo", function (err, result) {
         if (err) {
             console.log(err);
         } else {
-            var x  = JSON.parse(result)[0].opponent;
-            console.log(typeof(result));
+            var x = new helpFixMess(JSON.parse(result)[0].opponent);
+            console.log(x);
         }
     });
 }
