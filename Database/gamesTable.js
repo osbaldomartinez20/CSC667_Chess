@@ -73,7 +73,7 @@ exports.fetchAvailableGames = function(callback) {
 
 //helps finding ongoing games
 exports.fetchOngoingGames = function(callback) {
-    db.query("SELECT game_id, player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
+    db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
         if (err) {
             callback(err, null);
         } else {

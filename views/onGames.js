@@ -8,24 +8,6 @@ function onGames() {
     if (request.status === 200) {
         console.log(OnGoing_games = JSON.parse(request.responseText));
     }
-    
-    
-    var jsonExamples = [{
-        "Player 1": "Bob",
-        "Player 2": "Mark"
-    }, {
-        "Player 1": "Jenna",
-        "Player 2": "Bob"
-    }, {
-        "Player 1": "Grave",
-        "Player 2": "John"
-    }, {
-        "Player 1": "Mary",
-        "Player 2": "Jake"
-    }, {
-        "Player 1": "Erick",
-        "Player 2": "Patricia"
-    }]
 
     var col = [];
     for (var i = 0; i < OnGoing_games.length; i++) {

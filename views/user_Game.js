@@ -1,4 +1,4 @@
-function available_games() {
+function user_Games() {
     var User_games;
     var request = new XMLHttpRequest();
     request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending', false); // `false` makes the request synchronous
@@ -8,28 +8,6 @@ function available_games() {
         console.log(User_games = JSON.parse(request.responseText));
     }
 
-    var jsonExamples = [{
-        "Oponent": "Bob",
-        "status": "Going"
-    }, {
-        "Oponent": "Jenna",
-        "status": "Going"
-    }, {
-        "Oponent": "Grave",
-        "status": "Going"
-    }, {
-        "Oponent": "Mary",
-        "status": "Going"
-    }, {
-        "Oponent": "Erick",
-        "status": "Finished"
-    }, {
-        "Oponent": "Erick",
-        "status": "Finished"
-    }, {
-        "Oponent": "Erick",
-        "status": "Finished"
-    }]
 
     var col = [];
     for (var i = 0; i < User_games.length; i++) {

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
@@ -59,7 +59,15 @@
             <div class="table-header">
                 <h4> User Games</h4>
             </div>
-            <p id="userGames"></p>
+            <section class="uGames">
+                <p id="userGames"></p>
+            </section>
+            <div class="table-header">
+                <h4> Ongoing Games</h4>
+            </div>
+            <section class="onGames">
+                <p id="onG"></p>
+            </section>
         </div>
         <div id="map" class="tab">
             <div class="table-header">
@@ -70,12 +78,6 @@
                     <p id="available_games"></p>
                 </div>
             </section>
-            <div class="table-header">
-                <h4> Ongoing Games</h4>
-            </div>
-            <div>
-                <p id="onG"></p>
-            </div>
             <div>
                 <header>
                     <div class="chat-header">
@@ -112,11 +114,11 @@
         </div>
     </div>
     <script>
-        var socket = io.connect('http://localhost:3000/default');
+        var socket = io.connect('http://54.149.192.92:3000/default');
 
         function newGame() {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/create');
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
@@ -148,8 +150,8 @@
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        //to fix error use http://localhost:3000/default on server
-        //var socket = io.connect('http://localhost:3000/default');
+        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
+        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
@@ -187,10 +189,12 @@
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            user_game(), onlineP(), available_games(), onGames(), onLoad()
+            user_Games(), onlineP(), available_games(), onGames(), onLoad()
         };
 
         $(".avGames").scrollTop(0);
+        $(".auGames").scrollTop(0);
+        $(".onGames").scrollTop(0);
     </script>
 
 </body>

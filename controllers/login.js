@@ -7,7 +7,7 @@ const games = require('../Database/gamesTable.js');
 const rank = require('../Database/ranking.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client('1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com');
+const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
 
 //create a router for url request
 const router = express.Router()
@@ -25,7 +25,7 @@ router.post('/login', (request, response) => {
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: '1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com',
+            audience: '80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com',
         })
 
         const payload = ticket.getPayload()
@@ -72,7 +72,7 @@ router.get('/active', (request, response) => {
             response.send("Cannot retrieve available games");
         } else {
             for (var i = 0; i < Object.keys(result).length; i++) {
-                const temp = new games.ongoingData(result[i].game_id, result[i].player_one_id, result[i].player_two_id);
+                const temp = new games.ongoingData(result[i].player_one_id, result[i].player_two_id);
                 o_games.push(temp);
             }
             response.send(JSON.stringify(o_games));
