@@ -59,25 +59,25 @@
             <div class="table-header">
                 <h4> User Games</h4>
             </div>
-            <section class="uGames">
-                <p id="userGames"></p>
-            </section>
-            <div class="table-header">
-                <h4> Ongoing Games</h4>
-            </div>
-            <section class="onGames">
-                <p id="onG"></p>
-            </section>
-        </div>
-        <div id="map" class="tab">
+            <p id="userGames"></p>
+
             <div class="table-header">
                 <h4> Available Games</h4>
             </div>
-            <section class="avGames">
-                <div>
-                    <p id="available_games"></p>
-                </div>
-            </section>
+            <div>
+                <p id="available_games"></p>
+            </div>
+
+        </div>
+        <div id="map" class="tab">
+            <!--div class="table-header">
+                <h4> Available Games</h4>
+            </div>
+            <div>
+                <p id="available_games"></p>
+            </div-->
+
+            
             <div>
                 <header>
                     <div class="chat-header">
@@ -103,12 +103,22 @@
                     </div>
                 </section>
 
-                <form id="send-message">
-                    <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
-                    <button id="chat-button" type="submit">Send</button>
+                <form display="block" id="send-message">
+                    <input  style = "width: 75%" type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
+                    <button style = "width: 20%" id="chat-button" type="submit">Send</button>
                 </form>
             </div>
-        </div>
+
+            <div class="table-header">
+                <h4> Ongoing Games</h4>
+            </div>
+            <div>
+                <p id="onG"></p>
+            </div>
+        
+        </div>   
+
+
         <div id="utils" class="tab">
             <button onclick="newGame()">new game</button>
         </div>

@@ -87,7 +87,7 @@ exports.fetchOngoingGames = function (callback) {
     });
 }
 
-var fetchUserGames = function (username, callback) {
+exports.fetchUserGames = function (username, callback) {
     var storing = [];
     userFunc.getUserId(username, function (err, result) {
         if (err) {
@@ -108,16 +108,26 @@ var fetchUserGames = function (username, callback) {
                         let game_id = result[i].game_id;
                         let active = result[i].active;
                         if (result[i].player_one_id == user_id) {
-                            opponent = result[i].player_two_id;
+                            if (result[i].player_two_id == null || result[i].player_two_id == 'undefined') {
+                                opponent = 0;
+                            } else {
+                                opponent = result[i].player_two_id;
+                            }
                         } else if (result[i].player_two_id == user_id) {
-                            opponent = result[i].player_one_id;
+                            if (result[i].player_one_id == null || result[i].player_one_id == 'undefined') {
+                                opponent = 0;
+                            } else {
+                                opponent = result[i].player_one_id;
+                            }
                         }
                         userFunc.getUserName(opponent, function (err, res) {
                             if (err) {
                                 console.log(err);
                             } else {
                                 storing.push(new userGameData(game_id, res, active));
-                                callback(null, JSON.stringify(storing));
+                                if (storing.length >= counter) {
+                                    callback(null, JSON.stringify(storing));
+                                }
                             }
                         });
                     }
@@ -225,22 +235,3 @@ var startTrackingMoves = function (game_id) {
         }
     });
 }
-
-class helpFixMess {
-    constructor(x) {
-        this.x = x;
-    }
-}
-
-var ft = function () {
-    fetchUserGames("ozo", function (err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            var x = new helpFixMess(JSON.parse(result)[0].opponent);
-            console.log(x);
-        }
-    });
-}
-
-ft();

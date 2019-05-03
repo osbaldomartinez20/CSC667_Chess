@@ -160,9 +160,18 @@ h1,
     margin: 0 0 0 0;
 }
 
-input,
+input {
+    width: 80%;
+    font: inherit;
+    background: lightgray;
+    border: none;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid black;
+}
+
 button {
-    width: 100%;
+    width: 15%;
     font: inherit;
     background: lightgray;
     border: none;
@@ -237,4 +246,11 @@ button {
 #utils {
     background-color: white;
     width: calc(13% - 1px);
+}
+#available_games {
+    overflow: auto;
+    height: calc(100vh - 365px);
+}
+#send-message {
+    margin-bottom: 50px;
 }
