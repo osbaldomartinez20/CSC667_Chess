@@ -55,29 +55,37 @@
     <!--<input type="button" onclick="user_game()" value="Create Table From JSON" /> -->
     <div id="content">
         <div id="nav" class="tab"></div>
+        
         <div id="form" class="tab">
+            <div id="wrapper">
+                <button style ="float: left; margin-bottom: 15px" onclick="newGame()">new game</button>
+
+            </div>
+            
             <div class="table-header">
                 <h4> User Games</h4>
             </div>
-            <section class="uGames">
-                <p id="userGames"></p>
-            </section>
+            <p id="userGames"></p>
+
             <div class="table-header">
                 <h4> Ongoing Games</h4>
             </div>
-            <section class="onGames">
+            <div>
                 <p id="onG"></p>
-            </section>
+            </div>
+
+            
+
         </div>
         <div id="map" class="tab">
-            <div class="table-header">
+            <!--div class="table-header">
                 <h4> Available Games</h4>
             </div>
-            <section class="avGames">
-                <div>
-                    <p id="available_games"></p>
-                </div>
-            </section>
+            <div>
+                <p id="available_games"></p>
+            </div-->
+
+            
             <div>
                 <header>
                     <div class="chat-header">
@@ -103,14 +111,25 @@
                     </div>
                 </section>
 
-                <form id="send-message">
-                    <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
-                    <button id="chat-button" type="submit">Send</button>
+                <form display="block" id="send-message">
+                    <input  style = "width: 75%" type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
+                    <button style = "width: 20%" id="chat-button" type="submit">Send</button>
                 </form>
             </div>
-        </div>
+            
+            <div class="table-header">
+                <h4> Available Games</h4>
+            </div>
+            <div>
+                <p id="available_games"></p>
+            </div>
+            
+        
+        </div>   
+
+
         <div id="utils" class="tab">
-            <button onclick="newGame()">new game</button>
+
         </div>
     </div>
     <script>
@@ -158,6 +177,13 @@
             $('.user-count').html(data);
         });*/
 
+        socket.emit('new user', cookie.get('user') || 'Anonymous');
+        socket.on('usernames', function(data){
+            var jsonExamples = data;
+            onlineP();
+        })
+
+
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }
         socket.on('message', function(data) {
@@ -174,7 +200,7 @@
 
             // Retrieve the message from the user
             var message = $(e.target).find('input').val();
-
+ 
             // Send the message to the server
             socket.emit('message', {
                 user: cookie.get('user') || 'Anonymous',

@@ -5,6 +5,9 @@ var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 var cors = require('cors');
 const message = require('./Database/messages.js');
+=======
+//aray to store name of all online users for lobbby chat
+lobby_users=[]; 
 
 //important.. this line creates a connection to use static files such as html saved in the
 //folder public
@@ -20,6 +23,23 @@ app.get('/', (request, response) => {
 
 var rooms = '';
 var nsp = io.of('/default');
+
+
+
+nsp.on('connection', function(socket){
+    console.log('an user connected');
+    function updateUserNames(){
+        nsp.emit('usernames', lobby_users);
+    }
+
+    nsp.on('new user', function(data){
+            nsp.username = data;
+            lobby_users.push( {Opponent:nsp.username});
+            updateUserNames();
+    })
+})
+
+
 nsp.on('connection', function(socket) {
     socket.on('message', function(msg) {
         console.log(msg);
@@ -36,10 +56,11 @@ nsp.on('connection', function(socket) {
 });
 
 nsp.on('connection', function(socket) {
-    console.log('an user connected');
     socket.on('disconnect', function() {
         console.log('user disconnected');
         nsp.emit('new message', ' *disconnected*');
+        lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username),1);
+        updateUserNames();
     });
 });
 
