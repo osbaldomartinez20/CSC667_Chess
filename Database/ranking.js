@@ -138,9 +138,11 @@ exports.getUserWinningProbability = function (u_id, o_id, callback) {
 
 //class to hold the display_name and elo ranking of a player
 var playerRankInfo = class {
-    constructor(display_name, elo) {
+    constructor(display_name, elo, wins, losses) {
         this.display_name = display_name;
         this.elo = elo;
+        this.wins = wins;
+        this.losses = losses;
     }
 }
 
@@ -154,7 +156,7 @@ exports.getTopPlayers = function (callback) {
             callback(err, null)
         } else {
             for (var i = 0; i < result.length; i++) {
-                p_top.push(new playerRankInfo(result[i].display_name, result[i].elo));
+                p_top.push(new playerRankInfo(result[i].display_name, result[i].elo, result[i].wins, result[i].losses));
             }
             callback(null, JSON.stringify(p_top));
         }
