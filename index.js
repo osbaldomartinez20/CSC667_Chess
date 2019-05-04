@@ -4,9 +4,10 @@ const app = express()
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 var cors = require('cors');
+const message = require('./Database/messages.js');
+=======
 //aray to store name of all online users for lobbby chat
 lobby_users=[]; 
-
 
 //important.. this line creates a connection to use static files such as html saved in the
 //folder public
@@ -42,6 +43,7 @@ nsp.on('connection', function(socket){
 nsp.on('connection', function(socket) {
     socket.on('message', function(msg) {
         console.log(msg);
+	message.storeMessage(msg);
         nsp.emit('message', msg);
     });
 })

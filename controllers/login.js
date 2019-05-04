@@ -5,6 +5,7 @@ const user = require('../Database/user.js');
 const chat = require('../Database/messages.js');
 const games = require('../Database/gamesTable.js');
 const rank = require('../Database/ranking.js');
+const test = require('../scripts/db_test.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
