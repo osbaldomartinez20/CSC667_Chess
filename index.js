@@ -5,7 +5,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 var cors = require('cors');
 const message = require('./Database/messages.js');
-=======
+const moves = require('./Database/gamesTable.js');
 //aray to store name of all online users for lobbby chat
 lobby_users=[]; 
 
@@ -85,6 +85,7 @@ nsp2.on('connection', function(socket) {
 nsp2.on('connection', function(socket) {
     socket.on('move', function(msg) {
         console.log(msg);
+        moves.storeMove(msg);
         nsp2.to(rooms).emit('move', msg);
     });
 });
