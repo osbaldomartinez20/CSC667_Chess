@@ -4,6 +4,7 @@ const app = express()
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 var cors = require('cors');
+const message = require('./Database/messages.js');
 
 //important.. this line creates a connection to use static files such as html saved in the
 //folder public
@@ -22,6 +23,7 @@ var nsp = io.of('/default');
 nsp.on('connection', function(socket) {
     socket.on('message', function(msg) {
         console.log(msg);
+	message.storeMessage(msg);
         nsp.emit('message', msg);
     });
 })
