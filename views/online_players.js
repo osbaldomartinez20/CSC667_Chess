@@ -1,5 +1,5 @@
 function onlineP() {
-    var jsonExamples = [{
+    /*var jsonExamples = [{
         "Oponent": "joe"
     }, {
         "Oponent": "Jenna"
@@ -9,7 +9,7 @@ function onlineP() {
         "Oponent": "Mary"
     }, {
         "Oponent": "Erick"
-    }]
+    }]*/
 
     var col = [];
     for (var i = 0; i < jsonExamples.length; i++) {
