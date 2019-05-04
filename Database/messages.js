@@ -32,7 +32,6 @@ var dummyData = class {
 
 //this method stores messages in the database given game_id, message, and user_id
 exports.storeMessage = function (data) {
-    var t_stamp = new Date().getDay;
     var sql = "INSERT INTO chat (chat_id, messages, user_id) VALUES (" + data.game_id + ", '" + data.message + "', '" + data.user_id + "')";
     db.query(sql, function (err, result) {
         if (err) {

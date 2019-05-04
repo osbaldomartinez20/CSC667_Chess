@@ -1,9 +1,6 @@
 //database
 var db = require('../auth/db_config.js');
 
-//used for message tracker
-var chat = require('../Database/messages.js');
-
 //used to get the user id and display_name
 var userFunc = require('../Database/user.js');
 

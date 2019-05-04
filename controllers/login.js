@@ -80,6 +80,19 @@ router.get('/active', (request, response) => {
     });
 });
 
+//accepts a request that has an username. Sends a JSON with all the user games.
+router.get('/userGames', (request, response) => {
+    games.fetchUserGames(request.username, function(err, result) {
+        if(err) {
+            console.log("Cannot retrieve user games: " + err);
+            response.send(err);
+        } else {
+            console.log("Succesfully retrieved user games.");
+            response.send(result);
+        }
+    });
+});
+
 router.post('/create', (request, response) => {
     games.createNewGame(request.body.user_id, function(err, result) {
         if (err) {
