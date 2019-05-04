@@ -55,18 +55,26 @@
     <!--<input type="button" onclick="user_game()" value="Create Table From JSON" /> -->
     <div id="content">
         <div id="nav" class="tab"></div>
+        
         <div id="form" class="tab">
+            <div id="wrapper">
+                <button style ="float: left; margin-bottom: 15px" onclick="newGame()">new game</button>
+
+            </div>
+            
             <div class="table-header">
                 <h4> User Games</h4>
             </div>
             <p id="userGames"></p>
 
             <div class="table-header">
-                <h4> Available Games</h4>
+                <h4> Ongoing Games</h4>
             </div>
             <div>
-                <p id="available_games"></p>
+                <p id="onG"></p>
             </div>
+
+            
 
         </div>
         <div id="map" class="tab">
@@ -108,19 +116,20 @@
                     <button style = "width: 20%" id="chat-button" type="submit">Send</button>
                 </form>
             </div>
-
+            
             <div class="table-header">
-                <h4> Ongoing Games</h4>
+                <h4> Available Games</h4>
             </div>
             <div>
-                <p id="onG"></p>
+                <p id="available_games"></p>
             </div>
+            
         
         </div>   
 
 
         <div id="utils" class="tab">
-            <button onclick="newGame()">new game</button>
+
         </div>
     </div>
     <script>

@@ -247,10 +247,15 @@ button {
     background-color: white;
     width: calc(13% - 1px);
 }
-#available_games {
+#onG {
     overflow: auto;
     height: calc(100vh - 365px);
 }
 #send-message {
     margin-bottom: 50px;
+}
+#wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
