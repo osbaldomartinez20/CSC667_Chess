@@ -1,9 +1,6 @@
 //database
 var db = require('../auth/db_config.js');
 
-//used for message tracker
-var chat = require('../Database/messages.js');
-
 //used to get the user id and display_name
 var userFunc = require('../Database/user.js');
 
@@ -137,6 +134,7 @@ exports.fetchUserGames = function (username, callback) {
     });
 }
 
+//class helps organize sent data in fetchUserGames()
 var userGameData = class {
     constructor(game_id, opponent, isActive) {
         this.opponent = opponent;
@@ -161,7 +159,7 @@ exports.boardState = function (game_id, callback) {
 }
 
 //updates the current state of the board in the database
-exports.updateState = function (game_id, curr_state, callback) {
+var updateState = function (game_id, curr_state, callback) {
     var sql = "UPDATE games SET current_state = '" + curr_state + "' WHERE game_id = " + game_id + "";
     db.query(sql, function (err, result) {
         if (err) {
@@ -172,66 +170,24 @@ exports.updateState = function (game_id, curr_state, callback) {
     });
 }
 
-//used to help make the process of storing the moves easier
-var moves = class {
-    constructor(playerid, piece, origin, moveTo, timestamp) {
-        this.playername = playerid;
-        this.piece = piece;
-        this.origin = origin;
-        this.moveTo = moveTo;
-        this.timestamp = timestamp;
-    }
-}
-
-//creates dummy data for testing
-var dummyData = class {
-    constructor(playerid, piece, origin, moveTo, game_id) {
-        this.playername = playerid;
-        this.piece = piece;
-        this.origin = origin;
-        this.moveTo = moveTo;
-        this.game_id = game_id;
-    }
-}
-
-
 //stores moves in database in table game_moves
 //data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
 exports.storeMove = function (data) {
-    var storing = [];
-    var t_stamp = new Date();
-    var sql = "SELECT * FROM game_moves WHERE game_id = " + data.game_id + "";
+    var mv = JSON.parse(data.moves);
+    var piece = mv.color + "" + mv.piece;
+    var sql = "INSERT INTO game_moves (game_id, origin, dest, flags, piece, san) VALUES (" + data.game_id + ", '" + mv.from + "', '" + mv.to + "', '" + mv.flags + "', " + piece + ",  '" + mv.san + "')";
     db.query(sql, function (err, result) {
         if (err) {
-            console.log("Cannot retrieve moves: " + err);
+            console.log("Cannot store message: " + err)
         } else {
-            console.log(JSON.parse(result[0].moves));
-            var mov = JSON.parse(result[0].moves);
-            if (mov != null) {
-                for (let i = 0; i < mov.length; i++) {
-                    storing.push(new moves(mov[i].playername, mov[i].piece, mov[i].origin, mov[i].moveTo, mov[i].timestamp));
-                }
-            }
-            storing.push(new moves(data.playername, data.piece, data.origin, data.moveTo, t_stamp));
-            var st = JSON.stringify(storing);
-            db.query("UPDATE game_moves SET moves = '" + st + "' WHERE game_id = " + data.game_id + "", function (err, result) {
+            console.log("Message storage successful");
+            updateState(data.game_id, data.state, function (err, result) {
                 if (err) {
-                    console.log("Cannot update moves: " + err)
+                    console.log("There was an error: " + err);
                 } else {
-                    console.log("Move update successful");
+                    console.log("Success in storing moves and game state.")
                 }
             });
-        }
-    });
-}
-
-var startTrackingMoves = function (game_id) {
-    var sql = "INSERT INTO game_moves (game_id) VALUES (" + game_id + ")";
-    db.query(sql, function (err, result) {
-        if (err) {
-            console.log("Failed to assing a move tracker to game: " + game_id + ": " + err);
-        } else {
-            console.log("Can track moves of game: " + game_id);
         }
     });
 }
