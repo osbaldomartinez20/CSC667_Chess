@@ -52,26 +52,20 @@
             </div>
         </nav>
     </div>
-    <div class="ex2">
-        <div id="board">
+    <div id="content">
+        <div id="nav" class="tab"></div>
+        <div id="board" class="tab">
             <p>Status: <span id="status"></span></p>
             <p>FEN: <span id="fen"></span></p>
             <p>PGN: <span id="pgn"></span></p>
         </div>
-    </div>
-    <div class="ex1">
-
-        <div id="nav" class="tab">
-        </div>
-        <div id="form" class="tab">
+        <div id="map" class="tab">
             <div class="table-header">
                 <h4> Game Moves</h4>
             </div>
-            <div>
+            <section class="moves">
                 <p id="moves"></p>
-            </div>
-        </div>
-        <div id="map" class="tab">
+            </section>
             <header>
                 <div class="chat-header">
                     <div class="table-header">
@@ -81,8 +75,7 @@
             </header>
 
             <section class="chat">
-                <p><strong>John</strong>: Hello!</p>
-                <p><strong>Bob</strong>: How are you!</p>
+
             </section>
 
             <form>
@@ -91,52 +84,10 @@
             </form>
         </div>
         <div id="utils" class="tab">
-            <p></p>
+
         </div>
     </div>
-    <script>
-        window.addEventListener("load", myInit, true);
 
-        function myInit() {
-            moves()
-        };
-    </script>
-
-    </div>
-    <div class="ex1">
-        <div id="nav" class="tab">
-        </div>
-        <div id="form" class="tab">
-            <div class="table-header">
-                <h4> Game Moves</h4>
-            </div>
-            <div>
-                <p id="moves"></p>
-            </div>
-        </div>
-        <div id="map" class="tab">
-            <header>
-                <div class="chat-header">
-                    <div class="table-header">
-                        <h4> chat</h4>
-                    </div>
-                </div>
-            </header>
-
-            <section class="chat">
-
-            </section>
-
-
-            <form id="send-message">
-                <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
-                <button id="chat-button" type="submit">Send</button>
-            </form>
-        </div>
-        <div id="utils" class="tab">
-            <p></p>
-        </div>
-    </div>
     <script>
         window.addEventListener("load", myInit, true);
 
@@ -261,6 +212,7 @@
         if (players === player2) {
             board.orientation('black');
         }
+        $(window).resize(board.resize);
 
         socket.on('message', function(data) {
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
