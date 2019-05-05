@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
     <script src="available_games.js"></script>
-    <script src="online_players.js"></script>
     <script src="resizable.js"></script>
     <script src="onGames.js"></script>
+    <script src="online_players.js"></script>
     <!--used for chat box-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -45,7 +45,7 @@
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" onclick="signOut();"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        <li><a href="index.html" onclick="signOut();"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -55,37 +55,27 @@
     <!--<input type="button" onclick="user_game()" value="Create Table From JSON" /> -->
     <div id="content">
         <div id="nav" class="tab"></div>
-        
+
         <div id="form" class="tab">
             <div id="wrapper">
-                <button style ="float: left; margin-bottom: 15px" onclick="newGame()">new game</button>
+                <button style="float: left; margin-bottom: 15px" onclick="newGame()">new game</button>
 
             </div>
-            
+
             <div class="table-header">
                 <h4> User Games</h4>
+                <section class="uGames">
+                    <p id="userGames"></p>
+                </section>
+                <div class="table-header">
+                    <h4> Ongoing Games</h4>
+                </div>
+                <section class="onGames">
+                    <p id="onG"></p>
+                </section>
             </div>
-            <p id="userGames"></p>
-
-            <div class="table-header">
-                <h4> Ongoing Games</h4>
-            </div>
-            <div>
-                <p id="onG"></p>
-            </div>
-
-            
-
         </div>
         <div id="map" class="tab">
-            <!--div class="table-header">
-                <h4> Available Games</h4>
-            </div>
-            <div>
-                <p id="available_games"></p>
-            </div-->
-
-            
             <div>
                 <header>
                     <div class="chat-header">
@@ -112,22 +102,18 @@
                 </section>
 
                 <form display="block" id="send-message">
-                    <input  style = "width: 75%" type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
-                    <button style = "width: 20%" id="chat-button" type="submit">Send</button>
+                    <input style="width: 75%" type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
+                    <button style="width: 20%" id="chat-button" type="submit">Send</button>
                 </form>
             </div>
-            
+
             <div class="table-header">
                 <h4> Available Games</h4>
             </div>
-            <div>
+            <section class="avGames">
                 <p id="available_games"></p>
-            </div>
-            
-        
-        </div>   
-
-
+            </section>
+        </div>
         <div id="utils" class="tab">
 
         </div>
@@ -137,7 +123,7 @@
 
         function newGame() {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
+            xhr.open('POST', 'http://localhost:3000/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
@@ -169,8 +155,8 @@
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
-        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
+        //to fix error use http://localhost:3000/default on server
+        //var socket = io.connect('http://localhost:3000/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
@@ -178,7 +164,8 @@
         });*/
 
         socket.emit('new user', cookie.get('user') || 'Anonymous');
-        socket.on('usernames', function(data){
+        socket.on('usernames', function(data) {
+            console.log("online players " + data)
             var jsonExamples = data;
             onlineP();
         })
@@ -200,11 +187,12 @@
 
             // Retrieve the message from the user
             var message = $(e.target).find('input').val();
- 
+
             // Send the message to the server
             socket.emit('message', {
                 user: cookie.get('user') || 'Anonymous',
-                message: message
+                message: message,
+                chat_id: "lobby"
             });
 
             // Clear the input and focus it for a new message
@@ -215,11 +203,11 @@
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            user_Games(), onlineP(), available_games(), onGames(), onLoad()
+            user_Games(), available_games(), onGames(), onLoad()
         };
 
         $(".avGames").scrollTop(0);
-        $(".auGames").scrollTop(0);
+        $(".uGames").scrollTop(0);
         $(".onGames").scrollTop(0);
     </script>
 
