@@ -22,7 +22,7 @@ router.use(bodyParser.json());
 router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
-    //    verify(id_token)
+        //    verify(id_token)
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
@@ -48,7 +48,7 @@ router.post('/login', (request, response) => {
 //sends a JSON with the availbale games to join.
 //Empty JSON if there are no available games
 router.get('/pending', (request, response) => {
-    games.fetchAvailableGames(function (err, result) {
+    games.fetchAvailableGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -75,7 +75,7 @@ router.get('/active', (request, response) => {
 
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
-    games.fetchUserGames(request.username, function (err, result) {
+    games.fetchUserGames(request.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);
@@ -87,7 +87,7 @@ router.get('/userGames', (request, response) => {
 });
 
 router.post('/create', (request, response) => {
-    games.createNewGame(request.body.user_id, function (err, result) {
+    games.createNewGame(request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
@@ -100,7 +100,7 @@ router.post('/create', (request, response) => {
 
 //player2 joins the game
 router.put('/join', (request, response) => {
-    games.joinGame(request.body.game_id, request.body.user_id, function (err, result) {
+    games.joinGame(request.body.game_id, request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot join: " + err);
             response.sendStatus(500);
@@ -113,7 +113,7 @@ router.put('/join', (request, response) => {
 
 router.get('/players', (request, response) => {
     console.log(request.query.game_id);
-    games.getPlayers(request.query.game_id, function (err, result) {
+    games.getPlayers(request.query.game_id, function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -127,7 +127,7 @@ router.get('/players', (request, response) => {
 });
 
 router.put('/top', (request, response) => {
-    rank.getTopPlayers(function (err, result) {
+    rank.getTopPlayers(function(err, result) {
         if (err) {
             console.log("Cannot get top players: " + err);
             response.sendStatus(500);
