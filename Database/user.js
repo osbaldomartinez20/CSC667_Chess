@@ -21,8 +21,8 @@ exports.createUser = function (id, email) {
 }
 
 exports.updateDisplayName = function (user_id, newDisplayName) {
-    var sql = "UPDATE users SET display_name = '" + newDisplayName + "' WHERE user_id = '" + user_id + "'";
-    db.query(sql, function (err, result) {
+    var sql = "UPDATE users SET display_name = ? WHERE user_id = ?";
+    db.query(sql, [newDisplayName, user_id], function (err, result) {
         if (err) {
             console.log("cannot update display_name: " + err);
             return false;
@@ -66,7 +66,8 @@ exports.activateSession = function (id) {
 
 //function that returns the display_name given the user_id
 exports.getUserName = function (userid, callback) {
-    db.query("SELECT display_name FROM users WHERE user_id = " + userid + "", function (err, result) {
+    var sql = "SELECT display_name FROM users WHERE user_id = ?";
+    db.query(sql, [userid], function (err, result) {
         if (err) {
             console.log("Error retriving username: " + err);
             callback(err, null);
@@ -91,7 +92,8 @@ exports.getTwoUserName = function (userid1, userid2, callback) {
 
 //function that returns the display_name given the user_id
 exports.getUserId = function (username, callback) {
-    db.query("SELECT user_id FROM users WHERE display_name = '" + username + "'", function (err, result) {
+    var sql = "SELECT user_id FROM users WHERE display_name = ?";
+    db.query(sql, [username], function (err, result) {
         if (err) {
             console.log("Error retriving userid: " + err);
             callback(err, null);

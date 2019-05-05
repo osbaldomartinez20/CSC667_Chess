@@ -22,8 +22,8 @@ exports.createNewGame = async function (userid, callback) {
 //function used to join a game given an username and a game_id
 exports.joinGame = async function (game_id, userid, callback) {
     console.log(userid)
-    var sql = "UPDATE games SET player_two_id = '" + userid + "', active = true WHERE game_id = " + game_id + "";
-    db.query(sql, function (err, result) {
+    var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ?";
+    db.query(sql, [userid, game_id], function (err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -33,8 +33,8 @@ exports.joinGame = async function (game_id, userid, callback) {
 }
 
 exports.getPlayers = async function (game_id, callback) {
-    var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = '" + game_id + "' AND active = true";
-    db.query(sql, function (err, result) {
+    var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = ? AND active = true";
+    db.query(sql, [game_id], function (err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -71,13 +71,11 @@ exports.fetchAvailableGames = function (callback) {
             let counter = result.length;
             for (let i = 0; i < result.length; i++) {
                 let g_id = result[i].game_id;
-                let player;
-                if (result[i].player_one_id == 'undefined') {
-                    player = 0;
-                } else {
+                let player = 0;
+                if (result[i].player_one_id != 'undefined') {
                     player = result[i].player_one_id;
                 }
-                userFunc.getUserName(player, function(err, result) {
+                userFunc.getUserName(player, function (err, result) {
                     if (err) {
                         console.log("There was an error: " + err);
                     } else {
@@ -98,24 +96,20 @@ exports.fetchOngoingGames = function (callback) {
         var storing = [];
         if (err) {
             console.log("Cannot fetch available games: " + err);
-           callback(err, null);
+            callback(err, null);
         } else {
             let counter = result.length;
             for (let i = 0; i < result.length; i++) {
                 let g_id = result[i].game_id;
                 let player = 0;
                 let player2 = 1;
-                if (result[i].player_one_id == 'undefined' || result[i].player_one_id == null) {
-                    player = 0;
-                } else {
+                if (!(result[i].player_one_id == 'undefined' || result[i].player_one_id == null)) {
                     player = result[i].player_one_id;
                 }
-                if (result[i].player_two_id == 'undefined' || result[i].player_two_id == null) {
-                    player2 = 1;
-                } else {
+                if (!(result[i].player_two_id == 'undefined' || result[i].player_two_id == null)) {
                     player2 = result[i].player_two_id;
                 }
-                userFunc.getTwoUserName(player, player2, function(err, result) {
+                userFunc.getTwoUserName(player, player2, function (err, result) {
                     if (err) {
                         console.log("There was an error: " + err);
                     } else {
@@ -147,20 +141,16 @@ exports.fetchUserGames = function (username, callback) {
                     callback(err, null);
                 } else {
                     let counter = result.length;
-                    for (var i = 0; i < result.length; i++) {
-                        let opponent;
+                    for (let i = 0; i < result.length; i++) {
+                        let opponent = 0;
                         let game_id = result[i].game_id;
                         let active = result[i].active;
                         if (result[i].player_one_id == user_id) {
-                            if (result[i].player_two_id == null || result[i].player_two_id == 'undefined') {
-                                opponent = 0;
-                            } else {
+                            if (!(result[i].player_two_id == null || result[i].player_two_id == 'undefined')) {
                                 opponent = result[i].player_two_id;
                             }
                         } else if (result[i].player_two_id == user_id) {
-                            if (result[i].player_one_id == null || result[i].player_one_id == 'undefined') {
-                                opponent = 0;
-                            } else {
+                            if (!(result[i].player_one_id == null || result[i].player_one_id == 'undefined')) {
                                 opponent = result[i].player_one_id;
                             }
                         }
@@ -207,8 +197,8 @@ exports.boardState = function (game_id, callback) {
 
 //updates the current state of the board in the database
 var updateState = function (game_id, curr_state, callback) {
-    var sql = "UPDATE games SET current_state = '" + curr_state + "' WHERE game_id = " + game_id + "";
-    db.query(sql, function (err, result) {
+    var sql = "UPDATE games SET current_state = ? WHERE game_id = ?";
+    db.query(sql, [curr_state, game_id], function (err, result) {
         if (err) {
             callback(err, null);
         } else {
