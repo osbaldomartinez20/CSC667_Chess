@@ -8,7 +8,7 @@ const rank = require('../Database/ranking.js');
 const test = require('../scripts/db_test.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client('1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com');
+const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
 
 //create a router for url request
 const router = express.Router()
@@ -22,11 +22,11 @@ router.use(bodyParser.json());
 router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
-    //    verify(id_token)
+        //    verify(id_token)
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: '1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com',
+            audience: '80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com',
         })
 
         const payload = ticket.getPayload()
@@ -49,7 +49,7 @@ router.post('/login', (request, response) => {
 //Empty JSON if there are no available games
 router.get('/pending', (request, response) => {
     var a_games = [];
-    games.fetchAvailableGames(function (err, result) {
+    games.fetchAvailableGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.send("Cannot retrieve available games");
@@ -67,7 +67,7 @@ router.get('/pending', (request, response) => {
 //Empty JSON if there are no ongoing games
 router.get('/active', (request, response) => {
     var o_games = [];
-    games.fetchOngoingGames(function (err, result) {
+    games.fetchOngoingGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.send("Cannot retrieve available games");
@@ -83,7 +83,7 @@ router.get('/active', (request, response) => {
 
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
-    games.fetchUserGames(request.username, function (err, result) {
+    games.fetchUserGames(request.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);
@@ -95,7 +95,7 @@ router.get('/userGames', (request, response) => {
 });
 
 router.post('/create', (request, response) => {
-    games.createNewGame(request.body.user_id, function (err, result) {
+    games.createNewGame(request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
@@ -108,7 +108,7 @@ router.post('/create', (request, response) => {
 
 //player2 joins the game
 router.put('/join', (request, response) => {
-    games.joinGame(request.body.game_id, request.body.user_id, function (err, result) {
+    games.joinGame(request.body.game_id, request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot join: " + err);
             response.send("Cannot join game");
@@ -121,7 +121,7 @@ router.put('/join', (request, response) => {
 
 router.get('/players', (request, response) => {
     console.log(request.query.game_id);
-    games.getPlayers(request.query.game_id, function (err, result) {
+    games.getPlayers(request.query.game_id, function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.send("Cannot retrieve available games");
@@ -135,7 +135,7 @@ router.get('/players', (request, response) => {
 });
 
 router.put('/top', (request, response) => {
-    rank.getTopPlayers(function (err, result) {
+    rank.getTopPlayers(function(err, result) {
         if (err) {
             console.log("Cannot get top players: " + err);
             response.send("Cannot show top players");
