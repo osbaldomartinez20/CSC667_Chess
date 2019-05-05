@@ -68,17 +68,32 @@ exports.activateSession = function (id) {
 exports.getUserName = function (userid, callback) {
     db.query("SELECT display_name FROM users WHERE user_id = " + userid + "", function (err, result) {
         if (err) {
-           callback(err, null);
+            console.log("Error retriving username: " + err);
+            callback(err, null);
         } else {
             callback(null, result[0].display_name);
         }
     });
 }
 
+exports.getTwoUserName = function (userid1, userid2, callback) {
+    var sql = "SELECT display_name FROM users WHERE user_id = ? OR user_id = ?";
+    db.query(sql, [userid1, userid2], function (err, result) {
+        if (err) {
+            console.log("Error retriving usernames: " + err);
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+
 //function that returns the display_name given the user_id
 exports.getUserId = function (username, callback) {
     db.query("SELECT user_id FROM users WHERE display_name = '" + username + "'", function (err, result) {
         if (err) {
+            console.log("Error retriving userid: " + err);
             callback(err, null);
         } else {
             callback(null, result[0].user_id);

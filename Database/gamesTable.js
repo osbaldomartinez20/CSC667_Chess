@@ -44,52 +44,99 @@ exports.getPlayers = async function (game_id, callback) {
 }
 
 //"class" used to organized the retrieved date when finding available games
-exports.availableData = class {
-    constructor(game_id, playerid) {
+var availableData = class {
+    constructor(game_id, playername) {
         this.game_id = game_id;
-        this.playerid = playerid;
+        this.username = playername;
     }
 }
 
 //"class" used to organized the retrieved date when finding ongoing games
-exports.ongoingData = class {
+var ongoingData = class {
     constructor(game_id, playerid, player2id) {
         this.game_id = game_id;
-        this.playerid = playerid;
-        this.player2id = player2id;
+        this.username = playerid;
+        this.username2 = player2id;
     }
 }
 
-//helps finding available games
+//returns all the available games
 exports.fetchAvailableGames = function (callback) {
     db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
+        var storing = [];
         if (err) {
             console.log("Cannot fetch available games: " + err);
             callback(err, null);
         } else {
-            callback(null, result);
+            let counter = result.length;
+            for (let i = 0; i < result.length; i++) {
+                let g_id = result[i].game_id;
+                let player;
+                if (result[i].player_one_id == 'undefined') {
+                    player = 0;
+                } else {
+                    player = result[i].player_one_id;
+                }
+                userFunc.getUserName(player, function(err, result) {
+                    if (err) {
+                        console.log("There was an error: " + err);
+                    } else {
+                        storing.push(new availableData(g_id, result));
+                        if (storing.length >= counter) {
+                            callback(null, storing);
+                        }
+                    }
+                });
+            }
         }
     });
 }
 
-//helps finding ongoing games
+//returns all the ongoing games
 exports.fetchOngoingGames = function (callback) {
-    db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function (err, result) {
+    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
+        var storing = [];
         if (err) {
-            console.log("Cannot fetch ongoing games: " + err);
-            callback(err, null);
+            console.log("Cannot fetch available games: " + err);
+           callback(err, null);
         } else {
-            callback(null, result);
+            let counter = result.length;
+            for (let i = 0; i < result.length; i++) {
+                let g_id = result[i].game_id;
+                let player = 0;
+                let player2 = 1;
+                if (result[i].player_one_id == 'undefined' || result[i].player_one_id == null) {
+                    player = 0;
+                } else {
+                    player = result[i].player_one_id;
+                }
+                if (result[i].player_two_id == 'undefined' || result[i].player_two_id == null) {
+                    player2 = 1;
+                } else {
+                    player2 = result[i].player_two_id;
+                }
+                userFunc.getTwoUserName(player, player2, function(err, result) {
+                    if (err) {
+                        console.log("There was an error: " + err);
+                    } else {
+                        storing.push(new ongoingData(g_id, result[1].display_name, result[0].display_name));
+                        if (storing.length >= counter) {
+                            callback(null, storing);
+                        }
+                    }
+                });
+            }
         }
     });
 }
 
+//returns the games of an user. Given the username.
 exports.fetchUserGames = function (username, callback) {
     var storing = [];
     userFunc.getUserId(username, function (err, result) {
         if (err) {
             console.log(err);
-            //callback(err, null);
+            callback(err, null);
         } else {
             console.log(result);
             var user_id = result;
