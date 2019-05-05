@@ -163,8 +163,8 @@
             $('.user-count').html(data);
         });*/
 
-        socket.emit('new user', cookie.get('user') || 'Anonymous');
         socket.on('usernames', function(data) {
+            socket.emit('usernames', cookie.get('user') || 'Anonymous');
             console.log("online players " + data)
             var jsonExamples = data;
             onlineP();

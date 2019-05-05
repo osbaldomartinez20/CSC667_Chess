@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="moves.js"></script>
     <script src="js/chessboard-0.3.0.js"></script>
     <script src="js/chessboard-0.3.0.min.js"></script>
@@ -44,7 +46,7 @@
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        <li><a href="index.html" onclick="signOut();"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -285,6 +287,31 @@
             e.target.reset();
             $(e.target).find('input').focus();
         });
+
+        //validate user for signout
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
+                cookie.set('user', "");
+                window.location.href = "index.html";
+            });
+        }
+
+        function onLoad() {
+            console.log('I am here');
+            gapi.load('auth2', function() {
+                gapi.auth2.init();
+                console.log('User signed in.');
+
+            });
+        }
+
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            onLoad()
+        };
     </script>
 </body>
 
