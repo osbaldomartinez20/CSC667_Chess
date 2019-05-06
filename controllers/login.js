@@ -92,7 +92,7 @@ router.post('/create', (request, response) => {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
         } else {
-            console.log("New game created")
+            console.log("New game created");
             response.send(result);
         }
     });
@@ -145,9 +145,9 @@ router.get('/chatid', (request, response) => {
     const queryString = "SELECT game_id FROM games WHERE player_one_id = ? AND player_two_id = ?"
     db.query(queryString, [player_1, player_2], (err, rows, fields) => {
         if (err) {
-            console.log("Failed to query for users: " + err)
-            response.sendStatus(500)
-            return
+            console.log("Failed to query for users: " + err);
+            response.sendStatus(500);
+            return;
         }
         response.send(rows);
     })
@@ -164,7 +164,7 @@ router.get('/chatHistory', (request, response) => {
         if (err) {
             console.log("Error getting messages: " + err);
             response.sendStatus(500);
-            return
+            return;
         } else {
         response.send(result);
         }
@@ -177,7 +177,7 @@ router.get('/gameMoves', (request, response) => {
         if (err) {
             console.log("Failed to get moves: " + err);
             response.sendStatus(500);
-            return
+            return;
         } else {
             response.send(result);
         }
@@ -189,6 +189,19 @@ router.get('/getUser', (request, response) => {
     user.getUserName(request.body.user_id, function(err, result) {
         if (err) {
             console.log("Error retriving display_name: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+            response.send(result);
+        }
+    });
+});
+
+//this route is used to indicate that a game is complete
+router.put('/gameComplete', (request, response) => {
+    games.gameComplete(request.body.game_id, request.body.user1, request.body.user2, request.body.won, function(err, result) {
+        if (err) {
+            console.log("Error completing game: " + err);
             response.sendStatus(500);
             return;
         } else {

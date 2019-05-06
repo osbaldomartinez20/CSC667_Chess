@@ -4,6 +4,9 @@ var db = require('../auth/db_config.js');
 //used to get the user id and display_name
 var userFunc = require('../Database/user.js');
 
+//need rank for completed games
+var rankFunc = require('../Database/ranking.js');
+
 //create a new game by giving the username
 exports.createNewGame = async function (userid, callback) {
     //this is used to asign an unique id to each game.
@@ -21,15 +24,28 @@ exports.createNewGame = async function (userid, callback) {
 
 //function used to join a game given an username and a game_id
 exports.joinGame = async function (game_id, userid, callback) {
-    console.log(userid)
-    var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ?";
-    db.query(sql, [userid, game_id], function (err, result) {
+    var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ? AND player_one-id <> ?";
+    db.query(sql, [userid, game_id, userid], function (err, result) {
         if (err) {
             callback(err, null);
         } else {
             callback(null, result);
         }
     });
+}
+
+//marks the game as complete in database
+exports.gameComplete = function (game_id, user1, user2, won, callback) {
+    var sql = "UPDATE games SET complete = true, active = false WHERE game_id = ?";
+    db.query(sql, [game_id], function(err, result) {
+        if (err) {
+            console.log("Cannot mark game as complete: " + err);
+            callback(err, null);
+        } else {
+            rankFunc.updateEloRank(user1, user2, won);
+            callback(null, result);
+        }
+    }) ;
 }
 
 exports.getPlayers = async function (game_id, callback) {
@@ -71,10 +87,7 @@ exports.fetchAvailableGames = function (callback) {
             let counter = result.length;
             for (let i = 0; i < result.length; i++) {
                 let g_id = result[i].game_id;
-                let player = 0;
-                if (result[i].player_one_id != 'undefined') {
-                    player = result[i].player_one_id;
-                }
+                let player = result[i].player_one_id;
                 userFunc.getUserName(player, function (err, result) {
                     if (err) {
                         console.log("There was an error: " + err);
@@ -101,14 +114,8 @@ exports.fetchOngoingGames = function (callback) {
             let counter = result.length;
             for (let i = 0; i < result.length; i++) {
                 let g_id = result[i].game_id;
-                let player = 0;
-                let player2 = 1;
-                if (!(result[i].player_one_id == 'undefined' || result[i].player_one_id == null)) {
-                    player = result[i].player_one_id;
-                }
-                if (!(result[i].player_two_id == 'undefined' || result[i].player_two_id == null)) {
-                    player2 = result[i].player_two_id;
-                }
+                let player = result[i].player_one_id;
+                let player2 = result[i].player_two_id;
                 userFunc.getTwoUserName(player, player2, function (err, result) {
                     if (err) {
                         console.log("There was an error: " + err);
@@ -145,14 +152,11 @@ exports.fetchUserGames = function (username, callback) {
                         let opponent = 0;
                         let game_id = result[i].game_id;
                         let active = result[i].active;
+                        let complete = result[i].complete;
                         if (result[i].player_one_id == user_id) {
-                            if (!(result[i].player_two_id == null || result[i].player_two_id == 'undefined')) {
                                 opponent = result[i].player_two_id;
-                            }
                         } else if (result[i].player_two_id == user_id) {
-                            if (!(result[i].player_one_id == null || result[i].player_one_id == 'undefined')) {
                                 opponent = result[i].player_one_id;
-                            }
                         }
                         userFunc.getUserName(opponent, function (err, res) {
                             if (err) {
@@ -173,12 +177,14 @@ exports.fetchUserGames = function (username, callback) {
 
 //class helps organize sent data in fetchUserGames()
 var userGameData = class {
-    constructor(game_id, opponent, isActive) {
+    constructor(game_id, opponent, isActive, isComplete) {
         this.opponent = opponent;
-        if (isActive == 1) {
-            this.isActive = true;
+        if (isActive == 1 && isComplete == 0) {
+            this.status = "Complete";
+        } else if(isComplete == 1){
+            this.status = "Complete";
         } else {
-            this.isActive = false;
+            this.status = "Pending";
         }
         this.game_id = game_id;
     }
