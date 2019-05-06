@@ -179,8 +179,8 @@ exports.fetchUserGames = function (username, callback) {
 var userGameData = class {
     constructor(game_id, opponent, isActive, isComplete) {
         this.opponent = opponent;
-        if (isActive == 1 && isComplete == 0) {
-            this.status = "Complete";
+        if (isActive == 1) {
+            this.status = "Ongoing";
         } else if(isComplete == 1){
             this.status = "Complete";
         } else {
