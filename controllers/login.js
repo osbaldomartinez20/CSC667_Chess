@@ -75,7 +75,7 @@ router.get('/active', (request, response) => {
 
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
-    games.fetchUserGames(request.username, function(err, result) {
+    games.fetchUserGames(request.body.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);

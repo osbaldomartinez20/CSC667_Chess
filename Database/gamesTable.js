@@ -228,3 +228,47 @@ exports.storeMove = function (data) {
         }
     });
 }
+
+var moveDataOrg = class {
+    constructor(from, to, flags, piece, san) {
+        this.color = piece.charAt(0);
+        this.from = from;
+        this.to = to;
+        this.flags = flags;
+        this.piece = piece.charAt(1);
+        this.san = san;
+    }
+}
+
+//this thing grabs the moves of  game given the game_id
+//Returns a JSON with the moves made throughout the game.
+exports.getGameMoves = function (game_id, callback) {
+    let moves = [];
+    var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC";
+    db.query(sql, [game_id], function (err, result) {
+        if (err) {
+            console.log("Cannot retrieve game moves: " + err);
+            callback(err, null);
+        } else {
+            for (let i = 0; i < result.length; i++) {
+                moves.push(new moveDataOrg(result[i].origin, result[i].dest, result[i].flags, result[i].piece, result[i].san));
+            }
+            callback(null, JSON.stringify(moves));
+        }
+    });
+}
+
+//returns the most recent move made in the game given the game_id, returns it as a JSON
+exports.getGameLatestMove = function (game_id, callback) {
+    let moves = [];
+    var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC LIMIT 1";
+    db.query(sql, [game_id], function (err, result) {
+        if (err) {
+            console.log("Cannot retrieve game moves: " + err);
+            callback(err, null);
+        } else {
+            moves.push(new moveDataOrg(result[0].origin, result[0].dest, result[0].flags, result[0].piece, result[0].san));
+            callback(null, JSON.stringify(moves));
+        }
+    });
+}
