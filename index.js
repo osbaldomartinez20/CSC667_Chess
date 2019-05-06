@@ -86,6 +86,7 @@ nsp2.on('connection', function(socket) {
 nsp2.on('connection', function(socket) {
     socket.on('move', function(msg) {
         console.log(msg);
+        moves.storeMove(msg);
         nsp2.to(rooms).emit('move', msg);
     });
 });
