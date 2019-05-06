@@ -55,7 +55,7 @@ var availableData = class {
 var ongoingData = class {
     constructor(game_id, playerid, player2id) {
         this.game_id = game_id;
-        this.username = playerid;
+        this.username1 = playerid;
         this.username2 = player2id;
     }
 }
