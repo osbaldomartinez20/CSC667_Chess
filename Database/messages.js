@@ -3,7 +3,7 @@ var db = require('../auth/db_config.js');
 
 //this method stores messages in the database given game_id, message, and user_id
 exports.storeMessage = function (data) {
-    var sql = "INSERT INTO chat (chat_id, messages, user_id) VALUES ('" + data.chat_id + "', '" + data.message + "', '" + data.user_id + "')";
+    var sql = "INSERT INTO chat (chat_id, messages, display_name) VALUES ('" + data.chat_id + "', '" + data.message + "', '" + data.user + "')";
     db.query(sql, function (err, result) {
         if (err) {
             console.log("Cannot store message: " + err)
