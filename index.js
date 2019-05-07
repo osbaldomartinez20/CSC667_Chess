@@ -35,32 +35,10 @@ nsp.on('connection', function(socket) {
 
     nsp.on('username', function(data) {
         nsp.username = data;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of a3ccfac... Merge branch 'development' of https://github.com/csc667-02-sp19/csc667-sp19-Team9-ryanstills into development
         if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
             lobby_users.push({ Opponent: nsp.username });
             updateUserNames();
         }
-<<<<<<< HEAD
-=======
-        lobby_users.push({ Opponent: nsp.username });
-        console.log(lobby_users);
-        //  updateUserNames();
->>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
-=======
-        lobby_users.push({ Opponent: nsp.username });
-        updateUserNames();
->>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
-=======
-        lobby_users.push({ Opponent: nsp.username });
-        updateUserNames();
->>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
-=======
->>>>>>> parent of a3ccfac... Merge branch 'development' of https://github.com/csc667-02-sp19/csc667-sp19-Team9-ryanstills into development
     })
 })
 

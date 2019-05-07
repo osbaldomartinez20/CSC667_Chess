@@ -155,24 +155,13 @@
                 console.log('User signed in.');
 
             });
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            new_user();  //send username to backend via socket
-=======
 
             if (cookie.get('user') === " ") {
                 window.location.href = "index.html";
             }
->>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
-=======
->>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
-=======
->>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
-=======
-            new_user();  //send username to backend via socket
->>>>>>> parent of a3ccfac... Merge branch 'development' of https://github.com/csc667-02-sp19/csc667-sp19-Team9-ryanstills into development
+
+            new_user(); //send username to backend via socket
+
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
@@ -183,14 +172,22 @@
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
+        function new_user() {
+            socket.emit('new user', cookie.get('user') || 'Anonymous');
+        }
 
         socket.on('usernames', function(data) {
-            socket.emit('usernames', cookie.get('user') || 'Anonymous');
+            //socket.emit('usernames', cookie.get('user') || 'Anonymous');
             console.log("online players " + data)
             var jsonExamples = data;
             onlineP();
+            /* var html = "";
+                 for (i = 0; i < data.length; i++){
+                     html +=  data[i]  + '</br>';
+                 }
+             $users.html(html);
+             */
         })
-
 
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }
