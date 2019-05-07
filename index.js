@@ -33,8 +33,9 @@ nsp.on('connection', function(socket) {
         nsp.emit('usernames', lobby_users);
     }
 
-    nsp.on('new user', function(data) {
+    nsp.on('username', function(data) {
         nsp.username = data;
+<<<<<<< HEAD
 <<<<<<< HEAD
         if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
             lobby_users.push({ Opponent: nsp.username });
@@ -45,6 +46,10 @@ nsp.on('connection', function(socket) {
         console.log(lobby_users);
         //  updateUserNames();
 >>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
+=======
+        lobby_users.push({ Opponent: nsp.username });
+        updateUserNames();
+>>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
     })
 })
 
