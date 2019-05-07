@@ -9,7 +9,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com",
+            "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
         }
     ]

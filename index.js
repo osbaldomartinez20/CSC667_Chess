@@ -36,6 +36,7 @@ nsp.on('connection', function(socket) {
     nsp.on('username', function(data) {
         nsp.username = data;
         lobby_users.push({ Opponent: nsp.username });
+        console.log(lobby_users);
         updateUserNames();
     })
 })

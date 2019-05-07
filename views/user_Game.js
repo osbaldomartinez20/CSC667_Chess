@@ -1,7 +1,7 @@
 function user_Games() {
     var User_games;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending', false); // `false` makes the request synchronous
+    request.open('GET', 'http://localhost:3000/pending', false); // `false` makes the request synchronous
     request.send(null);
 
     if (request.status === 200) {
