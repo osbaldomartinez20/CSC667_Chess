@@ -153,6 +153,7 @@
                 console.log('User signed in.');
 
             });
+            new_user();  //send username to backend via socket
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
@@ -164,11 +165,23 @@
             $('.user-count').html(data);
         });*/
 
+
+        function new_user(){
+            socket.emit('new user', cookie.get('user') || 'Anonymous');
+        }
+
+
         socket.on('usernames', function(data) {
-            socket.emit('usernames', cookie.get('user') || 'Anonymous');
+            //socket.emit('usernames', cookie.get('user') || 'Anonymous');
             console.log("online players " + data)
             var jsonExamples = data;
             onlineP();
+           /* var html = "";
+                for (i = 0; i < data.length; i++){
+                    html +=  data[i]  + '</br>';
+                }
+            $users.html(html);
+            */
         })
 
 
