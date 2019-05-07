@@ -33,11 +33,18 @@ nsp.on('connection', function(socket) {
         nsp.emit('usernames', lobby_users);
     }
 
-    nsp.on('username', function(data) {
+    nsp.on('new user', function(data) {
         nsp.username = data;
+<<<<<<< HEAD
+        if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
+            lobby_users.push({ Opponent: nsp.username });
+            updateUserNames();
+        }
+=======
         lobby_users.push({ Opponent: nsp.username });
         console.log(lobby_users);
         //  updateUserNames();
+>>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
     })
 })
 
