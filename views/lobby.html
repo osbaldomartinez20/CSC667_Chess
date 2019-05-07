@@ -156,21 +156,6 @@
 
             if (cookie.get('user') === " ") {
                 window.location.href = "index.html";
-            } else {
-
-                ///use this to set the userrname 
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://localhost:3000/create');
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    socket.emit('newGame', "true");
-                };
-                socket.on('newGame', function(msg) {
-                    available_games();
-                });
-                const user_id = cookie.get('user');
-                console.log('Signed in as: ' + user_id);
-                xhr.send('user_id=' + user_id);
             }
         }
 

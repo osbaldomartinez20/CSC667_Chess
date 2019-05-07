@@ -62,7 +62,7 @@ router.get('/pending', (request, response) => {
 //sends a JSON with ongoing games.
 //Empty JSON if there are no ongoing games
 router.get('/active', (request, response) => {
-    games.fetchOngoingGames(function (err, result) {
+    games.fetchOngoingGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -160,20 +160,20 @@ router.post('/chatStore', (request, response) => {
 
 //sends a JSON with all the messages for a given chat_id
 router.get('/chatHistory', (request, response) => {
-    chat.getMessages(request.body.chat_id, function (err, result) {
+    chat.getMessages(request.body.chat_id, function(err, result) {
         if (err) {
             console.log("Error getting messages: " + err);
             response.sendStatus(500);
             return;
         } else {
-        response.send(result);
+            response.send(result);
         }
     });
 });
 
 //sends a JSON with all moves made in a game with the given game_id
 router.get('/gameMoves', (request, response) => {
-    games.getGameMoves(request.body.game_id, function (err, result) {
+    games.getGameMoves(request.body.game_id, function(err, result) {
         if (err) {
             console.log("Failed to get moves: " + err);
             response.sendStatus(500);
@@ -186,7 +186,8 @@ router.get('/gameMoves', (request, response) => {
 
 //get user_displayName by user_id.
 router.get('/getUser', (request, response) => {
-    user.getUserName(request.body.user_id, function(err, result) {
+    console.log("user" + request.query.user_id);
+    user.getUserName(request.query.user_id, function(err, result) {
         if (err) {
             console.log("Error retriving display_name: " + err);
             response.sendStatus(500);

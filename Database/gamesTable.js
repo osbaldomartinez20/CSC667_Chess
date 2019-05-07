@@ -8,12 +8,12 @@ var userFunc = require('../Database/user.js');
 var rankFunc = require('../Database/ranking.js');
 
 //create a new game by giving the username
-exports.createNewGame = async function (userid, callback) {
+exports.createNewGame = async function(userid, callback) {
     //this is used to asign an unique id to each game.
     var time = new Date();
     var game_id = time.getTime();
     var sql = "INSERT INTO games (game_id, player_one_id, active, complete) VALUES (" + game_id + ", '" + userid + "', false , false)";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -23,9 +23,9 @@ exports.createNewGame = async function (userid, callback) {
 }
 
 //function used to join a game given an username and a game_id
-exports.joinGame = async function (game_id, userid, callback) {
+exports.joinGame = async function(game_id, userid, callback) {
     var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ? AND player_one-id <> ?";
-    db.query(sql, [userid, game_id, userid], function (err, result) {
+    db.query(sql, [userid, game_id, userid], function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -35,7 +35,7 @@ exports.joinGame = async function (game_id, userid, callback) {
 }
 
 //marks the game as complete in database
-exports.gameComplete = function (game_id, user1, user2, won, callback) {
+exports.gameComplete = function(game_id, user1, user2, won, callback) {
     var sql = "UPDATE games SET complete = true, active = false WHERE game_id = ?";
     db.query(sql, [game_id], function(err, result) {
         if (err) {
@@ -45,12 +45,12 @@ exports.gameComplete = function (game_id, user1, user2, won, callback) {
             rankFunc.updateEloRank(user1, user2, won);
             callback(null, result);
         }
-    }) ;
+    });
 }
 
-exports.getPlayers = async function (game_id, callback) {
+exports.getPlayers = async function(game_id, callback) {
     var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = ? AND active = true";
-    db.query(sql, [game_id], function (err, result) {
+    db.query(sql, [game_id], function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -76,65 +76,33 @@ var ongoingData = class {
     }
 }
 
-//returns all the available games
-exports.fetchAvailableGames = function (callback) {
-    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function (err, result) {
-        var storing = [];
+///helps finding available games
+exports.fetchAvailableGames = function(callback) {
+    db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function(err, result) {
         if (err) {
             console.log("Cannot fetch available games: " + err);
             callback(err, null);
         } else {
-            let counter = result.length;
-            for (let i = 0; i < result.length; i++) {
-                let g_id = result[i].game_id;
-                let player = result[i].player_one_id;
-                userFunc.getUserName(player, function (err, result) {
-                    if (err) {
-                        console.log("There was an error: " + err);
-                    } else {
-                        storing.push(new availableData(g_id, result));
-                        if (storing.length >= counter) {
-                            callback(null, storing);
-                        }
-                    }
-                });
-            }
+            callback(null, result);
         }
     });
 }
 
-//returns all the ongoing games
-exports.fetchOngoingGames = function (callback) {
-    db.query("SELECT game_id, player_one_id FROM games WHERE active = true AND complete = false", function (err, result) {
-        var storing = [];
-        if (err) {
-            console.log("Cannot fetch available games: " + err);
-            callback(err, null);
-        } else {
-            let counter = result.length;
-            for (let i = 0; i < result.length; i++) {
-                let g_id = result[i].game_id;
-                let player = result[i].player_one_id;
-                let player2 = result[i].player_two_id;
-                userFunc.getTwoUserName(player, player2, function (err, result) {
-                    if (err) {
-                        console.log("There was an error: " + err);
-                    } else {
-                        storing.push(new ongoingData(g_id, result[1].display_name, result[0].display_name));
-                        if (storing.length >= counter) {
-                            callback(null, storing);
-                        }
-                    }
-                });
+//helps finding ongoing games
+exports.fetchOngoingGames = function(callback) {
+        db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
+            if (err) {
+                console.log("Cannot fetch ongoing games: " + err);
+                callback(err, null);
+            } else {
+                callback(null, result);
             }
-        }
-    });
-}
-
-//returns the games of an user. Given the username.
-exports.fetchUserGames = function (username, callback) {
+        });
+    }
+    //returns the games of an user. Given the username.
+exports.fetchUserGames = function(username, callback) {
     var storing = [];
-    userFunc.getUserId(username, function (err, result) {
+    userFunc.getUserId(username, function(err, result) {
         if (err) {
             console.log(err);
             callback(err, null);
@@ -142,7 +110,7 @@ exports.fetchUserGames = function (username, callback) {
             console.log(result);
             var user_id = result;
             var sql = "SELECT * FROM games WHERE player_one_id = " + user_id + " OR player_two_id = " + user_id + "";
-            db.query(sql, function (err, result) {
+            db.query(sql, function(err, result) {
                 if (err) {
                     console.log("Cannot fetch user games: " + err);
                     callback(err, null);
@@ -154,11 +122,11 @@ exports.fetchUserGames = function (username, callback) {
                         let active = result[i].active;
                         let complete = result[i].complete;
                         if (result[i].player_one_id == user_id) {
-                                opponent = result[i].player_two_id;
+                            opponent = result[i].player_two_id;
                         } else if (result[i].player_two_id == user_id) {
-                                opponent = result[i].player_one_id;
+                            opponent = result[i].player_one_id;
                         }
-                        userFunc.getUserName(opponent, function (err, res) {
+                        userFunc.getUserName(opponent, function(err, res) {
                             if (err) {
                                 console.log(err);
                             } else {
@@ -181,7 +149,7 @@ var userGameData = class {
         this.opponent = opponent;
         if (isActive == 1) {
             this.status = "Ongoing";
-        } else if(isComplete == 1){
+        } else if (isComplete == 1) {
             this.status = "Complete";
         } else {
             this.status = "Pending";
@@ -191,8 +159,8 @@ var userGameData = class {
 }
 
 //returns the currnt state of the game
-exports.boardState = function (game_id, callback) {
-    db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function (err, result) {
+exports.boardState = function(game_id, callback) {
+    db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -202,9 +170,9 @@ exports.boardState = function (game_id, callback) {
 }
 
 //updates the current state of the board in the database
-var updateState = function (game_id, curr_state, callback) {
+var updateState = function(game_id, curr_state, callback) {
     var sql = "UPDATE games SET current_state = ? WHERE game_id = ?";
-    db.query(sql, [curr_state, game_id], function (err, result) {
+    db.query(sql, [curr_state, game_id], function(err, result) {
         if (err) {
             callback(err, null);
         } else {
@@ -215,16 +183,16 @@ var updateState = function (game_id, curr_state, callback) {
 
 //stores moves in database in table game_moves
 //data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
-exports.storeMove = function (data) {
+exports.storeMove = function(data) {
     var mv = JSON.parse(data.moves);
     var piece = mv.color + "" + mv.piece;
     var sql = "INSERT INTO game_moves (game_id, origin, dest, flags, piece, san) VALUES (" + data.game_id + ", '" + mv.from + "', '" + mv.to + "', '" + mv.flags + "', " + piece + ",  '" + mv.san + "')";
-    db.query(sql, function (err, result) {
+    db.query(sql, function(err, result) {
         if (err) {
             console.log("Cannot store message: " + err)
         } else {
             console.log("Message storage successful");
-            updateState(data.game_id, data.state, function (err, result) {
+            updateState(data.game_id, data.state, function(err, result) {
                 if (err) {
                     console.log("There was an error: " + err);
                 } else {
@@ -248,10 +216,10 @@ var moveDataOrg = class {
 
 //this thing grabs the moves of  game given the game_id
 //Returns a JSON with the moves made throughout the game.
-exports.getGameMoves = function (game_id, callback) {
+exports.getGameMoves = function(game_id, callback) {
     let moves = [];
     var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC";
-    db.query(sql, [game_id], function (err, result) {
+    db.query(sql, [game_id], function(err, result) {
         if (err) {
             console.log("Cannot retrieve game moves: " + err);
             callback(err, null);
@@ -265,10 +233,10 @@ exports.getGameMoves = function (game_id, callback) {
 }
 
 //returns the most recent move made in the game given the game_id, returns it as a JSON
-exports.getGameLatestMove = function (game_id, callback) {
+exports.getGameLatestMove = function(game_id, callback) {
     let moves = [];
     var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC LIMIT 1";
-    db.query(sql, [game_id], function (err, result) {
+    db.query(sql, [game_id], function(err, result) {
         if (err) {
             console.log("Cannot retrieve game moves: " + err);
             callback(err, null);

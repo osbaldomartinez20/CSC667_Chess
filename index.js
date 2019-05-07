@@ -37,7 +37,7 @@ nsp.on('connection', function(socket) {
         nsp.username = data;
         lobby_users.push({ Opponent: nsp.username });
         console.log(lobby_users);
-        updateUserNames();
+        //  updateUserNames();
     })
 })
 
@@ -61,8 +61,8 @@ nsp.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
         nsp.emit('new message', ' *disconnected*');
-        lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
-        updateUserNames();
+        //lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
+        // updateUserNames();
     });
 });
 
