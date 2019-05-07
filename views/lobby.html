@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="user_Game.js"></script>
@@ -120,11 +120,11 @@
         </div>
     </div>
     <script>
-        var socket = io.connect('http://localhost:3000/default');
+        var socket = io.connect('http://54.149.192.92:3000/default');
 
         function newGame() {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/create');
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
@@ -158,6 +158,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             new_user();  //send username to backend via socket
 =======
 
@@ -169,11 +170,14 @@
 >>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
 =======
 >>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
+=======
+            new_user();  //send username to backend via socket
+>>>>>>> parent of a3ccfac... Merge branch 'development' of https://github.com/csc667-02-sp19/csc667-sp19-Team9-ryanstills into development
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        //to fix error use http://localhost:3000/default on server
-        //var socket = io.connect('http://localhost:3000/default');
+        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
+        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
