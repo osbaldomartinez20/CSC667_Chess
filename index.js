@@ -37,6 +37,7 @@ nsp.on('connection', function(socket) {
         nsp.username = data;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
             lobby_users.push({ Opponent: nsp.username });
             updateUserNames();
@@ -46,6 +47,10 @@ nsp.on('connection', function(socket) {
         console.log(lobby_users);
         //  updateUserNames();
 >>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
+=======
+        lobby_users.push({ Opponent: nsp.username });
+        updateUserNames();
+>>>>>>> parent of 689b52d... online player re: lobby chat updated for testing
 =======
         lobby_users.push({ Opponent: nsp.username });
         updateUserNames();
