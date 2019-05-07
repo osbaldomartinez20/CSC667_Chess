@@ -48,17 +48,13 @@ router.post('/login', (request, response) => {
 //sends a JSON with the availbale games to join.
 //Empty JSON if there are no available games
 router.get('/pending', (request, response) => {
-    var a_games = [];
     games.fetchAvailableGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
-            response.send("Cannot retrieve available games");
+            response.sendStatus(500);
+            return;
         } else {
-            for (var i = 0; i < Object.keys(result).length; i++) {
-                const temp = new games.availableData(result[i].game_id, result[i].player_one_id);
-                a_games.push(temp);
-            }
-            response.send(JSON.stringify(a_games));
+            response.send(JSON.stringify(result));
         }
     });
 });
@@ -66,24 +62,20 @@ router.get('/pending', (request, response) => {
 //sends a JSON with ongoing games.
 //Empty JSON if there are no ongoing games
 router.get('/active', (request, response) => {
-    var o_games = [];
-    games.fetchOngoingGames(function(err, result) {
+    games.fetchOngoingGames(function (err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
-            response.send("Cannot retrieve available games");
+            response.sendStatus(500);
+            return;
         } else {
-            for (var i = 0; i < Object.keys(result).length; i++) {
-                const temp = new games.ongoingData(result[i].player_one_id, result[i].player_two_id);
-                o_games.push(temp);
-            }
-            response.send(JSON.stringify(o_games));
+            response.send(JSON.stringify(result));
         }
     });
 });
 
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
-    games.fetchUserGames(request.username, function(err, result) {
+    games.fetchUserGames(request.body.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);
@@ -100,7 +92,7 @@ router.post('/create', (request, response) => {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
         } else {
-            console.log("New game created")
+            console.log("New game created");
             response.send(result);
         }
     });
@@ -111,7 +103,7 @@ router.put('/join', (request, response) => {
     games.joinGame(request.body.game_id, request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot join: " + err);
-            response.send("Cannot join game");
+            response.sendStatus(500);
         } else {
             console.log("Joined game")
             response.send(result);
@@ -124,7 +116,7 @@ router.get('/players', (request, response) => {
     games.getPlayers(request.query.game_id, function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
-            response.send("Cannot retrieve available games");
+            response.sendStatus(500);
         } else {
             const user = result.map((row) => {
                 return { player_1: row.player_one_id, player_2: row.player_two_id }
@@ -138,7 +130,8 @@ router.put('/top', (request, response) => {
     rank.getTopPlayers(function(err, result) {
         if (err) {
             console.log("Cannot get top players: " + err);
-            response.send("Cannot show top players");
+            response.sendStatus(500);
+            return;
         } else {
             console.log("Success in getting top players");
             response.send(result);
@@ -152,9 +145,9 @@ router.get('/chatid', (request, response) => {
     const queryString = "SELECT game_id FROM games WHERE player_one_id = ? AND player_two_id = ?"
     db.query(queryString, [player_1, player_2], (err, rows, fields) => {
         if (err) {
-            console.log("Failed to query for users: " + err)
-            response.sendStatus(500)
-            return
+            console.log("Failed to query for users: " + err);
+            response.sendStatus(500);
+            return;
         }
         response.send(rows);
     })
@@ -163,6 +156,58 @@ router.get('/chatid', (request, response) => {
 
 router.post('/chatStore', (request, response) => {
     chat.storeMessage(request.body);
+});
+
+//sends a JSON with all the messages for a given chat_id
+router.get('/chatHistory', (request, response) => {
+    chat.getMessages(request.body.chat_id, function (err, result) {
+        if (err) {
+            console.log("Error getting messages: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+        response.send(result);
+        }
+    });
+});
+
+//sends a JSON with all moves made in a game with the given game_id
+router.get('/gameMoves', (request, response) => {
+    games.getGameMoves(request.body.game_id, function (err, result) {
+        if (err) {
+            console.log("Failed to get moves: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+            response.send(result);
+        }
+    });
+});
+
+//get user_displayName by user_id.
+router.get('/getUser', (request, response) => {
+    user.getUserName(request.body.user_id, function(err, result) {
+        if (err) {
+            console.log("Error retriving display_name: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+            response.send(result);
+        }
+    });
+});
+
+//this route is used to indicate that a game is complete
+router.put('/gameComplete', (request, response) => {
+    games.gameComplete(request.body.game_id, request.body.user1, request.body.user2, request.body.won, function(err, result) {
+        if (err) {
+            console.log("Error completing game: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+            response.send(result);
+        }
+    });
 });
 
 module.exports = router;
