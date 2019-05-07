@@ -35,10 +35,16 @@ nsp.on('connection', function(socket) {
 
     nsp.on('new user', function(data) {
         nsp.username = data;
+<<<<<<< HEAD
         if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
             lobby_users.push({ Opponent: nsp.username });
             updateUserNames();
         }
+=======
+        lobby_users.push({ Opponent: nsp.username });
+        console.log(lobby_users);
+        //  updateUserNames();
+>>>>>>> 1ca3f2fa66bae61a35fb004ab52f182ebd8dcbe1
     })
 })
 
@@ -62,8 +68,8 @@ nsp.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
         nsp.emit('new message', ' *disconnected*');
-        lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
-        updateUserNames();
+        //lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
+        // updateUserNames();
     });
 });
 
@@ -88,6 +94,7 @@ nsp2.on('connection', function(socket) {
 nsp2.on('connection', function(socket) {
     socket.on('move', function(msg) {
         console.log(msg);
+        moves.storeMove(msg);
         nsp2.to(rooms).emit('move', msg);
     });
 });

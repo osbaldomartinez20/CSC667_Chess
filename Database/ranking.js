@@ -16,11 +16,11 @@ var winProbability = function (rank1, rank2) {
 //calculates the ELO rating after each match
 //The parameters are the display names of the users
 //and the won parameter is a 1 if user1 won and a 0 if user2 won
-exports.updateEloRank = function (user1, user2, won) {
+exports.updateEloRank = function (user1, user2, won,) {
 
     var rank1 = 0;
     var rank2 = 0;
-    db.query("SELECT * FROM users WHERE user_id = '" + user1 + "' OR user_id = '" + user2 + "'", function (err, result) {
+    db.query("SELECT * FROM users WHERE display_name =  ? OR display_name = ? ",[user1, user2] ,function (err, result) {
         if (err) {
             console.log("cannot retrieve ELO: " + err);
             return false;
@@ -44,7 +44,7 @@ exports.updateEloRank = function (user1, user2, won) {
                 var win1 = result[1].wins;
                 win1++;
                 //update player 1 in database
-                db.query("UPDATE users SET elo = " + rank1 + ", wins = " + win1 + " WHERE user_id = '" + user1 + "'", function (err, result) {
+                db.query("UPDATE users SET elo = " + rank1 + ", wins = " + win1 + " WHERE display_name = '" + user1 + "'", function (err, result) {
                     if (err) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
@@ -55,7 +55,7 @@ exports.updateEloRank = function (user1, user2, won) {
                 var losses2 = result[0].losses;
                 losses2++;
                 //update player 2 in database
-                db.query("UPDATE users SET elo = " + rank2 + ", losses = " + losses2 + " WHERE user_id = '" + user2 + "'", function (err, result) {
+                db.query("UPDATE users SET elo = " + rank2 + ", losses = " + losses2 + " WHERE display_name = '" + user2 + "'", function (err, result) {
                     if (err) {
                         console.log("cannot update losses: " + err);
                         return false;
@@ -71,7 +71,7 @@ exports.updateEloRank = function (user1, user2, won) {
                 var win2 = result[0].wins;
                 win2++;
                 //update player 2 in database
-                db.query("UPDATE users SET elo = " + rank2 + ", wins = " + win2 + " WHERE user_id = '" + user2 + "'", function (err, result) {
+                db.query("UPDATE users SET elo = " + rank2 + ", wins = " + win2 + " WHERE display_name = '" + user2 + "'", function (err, result) {
                     if (err) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
@@ -82,7 +82,7 @@ exports.updateEloRank = function (user1, user2, won) {
                 var losses1 = result[1].losses;
                 losses1++;
                 //update player 1 in database
-                db.query("UPDATE users SET elo = " + rank1 + ", losses = " + losses1 + " WHERE user_id = '" + user1 + "'", function (err, result) {
+                db.query("UPDATE users SET elo = " + rank1 + ", losses = " + losses1 + " WHERE display_name = '" + user1 + "'", function (err, result) {
                     if (err) {
                         console.log("cannot update ELO or losses: " + err);
                         return false;
