@@ -65,12 +65,13 @@ function available_games() {
             console.log("user_id" + user)
             cookie.set('game_id', game_id);
             window.location = "p_game.html";
+
         } else if (user == user_id) {
-            // alert("you need to wait for an opponent");
+            alert("you need to wait for an opponent");
         }
-        console.log("user_id" + user)
-        cookie.set('game_id', game_id);
-        window.location = "p_game.html";
+        //   console.log("user_id" + user)
+        //  cookie.set('game_id', game_id);
+        // window.location = "p_game.html";
     });
 
 }

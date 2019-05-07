@@ -92,8 +92,12 @@
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            moves()
+            moves(), alertP1()
         };
+
+        function alertP1() {
+            var socket = io.connect('http://localhost:3000/default');
+        }
     </script>
 
     <script>
@@ -116,7 +120,9 @@
         }
         var player1 = player[0].player_1;
         var player2 = player[0].player_2;
+        if (player2 != "") {
 
+        }
         var board,
             game = new Chess();
 

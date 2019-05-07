@@ -131,6 +131,8 @@
             };
             socket.on('newGame', function(msg) {
                 available_games();
+                user_Games();
+
             });
             const user_id = cookie.get('user');
             console.log('Signed in as: ' + user_id);
