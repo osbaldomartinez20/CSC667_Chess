@@ -34,6 +34,7 @@ nsp.on('connection', function(socket) {
     }
 
     nsp.on('username', function(data) {
+        console.log("username: " + data);
         nsp.username = data;
         if (lobby_users.indexOf({ Opponent: nsp.username }) == -1) {
             lobby_users.push({ Opponent: nsp.username });

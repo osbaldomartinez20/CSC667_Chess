@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="moves.js"></script>
     <script src="js/chessboard-0.3.0.js"></script>
@@ -94,15 +94,11 @@
         function myInit() {
             moves(), alertP1()
         };
-
-        function alertP1() {
-            var socket = io.connect('http://localhost:3000/default');
-        }
     </script>
 
     <script>
         var room = 'default';
-        var socket = io.connect('http://54.149.192.92:3000/private');
+        var socket = io.connect('http://localhost:3000/private');
 
         socket.on('connect', function() {
             socket.emit('room', room)
@@ -110,7 +106,7 @@
         var game_id = cookie.get('game_id');
         var players = cookie.get('user');
         var player
-        var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/players";
+        var url = "http://localhost:3000/players";
         var params = "game_id=" + game_id;
         var request = new XMLHttpRequest();
         request.open('GET', url + "?" + params, false); // `false` makes the request synchronous
