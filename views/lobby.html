@@ -164,6 +164,11 @@
 
         }
 
+        window.onload = function() {
+            console.log({user: cookie.get('user') || 'Anonymous'});
+            new_user();  //send username to backend via socket
+        };
+
         //On the client side, you tell Socket.IO client to connect to that namespace:
         //to fix error use http://localhost:3000/default on server
         //var socket = io.connect('http://localhost:3000/default');
@@ -173,12 +178,12 @@
             $('.user-count').html(data);
         });*/
         function new_user() {
-            socket.emit('new user', {user: cookie.get('user') || 'Anonymous'});
+            socket.emit('new_user', {user: cookie.get('user') || 'Anonymous'});
         }
 
         socket.on('usernames', function(data) {
             //socket.emit('usernames', cookie.get('user') || 'Anonymous');
-            console.log("online players :" + data)
+            //console.log("online players :" + data)
             //var jsonExamples = data;
             onlineP(data);
             /* var html = "";

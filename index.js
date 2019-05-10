@@ -33,7 +33,7 @@ nsp.on('connection', function(socket) {
         nsp.emit('usernames', lobby_users);
     }
 
-    nsp.on('username', function(data) {
+    socket.on('new_user', function(data) {
         console.log("username: " + data);
         nsp.name = data;
         if (lobby_users.indexOf(data) == -1) {
