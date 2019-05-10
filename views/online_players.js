@@ -1,4 +1,4 @@
-function onlineP() {
+function onlineP(jsonExamples) {
 
     var col = [];
     for (var i = 0; i < jsonExamples.length; i++) {

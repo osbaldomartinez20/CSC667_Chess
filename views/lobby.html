@@ -173,14 +173,14 @@
             $('.user-count').html(data);
         });*/
         function new_user() {
-            socket.emit('new user', cookie.get('user') || 'Anonymous');
+            socket.emit('new user', {user: cookie.get('user') || 'Anonymous'});
         }
 
         socket.on('usernames', function(data) {
             //socket.emit('usernames', cookie.get('user') || 'Anonymous');
-            console.log("online players " + data)
-            var jsonExamples = data;
-            onlineP();
+            console.log("online players :" + data)
+            //var jsonExamples = data;
+            onlineP(data);
             /* var html = "";
                  for (i = 0; i < data.length; i++){
                      html +=  data[i]  + '</br>';
