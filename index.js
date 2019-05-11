@@ -74,9 +74,13 @@ nsp.on('connection', function(socket) {
     });
 });
 
-socket.on('disconnect', function() {
-    console.log('user disconnected');
+nsp.on('connection', function(socket) {
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+
 });
+
 //var io = io.of('/private');
 /*io.on('connection', function(socket) {
     console.log('an user connected');
