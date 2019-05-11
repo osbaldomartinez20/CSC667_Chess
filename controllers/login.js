@@ -8,7 +8,7 @@ const rank = require('../Database/ranking.js');
 const test = require('../scripts/db_test.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client('1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com');
+const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
 
 //create a router for url request
 const router = express.Router()
@@ -26,7 +26,7 @@ router.post('/login', (request, response) => {
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: '1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com',
+            audience: '80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com',
         })
 
         const payload = ticket.getPayload()

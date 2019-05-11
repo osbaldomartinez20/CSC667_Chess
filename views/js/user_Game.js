@@ -3,7 +3,7 @@ function user_Games(username) {
     console.log("userName " + username)
     var request = new XMLHttpRequest();
     var params = 'username=' + username;
-    request.open('GET', 'http://localhost:3000/userGames' + '?' + params, false); // `false` makes the request synchronous
+    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/userGames' + '?' + params, false); // `false` makes the request synchronous
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
             User_games = JSON.parse(request.responseText)
