@@ -10,8 +10,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
-    <link href="site.css" rel="stylesheet">
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <link href="css/site.css" rel="stylesheet">
 
 
 </head>
@@ -52,13 +52,13 @@
 
     <div id="my-signin2"></div>
     <script>
-        window.addEventListener("load", myInit, true);
+        //window.addEventListener("load", myInit, true);
 
-        function myInit() {
-            if (cookie.get('user') !== "") {
-                window.location.href = "lobby.html";
-            }
-        };
+        /* function myInit() {
+             if (cookie.get('user') !== "") {
+                 window.location.href = "lobby.html";
+             }
+         };*/
 
         function onSuccess(googleUser) {
             /* var profile = googleUser.getBasicProfile();
@@ -71,16 +71,20 @@
 
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
-            var user = cookie.get('user');
-            user = googleUser.getBasicProfile().getId();
-            cookie.set('user', user);
-            console.log("ID Token: " + id_token);
+            var user_id = googleUser.getBasicProfile().getId();
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/login');
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/login');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
-                console.log('Signed in as: ' + xhr.responseText);
-                window.location.href = "lobby.html";
+                var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/getUser";
+                var params = "user_id=" + user_id;
+                var request = new XMLHttpRequest();
+                request.open('GET', url + "?" + params, false); // `false` makes the request synchronous
+                request.send(null);
+                if (request.status === 200) {
+                    cookie.set('user', request.responseText);
+                    window.location.href = "lobby.html";
+                }
             };
             xhr.send('idtoken=' + id_token);
         }

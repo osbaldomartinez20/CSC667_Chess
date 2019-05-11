@@ -4,6 +4,7 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(2, 48, 48)
 }
 
 button:hover {
@@ -72,26 +73,14 @@ tr:hover {
     border-radius: 30px;
 }
 
-div.ex1 {
-    width: 100%;
-    position: absolute;
-    top: 65%;
-}
 
-div.ex2 {
-    background-color: white;
-    width: 50%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-left: 25%;
-    margin-right: 25%;
-}
-
+/*
 #board {
-    width: 400px;
+    width: 40%;
     position: absolute;
     text-align: center
 }
+*/
 
 
 /*chat css */
@@ -112,6 +101,15 @@ h1,
 .chat {
     content: '';
     width: 80%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
+.moves {
+    width: 100%;
     height: calc(100vh - 165px);
     background: lightgrey;
     padding: 0;
@@ -152,6 +150,10 @@ button {
         float: right;
         width: 150px;
     }
+    .moves {
+        float: left;
+        height: calc(50vh - 200px);
+    }
 }
 
 #content {
@@ -160,20 +162,27 @@ button {
 
 .tab {
     float: left;
-    height: 100%;
+    height: 50%;
 }
 
-#form {
-    background-color: white;
-    width: 15%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-left: 80px;
-    margin-left: 285px;
+#nav {
+    background-color: rgb(2, 48, 48);
+    width: 10%;
+}
+
+#board {
+    background-color: rgb(2, 48, 48);
+    height: calc(50vh - 100px);
+    width: 45%;
+    margin-right: 1px;
 }
 
 #map {
-    background-color: white;
-    width: 30%;
-    margin-left: 30px;
+    background-color: rgb(2, 48, 48);
+    width: 35%;
+}
+
+#utils {
+    background-color: rgb(2, 48, 48);
+    width: calc(10% - 1px);
 }

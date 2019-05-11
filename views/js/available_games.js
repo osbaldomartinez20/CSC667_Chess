@@ -1,14 +1,12 @@
 function available_games() {
     var av_games;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:3000/pending', false); // `false` makes the request synchronous
+    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/pending', false); // `false` makes the request synchronous
     request.send(null);
 
     if (request.status === 200) {
         console.log(av_games = JSON.parse(request.responseText));
     }
-
-    console.log(jsonExamples);
 
     var col = [];
     for (var i = 0; i < av_games.length; i++) {
@@ -51,7 +49,7 @@ function available_games() {
     var aGames = document.getElementById("available_games");
     aGames.innerHTML = "";
     aGames.appendChild(table);
-    $("tr").click(function() {
+    $("tr").click(function(e) {
         var rowtable = $(this).children('td').map(function() {
             return this.innerHTML;
         }).toArray();
@@ -60,13 +58,13 @@ function available_games() {
         const user_id = cookie.get('user');
         if (user != user_id) {
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT', 'http://localhost:3000/join', false);
+            xhr.open('PUT', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/join', false);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.send('game_id=' + game_id + '&' + 'user_id=' + user_id);
             console.log('Signed in as: ' + xhr.responseText);
             console.log("user_id" + user)
-            cookie.set('game_id', game_id);
-            window.location = "p_game.html";
+            window.location.href = 'gameUpdate.html' + '#' + game_id;
+
         } else if (user == user_id) {
             alert("you need to wait for an opponent");
         }

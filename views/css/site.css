@@ -119,6 +119,24 @@ h1,
     overflow: auto;
 }
 
+.uGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
+.onGames {
+    width: 100%;
+    height: calc(100vh - 165px);
+    background: lightgrey;
+    padding: 0;
+    border: 1px solid black;
+    overflow: auto;
+}
+
 .chat {
     content: '';
     width: 80%;
@@ -142,9 +160,18 @@ h1,
     margin: 0 0 0 0;
 }
 
-input,
+input {
+    width: 80%;
+    font: inherit;
+    background: lightgray;
+    border: none;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid black;
+}
+
 button {
-    width: 100%;
+    width: 15%;
     font: inherit;
     background: lightgray;
     border: none;
@@ -172,6 +199,14 @@ button {
         float: left;
         height: calc(50vh - 200px);
     }
+    .onGames {
+        float: left;
+        height: calc(50vh - 200px);
+    }
+    .uGames {
+        float: left;
+        height: calc(50vh - 200px);
+    }
     input {
         width: 100%
     }
@@ -192,12 +227,12 @@ button {
 
 #nav {
     background-color: white;
-    width: 20%;
+    width: 10%;
 }
 
 #form {
     background-color: white;
-    width: 15%;
+    width: 30%;
     overflow-y: auto;
     overflow-x: hidden;
     margin-right: 80px;
@@ -211,4 +246,19 @@ button {
 #utils {
     background-color: white;
     width: calc(13% - 1px);
+}
+
+#onG {
+    overflow: auto;
+    height: calc(100vh - 365px);
+}
+
+#send-message {
+    margin-bottom: 50px;
+}
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

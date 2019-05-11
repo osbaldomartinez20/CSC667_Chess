@@ -9,10 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
-    <script src="moves.js"></script>
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="js/moves.js"></script>
     <script src="js/chessboard-0.3.0.js"></script>
     <script src="js/chessboard-0.3.0.min.js"></script>
-    <link href="p_game.css" rel="stylesheet">
+    <link href="css/p_game.css" rel="stylesheet">
     <link href="css/chessboard-0.3.0.css" rel="stylesheet">
     <link href="css/chessboard-0.3.0.min.css" rel="stylesheet">
     <!--used for chat box-->
@@ -37,39 +39,32 @@
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">Private Game</a></li>
-                        <li><a href="index.html">Login</a></li>
                         <li><a href="lobby.html">Lobby</a></li>
                         <li><a href="b_Players.html">Best Players</a></li>
                         <li><a href="rules.html">Rules</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        <li><a href="index.html" onclick="signOut();"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
-    <div class="ex2">
-        <div id="board">
+    <div id="content">
+        <div id="nav" class="tab"></div>
+        <div id="board" class="tab">
             <p>Status: <span id="status"></span></p>
             <p>FEN: <span id="fen"></span></p>
             <p>PGN: <span id="pgn"></span></p>
         </div>
-    </div>
-    <div class="ex1">
-
-        <div id="nav" class="tab">
-        </div>
-        <div id="form" class="tab">
+        <div id="map" class="tab">
             <div class="table-header">
                 <h4> Game Moves</h4>
             </div>
-            <div>
+            <section class="moves">
                 <p id="moves"></p>
-            </div>
-        </div>
-        <div id="map" class="tab">
+            </section>
             <header>
                 <div class="chat-header">
                     <div class="table-header">
@@ -79,8 +74,7 @@
             </header>
 
             <section class="chat">
-                <p><strong>John</strong>: Hello!</p>
-                <p><strong>Bob</strong>: How are you!</p>
+
             </section>
 
             <form>
@@ -89,52 +83,10 @@
             </form>
         </div>
         <div id="utils" class="tab">
-            <p></p>
+
         </div>
     </div>
-    <script>
-        window.addEventListener("load", myInit, true);
 
-        function myInit() {
-            moves()
-        };
-    </script>
-
-    </div>
-    <div class="ex1">
-        <div id="nav" class="tab">
-        </div>
-        <div id="form" class="tab">
-            <div class="table-header">
-                <h4> Game Moves</h4>
-            </div>
-            <div>
-                <p id="moves"></p>
-            </div>
-        </div>
-        <div id="map" class="tab">
-            <header>
-                <div class="chat-header">
-                    <div class="table-header">
-                        <h4> chat</h4>
-                    </div>
-                </div>
-            </header>
-
-            <section class="chat">
-
-            </section>
-
-
-            <form id="send-message">
-                <input type="text" id="message" placeholder="be respecful when you chat" autocomplete="off" />
-                <button id="chat-button" type="submit">Send</button>
-            </form>
-        </div>
-        <div id="utils" class="tab">
-            <p></p>
-        </div>
-    </div>
     <script>
         window.addEventListener("load", myInit, true);
 
@@ -144,16 +96,18 @@
     </script>
 
     <script>
-        var room = 'default';
-        var socket = io.connect('http://localhost:3000/private');
+        var socket_connect = function(room) {
+            return io('http://54.149.192.92:3000', {
+                query: 'rooms=' + room
+            });
+        }
+        var game_id = window.location.hash.substring(1);
+        var socket = socket_connect(game_id)
 
-        socket.on('connect', function() {
-            socket.emit('room', room)
-        })
-        var game_id = cookie.get('game_id');
         var players = cookie.get('user');
         var player
-        var url = "http://localhost:3000/players";
+        var state
+        var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/players";
         var params = "game_id=" + game_id;
         var request = new XMLHttpRequest();
         request.open('GET', url + "?" + params, false); // `false` makes the request synchronous
@@ -163,6 +117,9 @@
         }
         var player1 = player[0].player_1;
         var player2 = player[0].player_2;
+        if (player2 != "") {
+
+        }
 
         var board,
             game = new Chess();
@@ -183,6 +140,7 @@
         };
 
         var onDragStart = function(source, piece, position, orientation) {
+            console.log("here at onDrag " + source + piece + position + orientation)
             if ((orientation === 'white' && game.turn() === 'b' && piece.search(/^b/) !== -1) ||
                 (orientation === 'white' && game.turn() === 'w' && piece.search(/^b/) !== -1) ||
                 (orientation === 'black' && game.turn() === 'w' && piece.search(/^w/) !== -1) ||
@@ -212,11 +170,20 @@
         };
 
         var handleMove = function(source, target) {
+            removeGreySquares();
             var move = game.move({
                 from: source,
-                to: target
+                to: target,
             })
-            socket.emit('move', move);
+            if (move === null) {
+                alert("wait for your turn");
+                return 'snapback';
+            } else {
+                move["fen"] = game.fen();
+                move["game_id"] = game_id;
+                socket.emit('move', move);
+            }
+
         }
         var onMouseoverSquare = function(square, piece) {
             // get list of possible moves for this square
@@ -242,23 +209,27 @@
         };
 
         var onSnapEnd = function() {
-            board.position(game.fen());
-            console.log(game.fen());
+            board.position(game.fen())
         };
 
         var cfg = {
             draggable: true,
-            position: 'start',
+            position: getFen(),
             onDragStart: onDragStart,
-            onDrop: handleMove,
             onMouseoutSquare: onMouseoutSquare,
             onMouseoverSquare: onMouseoverSquare,
-            onSnapEnd: onSnapEnd
+            onSnapEnd: onSnapEnd,
+            onDrop: handleMove,
         };
         board = ChessBoard('board', cfg);
         if (players === player2) {
             board.orientation('black');
         }
+        if (status != 'start') {
+            game.load(getFen());
+        }
+
+        $(window).resize(board.resize);
 
         socket.on('message', function(data) {
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
@@ -278,13 +249,62 @@
             // Send the message to the server
             socket.emit('message', {
                 user: cookie.get('user') || 'Anonymous',
-                message: message
+                message: message,
+                chat_id: game_id
             });
 
             // Clear the input and focus it for a new message
             e.target.reset();
             $(e.target).find('input').focus();
         });
+
+        //validate user for signout
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
+                cookie.set('user', "");
+                window.location.href = "index.html";
+            });
+        }
+
+        function onLoad() {
+            console.log('I am here');
+            gapi.load('auth2', function() {
+                gapi.auth2.init();
+                console.log('User signed in.');
+
+            });
+
+        }
+
+        function getFen() {
+            var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/fen";
+            var params = "game_id=" + game_id;
+            var request = new XMLHttpRequest();
+            request.open('GET', url + "?" + params, false); // `false` makes the request synchronous
+            request.send(null);
+            if (request.status === 200) {
+                pos = JSON.stringify(request.responseText);
+                state = pos.replace(/"/g, '');
+                console.log(state);
+                return state
+            }
+        }
+
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            onLoad()
+        };
+
+        function isEmpty(obj) {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
     </script>
 </body>
 
