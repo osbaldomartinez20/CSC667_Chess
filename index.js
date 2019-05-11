@@ -21,27 +21,43 @@ app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
 
-var onPlayers = [];
-var nsp = io.of('/default');
+var nsp = io.of('/default').clients();
 
 
-
-/*nsp.on('connection', function(socket) {
+nsp.on('connection', function(socket) {
     console.log('an user connected');
 
     function updateUserNames() {
         nsp.emit('usernames', lobby_users);
     }
+    nsp.on('connection', function(socket) {
 
-    socket.on('new_user', function(data) {
-        console.log("username: " + data);
-        nsp.name = data;
-        if (lobby_users.indexOf(data) == -1) {
-            lobby_users.push(data);
-            updateUserNames();
-        }
-    })
-})*/
+        socket.on('new_user', function(data) {
+            console.log("username: " + data);
+            // nsp.name = data;
+            console.log('an user connected');
+            socket.on('usernames', function(data) {
+                //nsp.name = data;
+                if (lobby_users.indexOf(data) == -1) {
+                    console.log("username: " + data);
+                    lobby_users.push(data);
+                    updateUserNames();
+                    nsp.emit('usernames', lobby_users);
+                }
+            })
+        })
+
+        nsp.on('connection', function(socket) {
+            socket.on('disconnect', function() {
+                console.log('user disconnected');
+                nsp.emit('new message', ' *disconnected*');
+                lobby_users.splice(lobby_users.indexOf(nsp.name), 1);
+                updateUserNames();
+            });
+        });
+    });
+});
+
 
 
 nsp.on('connection', function(socket) {
@@ -53,18 +69,9 @@ nsp.on('connection', function(socket) {
 })
 
 nsp.on('connection', function(socket) {
-    socket.on('newGame', function(msg) { 
+    socket.on('newGame', function(msg) {
         console.log(msg);
         nsp.emit('newGame', msg);
-    });
-});
-
-nsp.on('connection', function(socket) {
-    socket.on('disconnect', function() {
-        console.log('user disconnected');
-        nsp.emit('new message', ' *disconnected*');
-        lobby_users.splice(lobby_users.indexOf(  nsp.name ), 1);
-        updateUserNames();            
     });
 });
 

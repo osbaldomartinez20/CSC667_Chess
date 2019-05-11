@@ -164,9 +164,10 @@
 
         }
 
-        window.onload = function() {
-            console.log({user: cookie.get('user') || 'Anonymous'});
-            new_user();  //send username to backend via socket
+        function load() {
+            socket.emit('usernames', {
+                user: cookie.get('user')
+            }); //send username to backend via socket
         };
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
@@ -177,21 +178,28 @@
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
-        function new_user() {
-            socket.emit('new_user', {user: cookie.get('user') || 'Anonymous'});
+        window.onload = function() {
+            console.log({
+                user: cookie.get('user') || 'Anonymous'
+            });
+            new_user(); //send username to backend via socket
+            function load() {
+                socket.emit('usernames', {
+                    user: cookie.get('user')
+                }); //send username to backend via socket
+            };
         }
 
+        function new_user() {
+            socket.emit('new_user', {
+                user: cookie.get('user') || 'Anonymous'
+            });
+        }
+
+
         socket.on('usernames', function(data) {
-            //socket.emit('usernames', cookie.get('user') || 'Anonymous');
-            //console.log("online players :" + data)
-            //var jsonExamples = data;
-            onlineP(data);
-            /* var html = "";
-                 for (i = 0; i < data.length; i++){
-                     html +=  data[i]  + '</br>';
-                 }
-             $users.html(html);
-             */
+            console.log(data);
+            // onlineP(data);
         })
 
         // When we receive a message
@@ -227,7 +235,7 @@
 
         function myInit(event) {
             event.stopPropagation();
-            user_Games(cookie.get('user')), available_games(), onGames(), onLoad()
+            user_Games(cookie.get('user')), available_games(), onGames(), onLoad(), load()
         };
 
         $(".avGames").scrollTop(0);
