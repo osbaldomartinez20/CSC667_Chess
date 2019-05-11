@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <script>
+        var socket = io.connect('http://localhost:3000/default');
+        window.addEventListener("load", myInit, true);
+
+        function myInit() {
+            var game_id = window.location.hash.substring(1);
+            socket.emit('newGame', "true");
+            window.location.href = 'p_game.html' + '#' + game_id;
+        };
+    </script>
+</body>
+
+</html>

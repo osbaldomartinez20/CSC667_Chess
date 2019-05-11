@@ -7,6 +7,15 @@ var userFunc = require('../Database/user.js');
 //need rank for completed games
 var rankFunc = require('../Database/ranking.js');
 
+
+function isEmpty(obj) {
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
 //create a new game by giving the username
 exports.createNewGame = async function(userid, callback) {
     //this is used to asign an unique id to each game.
@@ -101,44 +110,31 @@ exports.fetchOngoingGames = function(callback) {
     }
     //returns the games of an user. Given the username.
 exports.fetchUserGames = function(username, callback) {
+    console.log("username " + username);
     var storing = [];
-    userFunc.getUserId(username, function(err, result) {
+    var sql = "SELECT * FROM games WHERE player_one_id = ? OR player_two_id = ? ";
+    db.query(sql, [username, username], function(err, result) {
         if (err) {
-            console.log(err);
+            console.log("Cannot fetch user games: " + err);
             callback(err, null);
         } else {
-            console.log(result);
-            var user_id = result;
-            var sql = "SELECT * FROM games WHERE player_one_id = " + user_id + " OR player_two_id = " + user_id + "";
-            db.query(sql, function(err, result) {
-                if (err) {
-                    console.log("Cannot fetch user games: " + err);
-                    callback(err, null);
-                } else {
-                    let counter = result.length;
-                    for (let i = 0; i < result.length; i++) {
-                        let opponent = 0;
-                        let game_id = result[i].game_id;
-                        let active = result[i].active;
-                        let complete = result[i].complete;
-                        if (result[i].player_one_id == user_id) {
-                            opponent = result[i].player_two_id;
-                        } else if (result[i].player_two_id == user_id) {
-                            opponent = result[i].player_one_id;
-                        }
-                        userFunc.getUserName(opponent, function(err, res) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                storing.push(new userGameData(game_id, res, active, complete));
-                                if (storing.length >= counter) {
-                                    callback(null, JSON.stringify(storing));
-                                }
-                            }
-                        });
-                    }
+            let counter = result.length;
+            for (let i = 0; i < result.length; i++) {
+                let opponent = 0;
+                let game_id = result[i].game_id;
+                let active = result[i].active;
+                let complete = result[i].complete;
+                if (result[i].player_one_id == username) {
+                    opponent = result[i].player_two_id;
+                } else if (result[i].player_two_id == username) {
+                    opponent = result[i].player_one_id;
                 }
-            });
+
+                storing.push(new userGameData(game_id, opponent, active, complete));
+                if (storing.length >= counter) {
+                    callback(null, JSON.stringify(storing));
+                }
+            }
         }
     });
 }
@@ -184,10 +180,9 @@ var updateState = function(game_id, curr_state, callback) {
 //stores moves in database in table game_moves
 //data must contain: user_id, type of piece, original position of piece, where piece is moving to, and game_id
 exports.storeMove = function(data) {
-    var mv = JSON.parse(data.moves);
-    var piece = mv.color + "" + mv.piece;
-    var sql = "INSERT INTO game_moves (game_id, origin, dest, flags, piece, san) VALUES (" + data.game_id + ", '" + mv.from + "', '" + mv.to + "', '" + mv.flags + "', " + piece + ",  '" + mv.san + "')";
-    db.query(sql, function(err, result) {
+    var piece = data.color + "" + data.piece;
+    var sql = "INSERT INTO game_moves (game_id, origin, dest, flags, piece, san, fen) VALUES (?,?,?,?,?,?,?)";
+    db.query(sql, [data.game_id, data.from, data.to, data.flags, piece, data.san, data.fen], function(err, result) {
         if (err) {
             console.log("Cannot store message: " + err)
         } else {
@@ -228,6 +223,18 @@ exports.getGameMoves = function(game_id, callback) {
                 moves.push(new moveDataOrg(result[i].origin, result[i].dest, result[i].flags, result[i].piece, result[i].san));
             }
             callback(null, JSON.stringify(moves));
+        }
+    });
+}
+
+exports.getFEN = function(game_id, callback) {
+    var sql = "SELECT fen FROM game_moves WHERE game_id = ? ORDER BY move_time DESC LIMIT 1";
+    db.query(sql, [game_id], function(err, result) {
+        console.log(result);
+        if (isEmpty(result)) {
+            callback(null, 'start');
+        } else {
+            callback(null, result[0].fen);
         }
     });
 }

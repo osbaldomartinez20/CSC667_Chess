@@ -5,6 +5,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 var cors = require('cors');
 const message = require('./Database/messages.js');
+const moves = require('./Database/gamesTable');
 //aray to store name of all online users for lobbby chat
 lobby_users = [];
 
@@ -20,13 +21,12 @@ app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
 
-var rooms = '';
 var onPlayers = [];
 var nsp = io.of('/default');
 
 
 
-nsp.on('connection', function(socket) {
+/*nsp.on('connection', function(socket) {
     console.log('an user connected');
 
     function updateUserNames() {
@@ -41,7 +41,7 @@ nsp.on('connection', function(socket) {
             updateUserNames();
         }
     })
-})
+})*/
 
 
 nsp.on('connection', function(socket) {
@@ -63,13 +63,13 @@ nsp.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
         nsp.emit('new message', ' *disconnected*');
-        lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
-        updateUserNames();
+        // lobby_users.splice(lobby_users.indexOf(nsp.Opponent.username), 1);
+        //  updateUserNames();
     });
 });
 
-var nsp2 = io.of('/private');
-nsp2.on('connection', function(socket) {
+//var io = io.of('/private');
+/*io.on('connection', function(socket) {
     console.log('an user connected');
     socket.on('room', function(room) {
         socket.join(room)
@@ -77,34 +77,30 @@ nsp2.on('connection', function(socket) {
         console.log("room: " + room);
     })
 
-});
-
-nsp2.on('connection', function(socket) {
-    socket.on('message', function(msg) {
-        console.log(msg);
-        nsp2.to(rooms).emit('message', msg);
-    });
-});
-
-nsp2.on('connection', function(socket) {
-    socket.on('move', function(msg) {
-        console.log(msg);
-        nsp2.to(rooms).emit('move', msg);
-    });
-});
-
+});*/
 
 io.on('connection', function(socket) {
+    var room = socket.handshake['query']['rooms'];
+    socket.join(room);
+    console.log('user joined room #' + room);
+
+    socket.on('disconnect', function() {
+        socket.leave(room)
+        console.log('user disconnected');
+    });
+
     socket.on('message', function(msg) {
         console.log(msg);
-        io.to('default').emit('message', msg);
+        message.storeMessage(msg);
+        io.to(room).emit('message', msg);
+    });
+
+    socket.on('move', function(msg) {
+        console.log(msg);
+        moves.storeMove(msg);
+        io.to(room).emit('move', msg);
     });
 });
-
-/*io.on('disconnect', function() {
-    console.log('user disconnected');
-    io.to(rooms).emit('new message', ' *disconnected*');
-});*/
 
 const router = require('./controllers/login.js')
 app.use(router)

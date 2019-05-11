@@ -49,7 +49,7 @@ function available_games() {
     var aGames = document.getElementById("available_games");
     aGames.innerHTML = "";
     aGames.appendChild(table);
-    $("tr").click(function() {
+    $("tr").click(function(e) {
         var rowtable = $(this).children('td').map(function() {
             return this.innerHTML;
         }).toArray();
@@ -63,15 +63,11 @@ function available_games() {
             xhr.send('game_id=' + game_id + '&' + 'user_id=' + user_id);
             console.log('Signed in as: ' + xhr.responseText);
             console.log("user_id" + user)
-            cookie.set('game_id', game_id);
-            window.location = "p_game.html";
+            window.location.href = 'gameUpdate.html' + '#' + game_id;
 
         } else if (user == user_id) {
             alert("you need to wait for an opponent");
         }
-        //   console.log("user_id" + user)
-        //  cookie.set('game_id', game_id);
-        // window.location = "p_game.html";
     });
 
 }

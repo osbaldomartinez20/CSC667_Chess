@@ -75,7 +75,8 @@ router.get('/active', (request, response) => {
 
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
-    games.fetchUserGames(request.body.username, function(err, result) {
+    console.log(request.query.username);
+    games.fetchUserGames(request.query.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);
@@ -174,6 +175,19 @@ router.get('/chatHistory', (request, response) => {
 //sends a JSON with all moves made in a game with the given game_id
 router.get('/gameMoves', (request, response) => {
     games.getGameMoves(request.body.game_id, function(err, result) {
+        if (err) {
+            console.log("Failed to get moves: " + err);
+            response.sendStatus(500);
+            return;
+        } else {
+            response.send(result);
+        }
+    });
+});
+
+//sends a JSON with the board state
+router.get('/fen', (request, response) => {
+    games.getFEN(request.query.game_id, function(err, result) {
         if (err) {
             console.log("Failed to get moves: " + err);
             response.sendStatus(500);

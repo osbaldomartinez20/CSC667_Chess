@@ -11,15 +11,14 @@
     <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <script src="user_Game.js"></script>
-    <script src="available_games.js"></script>
-    <script src="resizable.js"></script>
-    <script src="onGames.js"></script>
-    <script src="online_players.js"></script>
+    <script src="js/user_Game.js"></script>
+    <script src="js/available_games.js"></script>
+    <script src="js/onGames.js"></script>
+    <script src="js/online_players.js"></script>
     <!--used for chat box-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <link href="site.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
 
 </head>
 
@@ -39,7 +38,6 @@
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">Lobby</a></li>
-                        <li><a href="index.html">Login</a></li>
                         <li><a href="b_Players.html">Best Players</a></li>
                         <li><a href="rules.html">Rules</a></li>
                         <li><a href="contact.html">Contact</a></li>
@@ -122,21 +120,17 @@
     <script>
         var socket = io.connect('http://localhost:3000/default');
 
-        function newGame() {
+        function newGame(event) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'http://localhost:3000/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
             };
-            socket.on('newGame', function(msg) {
-                available_games();
-                user_Games();
-
-            });
             const user_id = cookie.get('user');
             console.log('Signed in as: ' + user_id);
             xhr.send('user_id=' + user_id);
+
         }
 
         function signOut() {
@@ -148,6 +142,12 @@
             });
         }
 
+        socket.on('newGame', function(msg) {
+            available_games();
+            user_Games(cookie.get('user'));
+            onGames();
+        });
+
         function onLoad() {
             console.log('I am here');
             gapi.load('auth2', function() {
@@ -156,11 +156,11 @@
 
             });
 
-            if (cookie.get('user') === " ") {
+            if (cookie.get('user') === "") {
                 window.location.href = "index.html";
             }
 
-            new_user(); //send username to backend via socket
+            // new_user(); //send username to backend via socket
 
         }
 
@@ -172,22 +172,22 @@
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
-        function new_user() {
-            socket.emit('new user', cookie.get('user') || 'Anonymous');
-        }
+        /*  function new_user() {
+              socket.emit('new user', cookie.get('user') || 'Anonymous');
+          }
 
-        socket.on('usernames', function(data) {
-            //socket.emit('usernames', cookie.get('user') || 'Anonymous');
-            console.log("online players " + data)
-            var jsonExamples = data;
-            onlineP();
-            /* var html = "";
-                 for (i = 0; i < data.length; i++){
-                     html +=  data[i]  + '</br>';
-                 }
-             $users.html(html);
-             */
-        })
+          socket.on('usernames', function(data) {
+              //socket.emit('usernames', cookie.get('user') || 'Anonymous');
+              console.log("online players " + data)
+              var jsonExamples = data;
+              onlineP();
+              /* var html = "";
+                   for (i = 0; i < data.length; i++){
+                       html +=  data[i]  + '</br>';
+                   }
+               $users.html(html);
+               
+        })*/
 
         // When we receive a message
         // it will be like { user: 'username', message: 'text' }
@@ -220,13 +220,20 @@
 
         window.addEventListener("load", myInit, true);
 
-        function myInit() {
-            user_Games(), available_games(), onGames(), onLoad()
+        function myInit(event) {
+            event.stopPropagation();
+            user_Games(cookie.get('user')), available_games(), onGames(), onLoad()
         };
 
         $(".avGames").scrollTop(0);
         $(".uGames").scrollTop(0);
         $(".onGames").scrollTop(0);
+
+        $("tr").click(function(event) {
+            propStopped(event);
+            event.stopPropagation();
+            propStopped(event);
+        });
     </script>
 
 </body>
