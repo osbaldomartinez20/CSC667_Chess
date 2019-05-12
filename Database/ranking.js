@@ -96,19 +96,6 @@ exports.updateEloRank = function(user1, user2, won) {
 
 }
 
-//resets user stats back to  default numbers
-var resetToDefault = function(userid) {
-    var sql = "UPDATE users SET elo = 1200, losses = 0, wins = 0 WHERE user_id = " + userid + "";
-    db.query(sql, function(err, result) {
-        if (err) {
-            console.log("cannot update ELO or losses: " + err);
-            return false;
-        } else {
-            console.log(result.affectedRows + " record(s) updated");
-        }
-    });
-}
-
 //function that takes user_id as parameter and return ELO ranking
 exports.getElo = function(userid, callback) {
     db.query("SELECT elo FROM users WHERE user_id = '" + userid + "'", function(err, result) {
