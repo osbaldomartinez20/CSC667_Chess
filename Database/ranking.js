@@ -65,7 +65,7 @@ exports.updateEloRank = function(user1, user2, won) {
                 });
             }
             //case where player 2 wins
-            else {
+            else if (won == 0) {
                 rank1 = rank1 + K * (0 - player1);
                 rank2 = rank2 + K * (1 - player2);
                 var win2 = result[0].wins;
@@ -90,6 +90,9 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log(result.affectedRows + " record(s) updated");
                     }
                 });
+            //nothing happens if it is  draw.    
+            } else {
+                return false;
             }
         }
     });

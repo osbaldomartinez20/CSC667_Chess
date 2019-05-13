@@ -1,6 +1,7 @@
 //file used for methods that pertain to users
 //can create and update users
 
+//imports database for use
 var db = require('../auth/db_config.js');
 
 //param id and email should be given from the information that google gives us.

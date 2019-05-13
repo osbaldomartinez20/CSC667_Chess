@@ -19,6 +19,7 @@ function isEmpty(obj) {
 }
 
 //create a new game by giving the username
+//sends back a JSON with the game_id
 exports.createNewGame = async function(userid, callback) {
     //this is used to asign an unique id to each game.
     var time = new Date();
@@ -34,6 +35,7 @@ exports.createNewGame = async function(userid, callback) {
 }
 
 //function used to join a game given an username and a game_id
+//returns back the result from mysql.
 exports.joinGame = async function(game_id, userid, callback) {
     var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ? AND player_one_id <> ?";
     db.query(sql, [userid, game_id, userid], function(err, result) {
@@ -46,6 +48,7 @@ exports.joinGame = async function(game_id, userid, callback) {
 }
 
 //marks the game as complete in database
+//returns the result from the sql
 exports.gameComplete = function(game_id, user1, user2, won, callback) {
     var sql = "UPDATE games SET complete = true, active = false WHERE game_id = ?";
     db.query(sql, [game_id], function(err, result) {
@@ -141,7 +144,7 @@ var userGameData = class {
     }
 }
 
-//returns the currnt state of the game
+//returns the currnt state of the game given the user_id
 exports.boardState = function(game_id, callback) {
     db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function(err, result) {
         if (err) {
@@ -153,6 +156,7 @@ exports.boardState = function(game_id, callback) {
 }
 
 //updates the current state of the board in the database
+//returns the result from the sql
 var updateState = function(game_id, curr_state, callback) {
     var sql = "UPDATE games SET current_state = ? WHERE game_id = ?";
     db.query(sql, [curr_state, game_id], function(err, result) {
