@@ -4,10 +4,12 @@ var db = require('../auth/db_config.js');
 //used to get the user id and display_name
 var userFunc = require('../Database/user.js');
 
-//need rank for completed games
+//need rank update for completed games
 var rankFunc = require('../Database/ranking.js');
 
 
+//checks to see if someone sends an empty response.
+//if empty response in query. Query gives error.
 function isEmpty(obj) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key))
@@ -57,6 +59,7 @@ exports.gameComplete = function(game_id, user1, user2, won, callback) {
     });
 }
 
+//gets the players from a game given the game_id
 exports.getPlayers = async function(game_id, callback) {
     var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = ? AND active = true";
     db.query(sql, [game_id], function(err, result) {
@@ -68,24 +71,7 @@ exports.getPlayers = async function(game_id, callback) {
     });
 }
 
-//"class" used to organized the retrieved date when finding available games
-var availableData = class {
-    constructor(game_id, playername) {
-        this.game_id = game_id;
-        this.username = playername;
-    }
-}
-
-//"class" used to organized the retrieved date when finding ongoing games
-var ongoingData = class {
-    constructor(game_id, playerid, player2id) {
-        this.game_id = game_id;
-        this.username1 = playerid;
-        this.username2 = player2id;
-    }
-}
-
-///helps finding available games
+///returns the available games
 exports.fetchAvailableGames = function(callback) {
     db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function(err, result) {
         if (err) {
@@ -97,7 +83,7 @@ exports.fetchAvailableGames = function(callback) {
     });
 }
 
-//helps finding ongoing games
+///returns the ongoing games
 exports.fetchOngoingGames = function(callback) {
         db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
             if (err) {
@@ -108,7 +94,8 @@ exports.fetchOngoingGames = function(callback) {
             }
         });
     }
-    //returns the games of an user. Given the username.
+
+//returns the games of an user. Given the username.
 exports.fetchUserGames = function(username, callback) {
     console.log("username " + username);
     var storing = [];
@@ -198,6 +185,8 @@ exports.storeMove = function(data) {
     });
 }
 
+//helps organize the data for the move information
+//helps mainatin consitency between backend and front in the name of variables in a JSON.
 var moveDataOrg = class {
     constructor(from, to, flags, piece, san) {
         this.color = piece.charAt(0);
@@ -227,6 +216,8 @@ exports.getGameMoves = function(game_id, callback) {
     });
 }
 
+//returns the FEN string of a game given the game_id
+//FEN strings help organizing the correct state of the board.
 exports.getFEN = function(game_id, callback) {
     var sql = "SELECT fen FROM game_moves WHERE game_id = ? ORDER BY move_time DESC LIMIT 1";
     db.query(sql, [game_id], function(err, result) {
