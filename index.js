@@ -6,7 +6,7 @@ var io = require('socket.io').listen(http);
 var cors = require('cors');
 const message = require('./Database/messages.js');
 const moves = require('./Database/gamesTable');
-//aray to store name of all online users for lobbby chat
+//array to store name of all online users for lobbby chat
 lobby_users = [];
 
 //important.. this line creates a connection to use static files such as html saved in the

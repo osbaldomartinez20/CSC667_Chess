@@ -49,7 +49,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
                 var losses2 = result[0].losses;
@@ -60,7 +60,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update losses: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
             }
@@ -76,7 +76,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
                 var losses1 = result[1].losses;
@@ -87,7 +87,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or losses: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
             //nothing happens if it is  draw.    
@@ -105,7 +105,6 @@ exports.getElo = function(userid, callback) {
         if (err) {
             callback(err, null);
         } else {
-            console.log(result);
             callback(null, result[0].elo);
         }
     });

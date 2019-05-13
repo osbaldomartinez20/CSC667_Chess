@@ -177,7 +177,6 @@ exports.storeMove = function(data) {
         if (err) {
             console.log("Cannot store message: " + err)
         } else {
-            console.log("Message storage successful");
             updateState(data.game_id, data.state, function(err, result) {
                 if (err) {
                     console.log("There was an error: " + err);

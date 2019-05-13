@@ -22,7 +22,6 @@ exports.getMessages = function(chat_id, callback) {
             console.log("Cannot retrieve messages: " + err);
             callback(err, null);
         } else {
-            console.log("Message retrieval success" + '\n' + JSON.stringify(result));
             callback(null, JSON.stringify(result));
         }
     });

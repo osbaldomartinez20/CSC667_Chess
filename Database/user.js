@@ -28,7 +28,7 @@ exports.updateDisplayName = function(user_id, newDisplayName) {
             console.log("cannot update display_name: " + err);
             return false;
         } else {
-            console.log(result.affectedRows + " record(s) updated");
+            return true;
         }
     });
 }
@@ -44,7 +44,6 @@ exports.userExists = function(user_id) {
             console.log("error looking up user:" + err)
             return false
         } else {
-            console.log('Result: ' + result[0]['count(*)'])
             return result[0]['count(*)'];
         }
     })
