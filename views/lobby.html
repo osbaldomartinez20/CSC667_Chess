@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="js/user_Game.js"></script>
     <script src="js/available_games.js"></script>
     <script src="js/onGames.js"></script>
     <script src="js/online_players.js"></script>
+    <script src="js/chatHistory.js"></script>
     <!--used for chat box-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -90,8 +91,7 @@
                 </header>
 
                 <section class="chat">
-                    <!--<p><strong>John</strong>: Hello!</p>
-                    <p><strong>Bob</strong>: How are you!</p>-->
+                    <!-- space for chat-->
                 </section>
 
                 <section class="onlineP">
@@ -118,13 +118,16 @@
         </div>
     </div>
     <script>
-        //for server http://54.149.192.92:3000/default
-        //for local http://localhost:3000/default
-        var socket = io.connect('http://54.149.192.92:3000/default');
+        var socket_connect = function(room) {
+            return io('http://localhost:3000', {
+                query: 'rooms=lobby'
+            });
+        }
+        var socket = socket_connect('lobby')
 
         function newGame(event) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
+            xhr.open('POST', 'http://localhost:3000/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
@@ -166,42 +169,30 @@
 
         }
 
-        function load() {
-            socket.emit('usernames', {
-                user: cookie.get('user')
-            }); //send username to backend via socket
-        };
-
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
-        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
+        //to fix error use http://localhost:3000/default on server
+        //var socket = io.connect('http://localhost:3000/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
             $('.user-count').html(data);
         });*/
         window.onload = function() {
-            console.log({
-                user: cookie.get('user') || 'Anonymous'
-            });
-            new_user(); //send username to backend via socket
-            function load() {
-                socket.emit('usernames', {
-                    user: cookie.get('user')
-                }); //send username to backend via socket
-            };
+
+            chat_history(), new_user(); //send username to backend via socket
+
         }
 
         function new_user() {
-            socket.emit('new_user', {
-                user: cookie.get('user') || 'Anonymous'
+            socket.emit('username', {
+                user: cookie.get('user')
             });
         }
 
 
-        socket.on('usernames', function(data) {
-            console.log(data);
-            // onlineP(data);
+        socket.on('username', function(data) {
+            console.log("for user online " + data);
+            onlineP(data);
         })
 
         // When we receive a message
@@ -237,12 +228,29 @@
 
         function myInit(event) {
             event.stopPropagation();
-            user_Games(cookie.get('user')), available_games(), onGames(), onLoad(), load()
+            user_Games(cookie.get('user')), available_games(), onGames(), onLoad();
         };
 
-        $(".avGames").scrollTop(0);
-        $(".uGames").scrollTop(0);
-        $(".onGames").scrollTop(0);
+        function chat_history() {
+            var chat;
+            var request = new XMLHttpRequest();
+            var params = 'chat_id=' + 'lobby';
+            request.open('GET', 'http://localhost:3000/chatHistory' + '?' + params); // `false` makes the request synchronous
+            request.onload = function() {
+                if (request.status == 200) {
+                    chat = JSON.parse(request.responseText)
+                    console.log("line 242 " + chat);
+                    var col = [];
+                    for (var i = 0; i < chat.length; i++) {
+                        $('.chat').append('<p><strong>' + chat[i].display_name + '</strong>: ' + chat[i].messages + '</p>');
+                        $(".chat").stop().animate({
+                            scrollTop: $(".chat")[0].scrollHeight
+                        }, 1000);
+                    }
+                }
+            }
+            request.send(null);
+        }
 
         $("tr").click(function(event) {
             propStopped(event);

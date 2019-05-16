@@ -2,11 +2,18 @@
 <html>
 
 <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 </head>
 
 <body>
     <script>
-        var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
+        var socket_connect = function(room) {
+            return io('http://localhost:3000', {
+                query: 'rooms=lobby'
+            });
+        }
+        var socket = socket_connect('lobby')
         window.addEventListener("load", myInit, true);
 
         function myInit() {

@@ -209,8 +209,6 @@ var moveDataOrg = class {
     }
 }
 
-//this thing grabs the moves of  game given the game_id
-//Returns a JSON with the moves made throughout the game.
 exports.getGameMoves = function(game_id, callback) {
     let moves = [];
     var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC";

@@ -8,7 +8,7 @@ const rank = require('../Database/ranking.js');
 const test = require('../scripts/db_test.js');
 const bodyParser = require("body-parser")
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client('80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com');
+const client = new OAuth2Client('1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com');
 
 //create a router for url request
 const router = express.Router()
@@ -26,7 +26,7 @@ router.post('/login', (request, response) => {
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: '80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com',
+            audience: '1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com',
         })
 
         const payload = ticket.getPayload()
@@ -161,7 +161,7 @@ router.post('/chatStore', (request, response) => {
 
 //sends a JSON with all the messages for a given chat_id
 router.get('/chatHistory', (request, response) => {
-    chat.getMessages(request.body.chat_id, function(err, result) {
+    chat.getMessages(request.query.chat_id, function(err, result) {
         if (err) {
             console.log("Error getting messages: " + err);
             response.sendStatus(500);

@@ -10,39 +10,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
     <link href="css/site.css" rel="stylesheet">
 
 
 </head>
 
 <body>
-    <!-- Navigation var-->
-    <div class="container">
-        <nav class="navbar nav-border navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                                     
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>                        
-            </button>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Login</a></li>
-                        <li><a href="rules.html">Rules</a></li>
-                        <li><a href="b_Players.html">Best Players</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-    </div>
-
-
     <div class="container">
         <form action="">
             <div class="imgcontainer">
@@ -52,31 +26,24 @@
 
     <div id="my-signin2"></div>
     <script>
-        //window.addEventListener("load", myInit, true);
+        window.addEventListener("load", myInit, true);
 
-        /* function myInit() {
-             if (cookie.get('user') !== "") {
-                 window.location.href = "lobby.html";
-             }
-         };*/
+        function myInit() {
+            if (cookie.get('user') !== "") {
+                cookie.get('user') !== ""
+            }
+        };
 
         function onSuccess(googleUser) {
-            /* var profile = googleUser.getBasicProfile();
-             console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-             console.log('Full Name: ' + profile.getName());
-             console.log('Given Name: ' + profile.getGivenName());
-             console.log('Family Name: ' + profile.getFamilyName());
-             console.log("Image URL: " + profile.getImageUrl());
-             console.log("Email: " + profile.getEmail());*/
 
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
             var user_id = googleUser.getBasicProfile().getId();
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/login');
+            xhr.open('POST', 'http://localhost:3000/login');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
-                var url = "http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/getUser";
+                var url = "http://localhost:3000/getUser";
                 var params = "user_id=" + user_id;
                 var request = new XMLHttpRequest();
                 request.open('GET', url + "?" + params, false); // `false` makes the request synchronous

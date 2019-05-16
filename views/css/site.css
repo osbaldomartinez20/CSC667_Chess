@@ -249,7 +249,6 @@ button {
 }
 
 #onG {
-    overflow: auto;
     height: calc(100vh - 365px);
 }
 
