@@ -49,7 +49,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
                 var losses2 = result[0].losses;
@@ -60,12 +60,12 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update losses: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
             }
             //case where player 2 wins
-            else {
+            else if (won == 0) {
                 rank1 = rank1 + K * (0 - player1);
                 rank2 = rank2 + K * (1 - player2);
                 var win2 = result[0].wins;
@@ -76,7 +76,7 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or wins: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
                 var losses1 = result[1].losses;
@@ -87,26 +87,16 @@ exports.updateEloRank = function(user1, user2, won) {
                         console.log("cannot update ELO or losses: " + err);
                         return false;
                     } else {
-                        console.log(result.affectedRows + " record(s) updated");
+                        return true;
                     }
                 });
+            //nothing happens if it is  draw.    
+            } else {
+                return false;
             }
         }
     });
 
-}
-
-//resets user stats back to  default numbers
-var resetToDefault = function(userid) {
-    var sql = "UPDATE users SET elo = 1200, losses = 0, wins = 0 WHERE user_id = " + userid + "";
-    db.query(sql, function(err, result) {
-        if (err) {
-            console.log("cannot update ELO or losses: " + err);
-            return false;
-        } else {
-            console.log(result.affectedRows + " record(s) updated");
-        }
-    });
 }
 
 //function that takes user_id as parameter and return ELO ranking
@@ -115,7 +105,6 @@ exports.getElo = function(userid, callback) {
         if (err) {
             callback(err, null);
         } else {
-            console.log(result);
             callback(null, result[0].elo);
         }
     });

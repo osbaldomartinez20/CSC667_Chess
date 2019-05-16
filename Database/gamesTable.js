@@ -4,10 +4,12 @@ var db = require('../auth/db_config.js');
 //used to get the user id and display_name
 var userFunc = require('../Database/user.js');
 
-//need rank for completed games
+//need rank update for completed games
 var rankFunc = require('../Database/ranking.js');
 
 
+//checks to see if someone sends an empty response.
+//if empty response in query. Query gives error.
 function isEmpty(obj) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key))
@@ -17,6 +19,7 @@ function isEmpty(obj) {
 }
 
 //create a new game by giving the username
+//sends back a JSON with the game_id
 exports.createNewGame = async function(userid, callback) {
     //this is used to asign an unique id to each game.
     var time = new Date();
@@ -32,6 +35,7 @@ exports.createNewGame = async function(userid, callback) {
 }
 
 //function used to join a game given an username and a game_id
+//returns back the result from mysql.
 exports.joinGame = async function(game_id, userid, callback) {
     var sql = "UPDATE games SET player_two_id = ?, active = true WHERE game_id = ? AND player_one_id <> ?";
     db.query(sql, [userid, game_id, userid], function(err, result) {
@@ -44,6 +48,7 @@ exports.joinGame = async function(game_id, userid, callback) {
 }
 
 //marks the game as complete in database
+//returns the result from the sql
 exports.gameComplete = function(game_id, user1, user2, won, callback) {
     var sql = "UPDATE games SET complete = true, active = false WHERE game_id = ?";
     db.query(sql, [game_id], function(err, result) {
@@ -57,6 +62,7 @@ exports.gameComplete = function(game_id, user1, user2, won, callback) {
     });
 }
 
+//gets the players from a game given the game_id
 exports.getPlayers = async function(game_id, callback) {
     var sql = "SELECT player_one_id, player_two_id FROM games WHERE game_id = ? AND active = true";
     db.query(sql, [game_id], function(err, result) {
@@ -68,24 +74,7 @@ exports.getPlayers = async function(game_id, callback) {
     });
 }
 
-//"class" used to organized the retrieved date when finding available games
-var availableData = class {
-    constructor(game_id, playername) {
-        this.game_id = game_id;
-        this.username = playername;
-    }
-}
-
-//"class" used to organized the retrieved date when finding ongoing games
-var ongoingData = class {
-    constructor(game_id, playerid, player2id) {
-        this.game_id = game_id;
-        this.username1 = playerid;
-        this.username2 = player2id;
-    }
-}
-
-///helps finding available games
+///returns the available games
 exports.fetchAvailableGames = function(callback) {
     db.query("SELECT game_id, player_one_id FROM games WHERE active = false AND complete = false", function(err, result) {
         if (err) {
@@ -97,7 +86,7 @@ exports.fetchAvailableGames = function(callback) {
     });
 }
 
-//helps finding ongoing games
+///returns the ongoing games
 exports.fetchOngoingGames = function(callback) {
         db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
             if (err) {
@@ -108,7 +97,8 @@ exports.fetchOngoingGames = function(callback) {
             }
         });
     }
-    //returns the games of an user. Given the username.
+
+//returns the games of an user. Given the username.
 exports.fetchUserGames = function(username, callback) {
     console.log("username " + username);
     var storing = [];
@@ -154,7 +144,7 @@ var userGameData = class {
     }
 }
 
-//returns the currnt state of the game
+//returns the currnt state of the game given the user_id
 exports.boardState = function(game_id, callback) {
     db.query("SELECT current_state FROM games WHERE game_id = " + game_id + "", function(err, result) {
         if (err) {
@@ -166,6 +156,7 @@ exports.boardState = function(game_id, callback) {
 }
 
 //updates the current state of the board in the database
+//returns the result from the sql
 var updateState = function(game_id, curr_state, callback) {
     var sql = "UPDATE games SET current_state = ? WHERE game_id = ?";
     db.query(sql, [curr_state, game_id], function(err, result) {
@@ -186,7 +177,6 @@ exports.storeMove = function(data) {
         if (err) {
             console.log("Cannot store message: " + err)
         } else {
-            console.log("Message storage successful");
             updateState(data.game_id, data.state, function(err, result) {
                 if (err) {
                     console.log("There was an error: " + err);
@@ -198,6 +188,8 @@ exports.storeMove = function(data) {
     });
 }
 
+//helps organize the data for the move information
+//helps mainatin consitency between backend and front in the name of variables in a JSON.
 var moveDataOrg = class {
     constructor(from, to, flags, piece, san) {
         this.color = piece.charAt(0);
@@ -225,6 +217,8 @@ exports.getGameMoves = function(game_id, callback) {
     });
 }
 
+//returns the FEN string of a game given the game_id
+//FEN strings help organizing the correct state of the board.
 exports.getFEN = function(game_id, callback) {
     var sql = "SELECT fen FROM game_moves WHERE game_id = ? ORDER BY move_time DESC LIMIT 1";
     db.query(sql, [game_id], function(err, result) {
