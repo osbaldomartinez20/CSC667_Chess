@@ -16,7 +16,7 @@ exports.storeMessage = function(data) {
 
 //returns all the messages of the chat given the chat_id
 exports.getMessages = function(chat_id, callback) {
-    var sql = "SELECT chat_insert_date, display_name, messages FROM chat WHERE chat_id = '" + chat_id + "' ORDER BY chat_insert_date ASC LIMIT 50";
+    var sql = "SELECT chat_insert_date, display_name, messages FROM chat WHERE chat_id = '" + chat_id + "' ORDER BY chat_insert_date DESC LIMIT 50";
     db.query(sql, function(err, result) {
         if (err) {
             console.log("Cannot retrieve messages: " + err);

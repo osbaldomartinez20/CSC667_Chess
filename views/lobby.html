@@ -238,11 +238,12 @@
             var params = 'chat_id=' + 'lobby';
             request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/chatHistory' + '?' + params); // `false` makes the request synchronous
             request.onload = function() {
-                if (request.status == 200) {
+               if (request.status == 200) {
                     chat = JSON.parse(request.responseText)
+                    result = chat.reverse();
                     var col = [];
-                    for (var i = 0; i < chat.length; i++) {
-                        $('.chat').append('<p><strong>' + chat[i].display_name + '</strong>: ' + chat[i].messages + '</p>');
+                    for (var i = 0; i < result.length; i++) {
+                        $('.chat').append('<p><strong>' + result[i].display_name + '</strong>: ' + result[i].messages + '</p>');
                         $(".chat").stop().animate({
                             scrollTop: $(".chat")[0].scrollHeight
                         }, 1000);
