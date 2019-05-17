@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <script src="js/user_Game.js"></script>
@@ -39,7 +39,6 @@
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">Lobby</a></li>
-                        <li><a href="b_Players.html">Best Players</a></li>
                         <li><a href="rules.html">Rules</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
@@ -122,7 +121,7 @@
     </div>
     <script>
         var socket_connect = function(room) {
-            return io('http://localhost:3000', {
+            return io('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com', {
                 query: 'rooms=lobby'
             });
         }
@@ -130,13 +129,13 @@
 
         function newGame(event) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:3000/create');
+            xhr.open('POST', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/create');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
+                alert("New Game Created")
             };
             const user_id = cookie.get('user');
-            console.log('Signed in as: ' + user_id);
             xhr.send('user_id=' + user_id);
 
         }
@@ -144,12 +143,12 @@
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function() {
-                console.log('User signed out.');
                 cookie.set('user', "");
                 window.location.href = "index.html";
             });
         }
 
+        //reload the tables when a new game is created
         socket.on('newGame', function(msg) {
             available_games();
             user_Games(cookie.get('user'));
@@ -168,8 +167,8 @@
         }
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
-        //to fix error use http://localhost:3000/default on server
-        //var socket = io.connect('http://localhost:3000/default');
+        //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
+        //var socket = io.connect('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default');
 
         // The user count. Can change when someone joins/leaves
         /*socket.on('count', function(data) {
@@ -194,7 +193,6 @@
 
 
         socket.on('username', function(data) {
-            console.log("for user online " + data);
             onlineP(data);
         })
 
@@ -238,7 +236,7 @@
             var chat;
             var request = new XMLHttpRequest();
             var params = 'chat_id=' + 'lobby';
-            request.open('GET', 'http://localhost:3000/chatHistory' + '?' + params); // `false` makes the request synchronous
+            request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/chatHistory' + '?' + params); // `false` makes the request synchronous
             request.onload = function() {
                 if (request.status == 200) {
                     chat = JSON.parse(request.responseText)
@@ -253,6 +251,16 @@
             }
             request.send(null);
         }
+
+        $(".onG").stop().animate({
+            scrollTop: $(".onG")[0].scrollHeight
+        }, 1000);
+        $(".userGames").stop().animate({
+            scrollTop: $(".userGames")[0].scrollHeight
+        }, 1000);
+        $(".available_games").stop().animate({
+            scrollTop: $(".available_games")[0].scrollHeight
+        }, 1000);
 
         $("tr").click(function(event) {
             propStopped(event);

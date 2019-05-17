@@ -191,25 +191,23 @@ h1,
 input {
     width: 80%;
     font: inherit;
-    background-color: black;
+    background-color: rgb(0, 0, 0);
     color: white;
     opacity: 0.8;
-    border: none;
     margin-top: 10px;
     padding: 5px 10px;
-    border: 1px solid black;
+    border: 2px solid rgb(41, 6, 238);
 }
 
 button {
     width: 15%;
     font: inherit;
-    background-color: black;
+    background-color: hsl(150, 50%, 50%);
     color: white;
     opacity: 0.8;
-    border: none;
     margin-top: 10px;
     padding: 5px 10px;
-    border: 1px solid black;
+    border: 2px solid rgb(41, 6, 238);
 }
 
 #send-button:hover {

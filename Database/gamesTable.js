@@ -88,15 +88,15 @@ exports.fetchAvailableGames = function(callback) {
 
 ///returns the ongoing games
 exports.fetchOngoingGames = function(callback) {
-        db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
-            if (err) {
-                console.log("Cannot fetch ongoing games: " + err);
-                callback(err, null);
-            } else {
-                callback(null, result);
-            }
-        });
-    }
+    db.query("SELECT player_one_id, player_two_id FROM games WHERE active = true AND complete = false", function(err, result) {
+        if (err) {
+            console.log("Cannot fetch ongoing games: " + err);
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
 
 //returns the games of an user. Given the username.
 exports.fetchUserGames = function(username, callback) {
@@ -203,7 +203,7 @@ var moveDataOrg = class {
 
 exports.getGameMoves = function(game_id, callback) {
     let moves = [];
-    var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time DESC";
+    var sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_time ASC";
     db.query(sql, [game_id], function(err, result) {
         if (err) {
             console.log("Cannot retrieve game moves: " + err);

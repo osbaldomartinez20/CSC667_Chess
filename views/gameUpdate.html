@@ -9,8 +9,9 @@
 
 <body>
     <script>
+        //redirects and send the game id to private game page
         var socket_connect = function(room) {
-            return io('http://localhost:3000', {
+            return io('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com', {
                 query: 'rooms=lobby'
             });
         }

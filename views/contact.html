@@ -2,15 +2,16 @@
 <html>
 
 <head>
-    <!-- Bootstrap and CSS  calls goes Here-->
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Contact</title>
+    <title>Rules</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link href="site.css" rel="stylesheet">
-
+    <meta name="google-signin-client_id" content="80146750892-vh2nftso2rsa1h09ogk22qdd76ackhjh.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link href="css/site.css" rel="stylesheet">
+    <!--used for chat box-->
 </head>
 
 <body>
@@ -20,22 +21,20 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                                     
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>                        
-            </button>
+                                         
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>                        
+                </button>
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">Contact</a></li>
-                        <li><a href="index.html">Login</a></li>
                         <li><a href="lobby.html">Lobby</a></li>
                         <li><a href="rules.html">Rules</a></li>
-                        <li><a href="b_Players.html">Best Players</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        <li><a href="index.html" onclick="signOut();"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -44,34 +43,58 @@
 
 
     <div class="container">
-            <div style="text-align:center">
-        <h1> Contact Us </h1> <br> <br> <br>
-    <td><img src="images/Lidiya.png" alt="Lidiya Profile picture"></td> 
-    <p> Lidiya Jebessa </p>
-    <p>lidiyajebessa88@gmail.com</p>
-    <p>Computer Science Student at SFSU</p><br> <br> 
+        <div style="text-align:center; color: white;">
+            <h1> Contact Us </h1> <br> <br> <br>
+            <td><img src="images/Lidiya.png" alt="Lidiya Profile picture"></td>
+            <p> Lidiya Jebessa </p>
+            <p>lidiyajebessa88@gmail.com</p>
+            <p>Computer Science Student at SFSU</p><br> <br>
 
-    <td><img src="images/IMG_1025.jpg" alt="Anton's Profile picture"></td> <br> 
-    <p> Raul A Serrano</p>
-    <p>antonio.94124@gmail.com</p> 
-    <p>Computer Science Student at SFSU</p><br> <br> 
+            <td><img src="images/IMG_1025.jpg" alt="Anton's Profile picture"></td> <br>
+            <p> Raul A Serrano</p>
+            <p>antonio.94124@gmail.com</p>
+            <p>Computer Science Student at SFSU</p><br> <br>
 
-    <td><img src="images/profilePic.png" alt="Osbaldo's Profile picture"></td> <br> 
-    <p> Osbaldo Martinez </p>
-    <p>martin6@mail.sfsu.edu</p>
-    <p>Computer Science Student at SFSU</p> <br> <br> 
+            <td><img src="images/profilePic.png" alt="Osbaldo's Profile picture"></td> <br>
+            <p> Osbaldo Martinez </p>
+            <p>martin6@mail.sfsu.edu</p>
+            <p>Computer Science Student at SFSU</p> <br> <br>
 
-    <td><img src="images/Penguin.jpg" alt="Nina's Profile picture"></td> <br> 
-    <p> Nina Mir </p>
-    <p>smirsaeidifarahani@mail.sfsu.edu</p> 
-    <p>Computer Science Student at SFSU</p><br> <br> 
+            <td><img src="images/Penguin.jpg" alt="Nina's Profile picture"></td> <br>
+            <p> Nina Mir </p>
+            <p>smirsaeidifarahani@mail.sfsu.edu</p>
+            <p>Computer Science Student at SFSU</p><br> <br>
 
-    <td><img src="images/FB_IMG_1557868428169.jpg" alt="Raul's Profile picture"></td> <br> 
-    <p> David Raul  </p>
-    <p>stillwagonryan@gmail.com</p> 
-    <p>Computer Science Student at SFSU</p><br> <br> 
-  
-    </div>
+            <td><img src="images/FB_IMG_1557868428169.jpg" alt="Raul's Profile picture"></td> <br>
+            <p> David Stillwagon </p>
+            <p>stillwagonryan@gmail.com</p>
+            <p>Computer Science Student at SFSU</p><br> <br>
+
+        </div>
+
+        <script>
+            //validate user for signout
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function() {
+                    cookie.set('user', "");
+                    window.location.href = "index.html";
+                });
+            }
+
+            function onLoad() {
+                gapi.load('auth2', function() {
+                    gapi.auth2.init();
+
+
+                });
+
+            }
+
+            function myInit() {
+                onLoad();
+            };
+        </script>
 
 </body>
 

@@ -2,17 +2,13 @@ function onGames() {
     //get
     var OnGoing_games;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:3000/active', false);
+    request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/active', false);
     request.onload = function() {
         if (request.status == 200) {
             OnGoing_games = JSON.parse(request.responseText)
         }
     }
     request.send(null);
-
-    if (request.status === 200) {
-        console.log(OnGoing_games = JSON.parse(request.responseText));
-    }
 
     var col = [];
     for (var i = 0; i < OnGoing_games.length; i++) {
