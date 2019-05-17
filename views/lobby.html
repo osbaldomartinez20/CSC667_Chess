@@ -57,24 +57,27 @@
 
         <div id="form" class="tab">
             <div id="wrapper">
-                <button style="float: left; margin-bottom: 15px" onclick="newGame()">new game</button>
-
+                <button class="newGame" onclick="newGame()">new game</button>
+            </div>
+            <div class="top">
+                <div class="table-header">
+                    <h4> User Games</h4>
+                </div>
+                <section class="uGames">
+                    <p id="userGames"></p>
+                </section>
             </div>
 
-            <div class="table-header">
-                <h4> User Games</h4>
+            <div class="below">
+                <div class="table-header">
+                    <h4> Ongoing Games</h4>
+                </div>
+                <section class="onGames">
+                    <p id="onG"></p>
+                </section>
             </div>
-            <section class="uGames">
-                <p id="userGames"></p>
-            </section>
-            <div class="table-header">
-                <h4> Ongoing Games</h4>
-            </div>
-            <section class="onGames">
-                <p id="onG"></p>
-            </section>
+
         </div>
-
         <div id="map" class="tab">
             <div>
                 <header>
@@ -160,11 +163,6 @@
                 console.log('User signed in.');
 
             });
-
-            if (cookie.get('user') === "") {
-                window.location.href = "index.html";
-            }
-
             // new_user(); //send username to backend via socket
 
         }
@@ -178,8 +176,13 @@
             $('.user-count').html(data);
         });*/
         window.onload = function() {
+            chat_history(), new_user(), user();
+        }
 
-            chat_history(), new_user(); //send username to backend via socket
+        function user() {
+            if (cookie.get('user') == undefined) {
+                window.location.href = "index.html";
+            }
 
         }
 
@@ -214,7 +217,7 @@
 
             // Send the message to the server
             socket.emit('message', {
-                user: cookie.get('user') || 'Anonymous',
+                user: cookie.get('user'),
                 message: message,
                 chat_id: "lobby"
             });
@@ -239,7 +242,6 @@
             request.onload = function() {
                 if (request.status == 200) {
                     chat = JSON.parse(request.responseText)
-                    console.log("line 242 " + chat);
                     var col = [];
                     for (var i = 0; i < chat.length; i++) {
                         $('.chat').append('<p><strong>' + chat[i].display_name + '</strong>: ' + chat[i].messages + '</p>');

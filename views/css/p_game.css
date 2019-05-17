@@ -4,7 +4,11 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: rgb(2, 48, 48)
+    background: url(../chess-black.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 button:hover {
@@ -16,7 +20,8 @@ button:hover {
     padding: 1px;
     text-align: center;
     background: hsl(150, 50%, 50%);
-    color: black;
+    opacity: 0.8;
+    color: white;
     font-size: 30px;
 }
 
@@ -38,28 +43,21 @@ table th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 5px;
-    background: beige;
+    background: black;
+    opacity: 0.8;
+    color: white;
 }
 
-
-/* this line work to change color to each row in a colum
-tr:nth-child(1) {
-    width: 120%;
-    background: hsl(150, 50%, 50%);
-}*/
-
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: black;
+    color: white;
+    opacity: 0.8;
 }
 
 tr:hover {
     cursor: pointer;
-    background-color: #ccc;
-}
-
-.myclass tr:hover {
-    cursor: pointer;
-    background-color: #ccc;
+    background-color: rgb(31, 118, 233);
+    opacity: 0.8;
 }
 
 
@@ -72,15 +70,6 @@ tr:hover {
 .nav-border {
     border-radius: 30px;
 }
-
-
-/*
-#board {
-    width: 40%;
-    position: absolute;
-    text-align: center
-}
-*/
 
 
 /*chat css */
@@ -102,7 +91,9 @@ h1,
     content: '';
     width: 80%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background: black;
+    opacity: 0.8;
+    color: white;
     padding: 0;
     border: 1px solid black;
     overflow: auto;
@@ -111,7 +102,9 @@ h1,
 .moves {
     width: 100%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background: black;
+    opacity: 0.8;
+    color: white;
     padding: 0;
     border: 1px solid black;
     overflow: auto;
@@ -125,7 +118,9 @@ input,
 button {
     width: 100%;
     font: inherit;
-    background: lightgray;
+    background: black;
+    opacity: 0.8;
+    color: white;
     border: none;
     margin-top: 10px;
     padding: 5px 10px;
@@ -134,7 +129,8 @@ button {
 
 #send-button:hover {
     cursor: pointer;
-    background: #ddd;
+    background: black;
+    opacity: 0.8;
 }
 
 @media all and (min-width: 500px) {
@@ -166,23 +162,23 @@ button {
 }
 
 #nav {
-    background-color: rgb(2, 48, 48);
+    background-color: transparent;
     width: 10%;
 }
 
 #board {
-    background-color: rgb(2, 48, 48);
+    background-color: transparent;
     height: calc(50vh - 100px);
     width: 45%;
     margin-right: 1px;
 }
 
 #map {
-    background-color: rgb(2, 48, 48);
+    background-color: transparent;
     width: 35%;
 }
 
 #utils {
-    background-color: rgb(2, 48, 48);
+    background-color: transparent;
     width: calc(10% - 1px);
 }

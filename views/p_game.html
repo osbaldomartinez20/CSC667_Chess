@@ -248,7 +248,7 @@
 
             // Send the message to the server
             socket.emit('message', {
-                user: cookie.get('user') || 'Anonymous',
+                user: cookie.get('user'),
                 message: message,
                 chat_id: game_id
             });
@@ -292,11 +292,40 @@
             }
         }
 
+        function chat_history() {
+            var chat;
+            var request = new XMLHttpRequest();
+            var params = 'chat_id=' + 'lobby';
+            request.open('GET', 'http://localhost:3000/chatHistory' + '?' + game_id); // `false` makes the request synchronous
+            request.onload = function() {
+                if (request.status == 200) {
+                    chat = JSON.parse(request.responseText)
+                    console.log("line 242 " + chat);
+                    var col = [];
+                    for (var i = 0; i < chat.length; i++) {
+                        $('.chat').append('<p><strong>' + chat[i].display_name + '</strong>: ' + chat[i].messages + '</p>');
+                        $(".chat").stop().animate({
+                            scrollTop: $(".chat")[0].scrollHeight
+                        }, 1000);
+                    }
+                }
+            }
+            request.send(null);
+        }
+
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            onLoad()
+            onLoad(), chat_history(), user();
         };
+
+        function user() {
+            if (cookie.get('user') == undefined) {
+                window.location.href = "index.html";
+            }
+
+        }
+
 
         function isEmpty(obj) {
             for (var key in obj) {

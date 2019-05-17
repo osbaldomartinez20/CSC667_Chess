@@ -4,10 +4,30 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    background: url(../chess-black.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 button:hover {
     opacity: 0.8;
+}
+
+.top {
+    width: 100%;
+    height: 100px;
+    float: left;
+    margin-bottom: 60px
+}
+
+.below {
+    clear: left;
+    width: 100%;
+    height: auto;
+    float: left;
+    margin-top: 107px;
 }
 
 .table-header {
@@ -15,7 +35,9 @@ button:hover {
     padding: 1px;
     text-align: center;
     background: hsl(150, 50%, 50%);
-    color: black;
+    font-size: 10vw;
+    color: white;
+    opacity: 0.8;
     font-size: 30px;
 }
 
@@ -30,6 +52,7 @@ table {
 table td {
     border: 1px solid #dddddd;
     text-align: left;
+    color: white;
     padding: 5px;
 }
 
@@ -37,28 +60,21 @@ table th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 5px;
-    background: beige;
+    color: white;
+    background-color: black;
+    opacity: 0.8;
 }
 
-
-/* this line work to change color to each row in a colum
-tr:nth-child(1) {
-    width: 120%;
-    background: hsl(150, 50%, 50%);
-}*/
-
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: black;
+    color: white;
+    opacity: 0.8;
 }
 
 tr:hover {
     cursor: pointer;
-    background-color: #ccc;
-}
-
-.myclass tr:hover {
-    cursor: pointer;
-    background-color: #ccc;
+    background-color: rgb(19, 86, 230);
+    opacity: 0.8;
 }
 
 .imgcontainer {
@@ -71,15 +87,20 @@ img.avatar {
     border-radius: 50%;
 }
 
-
-/* used to create a container (square ) */
-
 .container {
     padding: 16px;
 }
 
 .nav-border {
     border-radius: 30px;
+}
+
+.newGame {
+    float: left;
+    margin-bottom: 15px;
+    color: white;
+    background-color: hsl(150, 50%, 50%);
+    opacity: 0.8;
 }
 
 
@@ -113,7 +134,8 @@ h1,
 .avGames {
     width: 100%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background-color: black;
+    opacity: 0.8;
     padding: 0;
     border: 1px solid black;
     overflow: auto;
@@ -122,7 +144,8 @@ h1,
 .uGames {
     width: 100%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background-color: black;
+    opacity: 0.8;
     padding: 0;
     border: 1px solid black;
     overflow: auto;
@@ -131,7 +154,8 @@ h1,
 .onGames {
     width: 100%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background-color: black;
+    opacity: 0.8;
     padding: 0;
     border: 1px solid black;
     overflow: auto;
@@ -141,8 +165,10 @@ h1,
     content: '';
     width: 80%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background-color: black;
+    opacity: 0.8;
     padding: 0;
+    color: white;
     border: 1px solid black;
     overflow: auto;
 }
@@ -150,8 +176,10 @@ h1,
 .onlineP {
     width: 20%;
     height: calc(100vh - 165px);
-    background: lightgrey;
+    background-color: black;
+    opacity: 0.8;
     padding: 0;
+    color: white;
     border: 1px solid black;
     overflow: auto;
 }
@@ -163,7 +191,9 @@ h1,
 input {
     width: 80%;
     font: inherit;
-    background: lightgray;
+    background-color: black;
+    color: white;
+    opacity: 0.8;
     border: none;
     margin-top: 10px;
     padding: 5px 10px;
@@ -173,7 +203,9 @@ input {
 button {
     width: 15%;
     font: inherit;
-    background: lightgray;
+    background-color: black;
+    color: white;
+    opacity: 0.8;
     border: none;
     margin-top: 10px;
     padding: 5px 10px;
@@ -182,7 +214,8 @@ button {
 
 #send-button:hover {
     cursor: pointer;
-    background: #ddd;
+    background: black;
+    opacity: 0.8;
 }
 
 @media all and (min-width: 500px) {
@@ -226,12 +259,12 @@ button {
 }
 
 #nav {
-    background-color: white;
+    background-color: transparent;
     width: 10%;
 }
 
 #form {
-    background-color: white;
+    background-color: transparent;
     width: 30%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -239,12 +272,12 @@ button {
 }
 
 #map {
-    background-color: white;
+    background-color: transparent;
     width: 40%;
 }
 
 #utils {
-    background-color: white;
+    background-color: transparent;
     width: calc(13% - 1px);
 }
 
@@ -253,7 +286,7 @@ button {
 }
 
 #send-message {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 #wrapper {

@@ -11,26 +11,27 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
     <meta name="google-signin-client_id" content="1032027183995-9ejqlmjsu33kjhhh1rdhcl085kklrlrc.apps.googleusercontent.com">
-    <link href="css/site.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 
 
 </head>
 
 <body>
-    <div class="container">
-        <form action="">
-            <div class="imgcontainer">
-                <img src="avatar.jpg" alt="Avatar" class="avatar">
-            </div>
+    <div class="header">
+        <h1 style="font-size:10vw; color:darkgray"> Welcome </h1>
+    </div>
+    <div class="content">
+        <div id="my-signin2"> </div>
     </div>
 
-    <div id="my-signin2"></div>
+
+
     <script>
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            if (cookie.get('user') !== "") {
-                cookie.get('user') !== ""
+            if (cookie.get('user') != "") {
+                cookie.set('user') == ""
             }
         };
 
@@ -66,7 +67,7 @@
                 'width': 240,
                 'height': 50,
                 'longtitle': true,
-                'theme': 'dark',
+                'theme': 'light',
                 'onsuccess': onSuccess,
                 'onfailure': onFailure
             });
