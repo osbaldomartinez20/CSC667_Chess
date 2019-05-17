@@ -133,7 +133,6 @@
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 socket.emit('newGame', "true");
-                alert("New Game Created")
             };
             const user_id = cookie.get('user');
             xhr.send('user_id=' + user_id);
@@ -153,6 +152,7 @@
             available_games();
             user_Games(cookie.get('user'));
             onGames();
+            alert("New Game Created")
         });
 
         function onLoad() {
@@ -202,7 +202,7 @@
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
             $(".chat").stop().animate({
                 scrollTop: $(".chat")[0].scrollHeight
-            }, 1000);
+            }, 10);
         });
 
         // When the form is submitted
@@ -251,16 +251,6 @@
             }
             request.send(null);
         }
-
-        $(".onG").stop().animate({
-            scrollTop: $(".onG")[0].scrollHeight
-        }, 1000);
-        $(".userGames").stop().animate({
-            scrollTop: $(".userGames")[0].scrollHeight
-        }, 1000);
-        $(".available_games").stop().animate({
-            scrollTop: $(".available_games")[0].scrollHeight
-        }, 1000);
 
         $("tr").click(function(event) {
             propStopped(event);

@@ -99,6 +99,12 @@ io.on('connection', function(socket) {
         io.to(room).emit('usernames', lobby_users);
     };
 
+    socket.on('newGame', function(msg) {
+        // console.log(msg);
+        io.emit('newGame', msg);
+    });
+
+
     socket.on('username', function(data) {
         socket.nickname = data;
         if (lobby_users.indexOf(data) == -1) {
