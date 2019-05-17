@@ -202,7 +202,7 @@
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
             $(".chat").stop().animate({
                 scrollTop: $(".chat")[0].scrollHeight
-            }, 10);
+            }, 1000);
         });
 
         // When the form is submitted
