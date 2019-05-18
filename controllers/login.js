@@ -137,7 +137,7 @@ router.get('/players', (request, response) => {
 //no information/parameters needed for this route.
 //returns the top players by ELO as a JSON.
 //the number of top players is defined by variable top in Database/rankings.js
-router.put('/top', (request, response) => {
+router.get('/top', (request, response) => {
     rank.getTopPlayers(function(err, result) {
         if (err) {
             console.log("Cannot get top players: " + err);

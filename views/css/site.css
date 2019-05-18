@@ -161,6 +161,16 @@ h1,
     overflow: auto;
 }
 
+.topPlayers {
+        width: 100%;
+        height: calc(100vh - 165px);
+        background-color: black;
+        opacity: 0.8;
+        padding: 0;
+        border: 1px solid black;
+        overflow: auto;
+}
+
 .chat {
     content: '';
     width: 80%;
