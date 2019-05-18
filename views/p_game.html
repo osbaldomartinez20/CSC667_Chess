@@ -40,7 +40,6 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">Private Game</a></li>
                         <li><a href="lobby.html">Lobby</a></li>
-                        <li><a href="b_Players.html">Best Players</a></li>
                         <li><a href="rules.html">Rules</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
@@ -54,16 +53,13 @@
     <div id="content">
         <div id="nav" class="tab"></div>
         <div id="board" class="tab">
-            <p>Status: <span id="status"></span></p>
-            <p>FEN: <span id="fen"></span></p>
-            <p>PGN: <span id="pgn"></span></p>
         </div>
         <div id="map" class="tab">
             <div class="table-header">
                 <h4> Game Moves</h4>
             </div>
             <section class="moves">
-                <p id="moves"></p>
+                <p id="move"></p>
             </section>
             <header>
                 <div class="chat-header">
@@ -88,22 +84,13 @@
     </div>
 
     <script>
-        window.addEventListener("load", myInit, true);
-
-        function myInit() {
-            moves()
-        };
-    </script>
-
-    <script>
         var socket_connect = function(room) {
-            return io('http://54.149.192.92:3000', {
+            return io('http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com', {
                 query: 'rooms=' + room
             });
         }
         var game_id = window.location.hash.substring(1);
         var socket = socket_connect(game_id)
-
         var players = cookie.get('user');
         var player
         var state
@@ -139,6 +126,7 @@
             squareEl.css('background', background);
         };
 
+        //pick only valid pieces and only if it is the right player turn
         var onDragStart = function(source, piece, position, orientation) {
             console.log("here at onDrag " + source + piece + position + orientation)
             if ((orientation === 'white' && game.turn() === 'b' && piece.search(/^b/) !== -1) ||
@@ -149,31 +137,20 @@
             }
         };
 
+        //update the game on move received
         socket.on('move', function(msg) {
             game.move(msg);
             board.position(game.fen()); // fen is the board layout
-            moves(msg);
+            moves(game_id);
         });
 
-        var onDrop = function(source, target) {
-            removeGreySquares();
-
-            // see if the move is legal
-            var move = game.move({
-                from: source,
-                to: target,
-                promotion: 'q' // NOTE: always promote to a queen for example simplicity
-            });
-
-            // illegal move
-            if (move === null) return 'snapback';
-        };
-
+        //check for moves handle the move and send it to the backend 
         var handleMove = function(source, target) {
             removeGreySquares();
             var move = game.move({
                 from: source,
                 to: target,
+                promotion: 'q' // NOTE: always promote to a queen for example simplicity
             })
             if (move === null) {
                 alert("wait for your turn");
@@ -183,8 +160,45 @@
                 move["game_id"] = game_id;
                 socket.emit('move', move);
             }
-
+            updateStatus();
         }
+
+        //check game status for player turn/ game end etc
+        var updateStatus = function() {
+            var status = '';
+
+            var moveColor = 'White';
+            if (game.turn() === 'b') {
+                moveColor = 'Black';
+            }
+
+            // checkmate?
+            if (game.in_checkmate() === true) {
+                status = 'Game over, ' + moveColor + ' is in checkmate.';
+            }
+
+            // draw?
+            else if (game.in_draw() === true) {
+                status = 'Game over, drawn position';
+            }
+
+            // game still on
+            else {
+                status = moveColor + ' to move';
+
+                // check?
+                if (game.in_check() === true) {
+                    status += ', ' + moveColor + ' is in check';
+                }
+            }
+            // Send the message to the server
+            socket.emit('message', {
+                user: "Status",
+                message: status,
+                chat_id: game_id
+            });
+        };
+
         var onMouseoverSquare = function(square, piece) {
             // get list of possible moves for this square
             var moves = game.moves({
@@ -228,9 +242,11 @@
         if (status != 'start') {
             game.load(getFen());
         }
+        updateStatus();
 
         $(window).resize(board.resize);
 
+        //parse the message recived and displaye it on the chat
         socket.on('message', function(data) {
             $('.chat').append('<p><strong>' + data.user + '</strong>: ' + data.message + '</p>');
             $(".chat").stop().animate({
@@ -248,7 +264,7 @@
 
             // Send the message to the server
             socket.emit('message', {
-                user: cookie.get('user') || 'Anonymous',
+                user: cookie.get('user'),
                 message: message,
                 chat_id: game_id
             });
@@ -262,18 +278,14 @@
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function() {
-                console.log('User signed out.');
                 cookie.set('user', "");
                 window.location.href = "index.html";
             });
         }
 
         function onLoad() {
-            console.log('I am here');
             gapi.load('auth2', function() {
                 gapi.auth2.init();
-                console.log('User signed in.');
-
             });
 
         }
@@ -287,24 +299,48 @@
             if (request.status === 200) {
                 pos = JSON.stringify(request.responseText);
                 state = pos.replace(/"/g, '');
-                console.log(state);
                 return state
             }
+        }
+
+        function chat_history() {
+            var chat;
+            var request = new XMLHttpRequest();
+            var params = 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/chatHistory?chat_id=' + game_id;
+            request.open('GET', params); // `false` makes the request synchronous
+            request.onload = function() {
+                if (request.status == 200) {
+                    chat = JSON.parse(request.responseText)
+                    var col = [];
+                    for (var i = 0; i < chat.length; i++) {
+                        $('.chat').append('<p><strong>' + chat[i].display_name + '</strong>: ' + chat[i].messages + '</p>');
+                        $(".chat").stop().animate({
+                            scrollTop: $(".chat")[0].scrollHeight
+                        }, 1000);
+                    }
+                }
+            }
+            request.send(null);
         }
 
         window.addEventListener("load", myInit, true);
 
         function myInit() {
-            onLoad()
+            onLoad(), chat_history(), user(), moves(game_id);
         };
 
-        function isEmpty(obj) {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key))
-                    return false;
+        //check if valid user or redirect to login page
+        function user() {
+            if (cookie.get('user') == undefined) {
+                window.location.href = "index.html";
             }
-            return true;
+
         }
+
+        //scroll table to last moves
+        $(".moves").stop().animate({
+            scrollTop: $(".moves")[0].scrollHeight
+        }, 100);
     </script>
 </body>
 

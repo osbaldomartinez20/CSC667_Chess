@@ -1,6 +1,5 @@
 function user_Games(username) {
     var User_games;
-    console.log("userName " + username)
     var request = new XMLHttpRequest();
     var params = 'username=' + username;
     request.open('GET', 'http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/userGames' + '?' + params, false); // `false` makes the request synchronous

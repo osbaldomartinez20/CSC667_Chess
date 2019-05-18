@@ -24,7 +24,7 @@ router.use(bodyParser.json());
 router.post('/login', (request, response) => {
     var token = request.body.idtoken
     console.log("the id token is " + token)
-    //    verify(id_token)
+        //    verify(id_token)
     async function verify() {
         const ticket = await client.verifyIdToken({
             idToken: token,
@@ -50,7 +50,7 @@ router.post('/login', (request, response) => {
 //sends a JSON with the availbale games to join.
 //Empty JSON if there are no available games
 router.get('/pending', (request, response) => {
-    games.fetchAvailableGames(function (err, result) {
+    games.fetchAvailableGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -64,7 +64,7 @@ router.get('/pending', (request, response) => {
 //sends a JSON with ongoing games.
 //Empty JSON if there are no ongoing games
 router.get('/active', (request, response) => {
-    games.fetchOngoingGames(function (err, result) {
+    games.fetchOngoingGames(function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -78,7 +78,7 @@ router.get('/active', (request, response) => {
 //accepts a request that has an username. Sends a JSON with all the user games.
 router.get('/userGames', (request, response) => {
     console.log(request.query.username);
-    games.fetchUserGames(request.query.username, function (err, result) {
+    games.fetchUserGames(request.query.username, function(err, result) {
         if (err) {
             console.log("Cannot retrieve user games: " + err);
             response.send(err);
@@ -92,7 +92,7 @@ router.get('/userGames', (request, response) => {
 //route is used to create a new game. User_id is needed to initialize a new game with an initial player.
 //sends a JSON with the game_id
 router.post('/create', (request, response) => {
-    games.createNewGame(request.body.user_id, function (err, result) {
+    games.createNewGame(request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot create game: " + err);
             response.send("Cannot create new game");
@@ -106,7 +106,7 @@ router.post('/create', (request, response) => {
 //player2 joins the game
 //Accepts the opponent user_id. Opponent has to be a different
 router.put('/join', (request, response) => {
-    games.joinGame(request.body.game_id, request.body.user_id, function (err, result) {
+    games.joinGame(request.body.game_id, request.body.user_id, function(err, result) {
         if (err) {
             console.log("Cannot join: " + err);
             response.sendStatus(500);
@@ -121,7 +121,7 @@ router.put('/join', (request, response) => {
 //given the game_id of the game
 router.get('/players', (request, response) => {
     console.log(request.query.game_id);
-    games.getPlayers(request.query.game_id, function (err, result) {
+    games.getPlayers(request.query.game_id, function(err, result) {
         if (err) {
             console.log("There was an error retrieving available games: " + err);
             response.sendStatus(500);
@@ -138,7 +138,7 @@ router.get('/players', (request, response) => {
 //returns the top players by ELO as a JSON.
 //the number of top players is defined by variable top in Database/rankings.js
 router.put('/top', (request, response) => {
-    rank.getTopPlayers(function (err, result) {
+    rank.getTopPlayers(function(err, result) {
         if (err) {
             console.log("Cannot get top players: " + err);
             response.sendStatus(500);
@@ -169,7 +169,7 @@ router.get('/chatid', (request, response) => {
 
 //sends a JSON with all the messages for a given chat_id
 router.get('/chatHistory', (request, response) => {
-    chat.getMessages(request.body.chat_id, function (err, result) {
+    chat.getMessages(request.query.chat_id, function(err, result) {
         if (err) {
             console.log("Error getting messages: " + err);
             response.sendStatus(500);
@@ -182,7 +182,7 @@ router.get('/chatHistory', (request, response) => {
 
 //sends a JSON with all moves made in a game with the given game_id
 router.get('/gameMoves', (request, response) => {
-    games.getGameMoves(request.body.game_id, function (err, result) {
+    games.getGameMoves(request.query.game_id, function(err, result) {
         if (err) {
             console.log("Failed to get moves: " + err);
             response.sendStatus(500);
@@ -195,7 +195,7 @@ router.get('/gameMoves', (request, response) => {
 
 //sends a JSON with the board state. Given the game_id of the game
 router.get('/fen', (request, response) => {
-    games.getFEN(request.query.game_id, function (err, result) {
+    games.getFEN(request.query.game_id, function(err, result) {
         if (err) {
             console.log("Failed to get moves: " + err);
             response.sendStatus(500);
@@ -209,7 +209,7 @@ router.get('/fen', (request, response) => {
 //get user_displayName by user_id.
 router.get('/getUser', (request, response) => {
     console.log("user" + request.query.user_id);
-    user.getUserName(request.query.user_id, function (err, result) {
+    user.getUserName(request.query.user_id, function(err, result) {
         if (err) {
             console.log("Error retriving display_name: " + err);
             response.sendStatus(500);
@@ -224,7 +224,7 @@ router.get('/getUser', (request, response) => {
 //Needs to get game_id, user1, user2, won(1 if user1 wins and 0 if user2 wins, otherwise draw game)
 //returns a sql result
 router.put('/gameComplete', (request, response) => {
-    games.gameComplete(request.body.game_id, request.body.user1, request.body.user2, request.body.won, function (err, result) {
+    games.gameComplete(request.body.game_id, request.body.user1, request.body.user2, request.body.won, function(err, result) {
         if (err) {
             console.log("Error completing game: " + err);
             response.sendStatus(500);
