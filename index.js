@@ -21,76 +21,6 @@ app.get('/', (request, response) => {
     response.sendFile('/views/index.html', { root: __dirname })
 })
 
-// //var nsp = io.of();
-
-// io.on('connection', function(socket) {
-//     //          console.log('an user connected');
-//     socket.join('lobby');
-
-//     function updateUserNames() {
-//         io.to('lobby').emit('usernames', lobby_users);
-//     }
-
-//     // socket.on('connection', function(socket) {
-//     //    console.log("33");
-//     //  socket.on('new_user', function(data) {
-//     //     console.log("username: " + data + "34");
-//     //     socket.nickname = data;
-//     //     console.log('an user connected ' + socket.nickname + "36");
-//     socket.on('username', function(data) {
-//             socket.nickname = data;
-//             if (lobby_users.indexOf(data) == -1) {
-//                 console.log("username: " + data + "40");
-//                 lobby_users.push(data);
-//                 io.to('lobby').emit('username', lobby_users);
-//             }
-//         })
-//         //  })
-
-
-//     socket.on('disconnect', function() {
-//         // console.log('user disconnected');
-//         io.to('lobby').emit('new message', ' *disconnected*');
-//         lobby_users.splice(lobby_users.indexOf(socket.nickname), 1);
-//         updateUserNames();
-//     });
-// });
-
-
-
-/*nsp.on('connection', function(socket) {
-    socket.on('message', function(msg) {
-        // console.log(msg);
-        message.storeMessage(msg);
-        io.emit('message', msg);
-    });
-})
-
-nsp.on('connection', function(socket) {
-    socket.on('newGame', function(msg) {
-        // console.log(msg);
-        io.emit('newGame', msg);
-    });
-});
-
-io.on('connection', function(socket) {
-    socket.on('disconnect', function() {
-        //console.log('user disconnected');
-    });
-
-});
-
-//var io = io.of('/private');
-/*io.on('connection', function(socket) {
-    console.log('an user connected');
-    socket.on('room', function(room) {
-        socket.join(room)
-        rooms = room;
-        console.log("room: " + room);
-    })
-
-});*/
-
 io.on('connection', function(socket) {
     var room = socket.handshake['query']['rooms'];
     socket.join(room);
@@ -99,26 +29,30 @@ io.on('connection', function(socket) {
         io.to(room).emit('usernames', lobby_users);
     };
 
+    function updateCounter() {
+        io.to(room).emit('count', io.engine.clientsCount);
+    };
+    
     socket.on('newGame', function(msg) {
         // console.log(msg);
         io.emit('newGame', msg);
     });
 
-
     socket.on('username', function(data) {
+        updateCounter();
+
         socket.nickname = data;
         if (lobby_users.indexOf(data) == -1) {
             lobby_users.push(data);
-            io.to(room).emit('username', lobby_users);
         }
     });
 
     socket.on('disconnect', function() {
         socket.leave(room)
+
         if (room == 'lobby') {
             io.to(room).emit('new message', ' *disconnected*');
-            lobby_users.splice(lobby_users.indexOf(socket.nickname), 1);
-            updateUserNames();
+            updateCounter();
         } else {
             io.to(room).emit('new message', ' *disconnected*');
         }

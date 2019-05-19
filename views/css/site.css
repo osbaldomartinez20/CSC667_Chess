@@ -119,6 +119,18 @@ h1,
     width: 100%
 }
 
+.user-count {
+  margin: 0;
+  padding: 1px 3px;
+  font-size: 32px;
+}
+
+.user-count {
+  float: right;
+}
+
+
+
 .player-header {
     margin: 0;
     padding: 1px 0;
@@ -240,7 +252,7 @@ button {
     }
     .avGames {
         float: left;
-        height: calc(50vh - 200px);
+        height: calc(50vh - 200px);c
     }
     .onGames {
         float: left;
