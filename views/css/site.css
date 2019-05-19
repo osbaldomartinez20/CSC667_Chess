@@ -232,7 +232,7 @@ button {
     .chat {
         height: calc(50vh - 200px);
         float: right;
-        width: 80%;
+        width: 100%;
     }
     .onlineP {
         float: left;
