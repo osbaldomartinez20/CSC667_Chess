@@ -116,7 +116,7 @@ h1,
 
 .chat-header {
     float: right;
-    width: 80%
+    width: 100%
 }
 
 .player-header {
@@ -128,7 +128,8 @@ h1,
 
 .player-header {
     float: left;
-    width: 20%
+    width: 0%;
+    display: none;
 }
 
 .avGames {
@@ -173,7 +174,7 @@ h1,
 
 .chat {
     content: '';
-    width: 80%;
+    width: 100%;
     height: calc(100vh - 165px);
     background-color: black;
     opacity: 0.8;
@@ -184,7 +185,7 @@ h1,
 }
 
 .onlineP {
-    width: 20%;
+    width: 0%;
     height: calc(100vh - 165px);
     background-color: black;
     opacity: 0.8;
@@ -192,6 +193,7 @@ h1,
     color: white;
     border: 1px solid black;
     overflow: auto;
+    display: none;
 }
 
 .chat p {
