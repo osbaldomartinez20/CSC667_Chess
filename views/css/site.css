@@ -252,8 +252,9 @@ button {
     }
     .avGames {
         float: left;
-        height: calc(50vh - 200px);c
+        height: calc(50vh - 200px);
     }
+
     .onGames {
         float: left;
         height: calc(50vh - 200px);
