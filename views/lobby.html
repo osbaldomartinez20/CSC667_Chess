@@ -83,7 +83,7 @@
                     <div class="chat-header">
                         <div class="table-header">  
                             <div class="user-count">0</div>
-                            <h4> chat</h4>
+                            <h4 style = "font-size:20"> Chat</h4>
                         </div>
                     </div>
                     <div class="player-header">
@@ -175,7 +175,7 @@
 
         // The user count. Can change when someone joins/leaves
         socket.on('count', function(data) {
-            $('.user-count').html(data);
+            $('.user-count').html("online players: " + data);
         });
 
         window.onload = function() {
