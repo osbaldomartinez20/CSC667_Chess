@@ -38,23 +38,20 @@ io.on('connection', function(socket) {
         io.emit('newGame', msg);
     });
 
-    socket.on('username', function(data) {
+    socket.on('username', function(name) {
         updateCounter();
 
-        socket.nickname = data;
-        if (lobby_users.indexOf(data) == -1) {
-            lobby_users.push(data);
-        }
+        io.to(room).emit('new_user', name._name);
     });
 
     socket.on('disconnect', function() {
         socket.leave(room)
 
         if (room == 'lobby') {
-            io.to(room).emit('new message', ' *disconnected*');
+            io.to(room).emit('new message', ' *a user disconnected*');
             updateCounter();
         } else {
-            io.to(room).emit('new message', ' *disconnected*');
+            io.to(room).emit('new message', ' *a user disconnected*');
         }
 
     });

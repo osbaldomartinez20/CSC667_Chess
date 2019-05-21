@@ -161,11 +161,13 @@
             gapi.load('auth2', function() {
                 gapi.auth2.init();
                 console.log('User signed in.');
-
+		new_user();
             });
             // new_user(); //send username to backend via socket
 
         }
+
+	var _name;
 
         //On the client side, you tell Socket.IO client to connect to that namespace:
         //to fix error use http://ec2-54-149-192-92.us-west-2.compute.amazonaws.com/default on server
@@ -177,7 +179,7 @@
         });
 
         window.onload = function() {
-            chat_history(), new_user(), user();
+            chat_history();
         }
 
         function user() {
@@ -189,13 +191,17 @@
 
         function new_user() {
             socket.emit('username', {
-                user: cookie.get('user')
+                _name
             });
         }
 
 
-        socket.on('username', function(data) {
-            //onlineP(data);
+        socket.on('new_user', function(data) {
+	    $('.chat').append( '<p> ' + data +  "-- just connected to chat!" + '</p>');
+            $(".chat").stop().animate({
+                scrollTop: $(".chat")[0].scrollHeight
+            }, 1000);
+            
         })
 
         // When we receive a message
@@ -206,6 +212,15 @@
                 scrollTop: $(".chat")[0].scrollHeight
             }, 1000);
         });
+
+	socket.on('new message', function(data) {
+            $('.chat').append('<p>' + data + '</p>');
+            $(".chat").stop().animate({
+                scrollTop: $(".chat")[0].scrollHeight
+            }, 1000);
+        });
+
+
 
         // When the form is submitted
         $('form').submit(function(e) {
@@ -231,7 +246,7 @@
 
         function myInit(event) {
             event.stopPropagation();
-            user_Games(cookie.get('user')), available_games(), onGames(), onLoad();
+            user_Games(cookie.get('user')), available_games(), onGames(), _name = cookie.get('user'), onLoad();
         };
 
         function chat_history() {
